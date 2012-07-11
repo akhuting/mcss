@@ -19,10 +19,14 @@
     <link href="<%=basePath%>styles/layout.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>styles/wysiwyg.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>css/style.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="<%=basePath%>styles/jquery.loadmask.css" type="text/css">
+    <link href="<%=basePath%>styles/sticky.full.css" rel="stylesheet" type="text/css"/>
     <!-- Theme Start -->
     <link href="<%=basePath%>themes/blue/styles.css" rel="stylesheet" type="text/css"/>
     <!-- Theme End -->
     <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery-1.4.4.min.js"></SCRIPT>
+    <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery.loadmask.min.js"></SCRIPT>
+    <SCRIPT type="text/javascript" src="<%=basePath%>scripts/sticky.full.js"></SCRIPT>
     <script type="text/javascript">
         var temp = "";
         function changeSelect(obj) {
@@ -69,6 +73,12 @@
         });
         function onLogout() {
             window.location = "<%=basePath + "user!logout.action?d=" + System.currentTimeMillis()%>";
+        }
+        function showMask(){
+            $('#homepage').mask("");
+        }
+        function hideMask(){
+            $('#homepage').unmask();
         }
     </script>
 </head>

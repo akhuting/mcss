@@ -35,16 +35,18 @@
     <SCRIPT type="text/javascript" src="<%=basePath%>scripts/util.js"></SCRIPT>
     <SCRIPT type="text/javascript">
         function getCP() {
+//            parent.$("#detail").height($(".contentcontainer").height() * 2);
             var d = new Date();
             sendAjaxRequest("cp!field.action?type=Live&subType=5Min,10Min,30Min,60Min,NMin&field=cp&d=" + d.getMilliseconds());
         }
         function getChannel() {
+
             var d = new Date();
             sendAjax("cp!channel.action?type=Live&subType=5Min,10Min,30Min,60Min,NMin&field=item&d=" + d.getMilliseconds());
         }
     </SCRIPT>
 </head>
-<body id="homepage">
+<body id="homepage" onload="goPage(1,12)">
 <!-- Right Side/Main Content Start -->
 <div id="rightside">
 
@@ -159,6 +161,7 @@
                 %>
                 </tbody>
             </table>
+            <div id="barcon"></div>
             <div style="clear: both;"></div>
         </div>
 
@@ -173,7 +176,6 @@
         	Copyright &copy; 1997 - 2011 Sobey Digital Technology Co.Ltd
         </div>
         -->
-
 </div>
 </body>
 </html>

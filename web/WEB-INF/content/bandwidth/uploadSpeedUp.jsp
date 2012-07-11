@@ -1,9 +1,6 @@
-<%@ page import="java.util.Map" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.text.DecimalFormat" %>
-<%@ page import="java.util.Arrays" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="com.sobey.mcss.domain.Hourstatitem" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Map" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator

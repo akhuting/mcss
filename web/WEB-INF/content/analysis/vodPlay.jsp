@@ -88,9 +88,9 @@
                 %>
                 <tr class=table-row>
                     <td>00:00-<%=key%>:00</td>
-                    <td><%=Integer.parseInt(value.toString().split(";")[0])%>
+                    <td><%=value.toString().split(";")[0]%>
                     </td>
-                    <td><%=Integer.parseInt(value.toString().split(";")[1])%>
+                    <td><%=value.toString().split(";")[1]%>
                     </td>
 
                 </tr>
@@ -100,11 +100,9 @@
                 %>
                 <tr class=table-row>
                     <td><%=last%>:00-<%=key%>:00</td>
-                    <td><%=Integer.parseInt(value.toString().split(";")[0])%>
-
+                    <td><%=value.toString().split(";")[0]%>
                     </td>
-                    <td><%=Integer.parseInt(value.toString().split(";")[1])%>
-
+                    <td><%=value.toString().split(";")[1]%>
                     </td>
 
                 </tr>
@@ -118,13 +116,10 @@
                 <tr class=table-row>
                     <td><%=key%>
                     </td>
-                    <td><%=Integer.parseInt(value.toString().split(";")[0])%>
-
+                    <td><%=value.toString().split(";")[0]%>
                     </td>
-                    <td><%=Integer.parseInt(value.toString().split(";")[1])%>
-
+                    <td><%=value.toString().split(";")[1]%>
                     </td>
-
                 </tr>
                 <%
                             }

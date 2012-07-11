@@ -95,9 +95,9 @@
                 %>
                 <tr>
                     <td>00:00-<%=key%>:00</td>
-                    <td><%=mdn%>MB
+                    <td><%=mdn%><%=request.getAttribute("unit_lable")%>
                     </td>
-                    <td><%=mdn%>MB</td>
+                    <td><%=mdn%><%=request.getAttribute("unit_lable")%></td>
                 </tr>
                 <%
                 } else {
@@ -105,10 +105,10 @@
                 %>
                 <tr>
                     <td><%=last%>:00-<%=key%>:00</td>
-                    <td><%=mdn%>MB
+                    <td><%=mdn%><%=request.getAttribute("unit_lable")%>
                     </td>
 
-                    <td><%=mdn%>MB</td>
+                    <td><%=mdn%><%=request.getAttribute("unit_lable")%></td>
                 </tr>
                 <%
                     }
@@ -124,10 +124,10 @@
                 <tr>
                     <td><%=key%>
                     </td>
-                    <td><%=mdn%>MB
+                    <td><%=mdn%><%=request.getAttribute("unit_lable")%>
                     </td>
 
-                    <td><%=mdn%>MB</td>
+                    <td><%=mdn%><%=request.getAttribute("unit_lable")%></td>
                 </tr>
                 <%
                             }

@@ -2,6 +2,7 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page import="java.util.Arrays" %>
+<%@ page import="com.sobey.common.util.StringUtil" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -76,13 +77,13 @@
                         }
                     }
                     NumberFormat formatter = new DecimalFormat("0%");
-                    for (Map.Entry<String, String> entry : map.entrySet()) {
+                    for (Map.Entry<String, String> entry : StringUtil.sortMapByValueDouble(map)) {
                         if (!entry.getKey().equals("xml") && !entry.getKey().equals("type") && !entry.getKey().equals("total")) {
                 %>
                 <tr class=table-row>
                     <td><%=entry.getKey()%>
                     </td>
-                    <td><%=entry.getValue()%>MB
+                    <td><%=entry.getValue()%><%=request.getAttribute("unit_lable")%>
                     </td>
                     <td><%=formatter.format(Double.parseDouble(entry.getValue()) / total)%>
                     </td>

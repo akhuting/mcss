@@ -41,6 +41,18 @@ public class Cp {
     }
 
 
+    private int pid;
+
+    @javax.persistence.Column(name = "pid", nullable = true, insertable = true, updatable = true, length = 10, precision = 0)
+    @javax.persistence.Basic
+    public int getPid() {
+        return pid;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
+    }
+
     private List<Userinfo> users;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},

@@ -1,20 +1,22 @@
 package com.sobey.mcss.action;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import com.sobey.common.util.R;
 import com.sobey.mcss.domain.Cp;
 import com.sobey.mcss.domain.Userinfo;
-import com.sobey.mcss.service.*;
+import com.sobey.mcss.service.CpService;
+import com.sobey.mcss.service.DayStatItemService;
+import com.sobey.mcss.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
+import org.apache.struts2.interceptor.ServletRequestAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.io.InputStream;
+import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,7 @@ import java.util.List;
 @SuppressWarnings({"deprecation"})
 @Controller
 @Results(@Result(name = "inputStream", type = "stream", params = {"contentType", "text/html;charset=utf-8", "inputName", "inputStream"}))
-public class CpAction extends ActionSupport {
+public class CpAction extends ActionSupport  implements ServletRequestAware {
     private InputStream inputStream;
     private String type;
     private String subType;
@@ -66,7 +68,11 @@ public class CpAction extends ActionSupport {
     public void setItem(String item) {
         this.item = item;
     }
+    private HttpServletRequest request;
 
+    public void setServletRequest(HttpServletRequest request) {
+        this.request = request;
+    }
 
     @Autowired
     private DayStatItemService dayStatItemService;
@@ -74,27 +80,44 @@ public class CpAction extends ActionSupport {
     @Autowired
     private CpService cpService;
 
+    @Autowired
+    private UserService userService;
+
     public String field() {
         try {
-            List list = null;
-            StringBuffer sql = new StringBuffer("SELECT cp from cp ");
-            ActionContext ac = ActionContext.getContext();
-            Userinfo user = (Userinfo) ac.getSession().get("user");
-            if (user.getUserStatus() != 1) {
-                sql.append(" where id in(select cpid from user_cp where userid=").append(user.getUserid()).append(") ");
-            }
-            list = dayStatItemService.getDaystatitemListBySql(sql.toString());
-            StringBuffer result = new StringBuffer();
+            Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
+            List list  =   userService.getUserById(userinfo.getUserid()).get(0).getCps();
+            JSONArray roc_cp = new JSONArray();
+
             if (list.size() > 0) {
                 for (int i = 0; i < list.size(); i++) {
-                    if (i != 0) {
-                        result.append("|").append(list.get(i));
-                    } else {
-                        result.append(list.get(i));
+                    Cp cp = (Cp) list.get(i);
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id", cp.getCp());
+                    jsonObject.put("text", cp.getCp());
+
+                    JSONArray subCps = null;
+                    for (int j = 0; j < list.size(); j++) {
+                        Cp subCp = (Cp) list.get(j);
+                        if(subCp.getPid() == cp.getId()){
+                            if (subCps == null) {
+                                subCps = new JSONArray();
+                            }
+                            JSONObject subObj = new JSONObject();
+                            subObj.put("id", subCp.getCp());
+                            subObj.put("text", subCp.getCp());
+
+                            subCps.add(subObj);
+                        }
                     }
+                    if (subCps != null) {
+                        jsonObject.put("children", subCps);
+                        jsonObject.put("state", "closed");
+                    }
+                    roc_cp.add(jsonObject);
                 }
             }
-            inputStream = new ByteArrayInputStream(java.net.URLEncoder.encode(result.toString(), "UTF-8").getBytes());
+            inputStream = new ByteArrayInputStream(roc_cp.toString().getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             inputStream = new ByteArrayInputStream(e.getMessage().getBytes());
@@ -106,13 +129,34 @@ public class CpAction extends ActionSupport {
         try {
             String result = "0";
             JSONArray jsonArray = new JSONArray();
-            List<Cp> cps = cpService.getAll();
+            Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
+
+            List<Cp> cps = userService.getUserById(userinfo.getUserid()).get(0).getCps();
             if (cps != null && cps.size() > 0) {
                 for (int i = 0; i < cps.size(); i++) {
                     Cp cp = cps.get(i);
+                    if(cp.getPid() !=0){
+                        continue;
+                    }
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("name", cp.getCp());
                     jsonObject.put("id", cp.getId());
+                    JSONArray subCps = null;
+                    for (int j = 0; j < cps.size(); j++) {
+                          Cp subCp = cps.get(j);
+                        if(subCp.getPid() == cp.getId()){
+                            if(subCps == null){
+                                subCps = new JSONArray();
+                            }
+                            JSONObject sub = new JSONObject();
+                            sub.put("name" , subCp.getCp());
+                            sub.put("id" , cp.getId());
+                            subCps.add(sub);
+                        }
+                    }
+                    if(subCps!=null){
+                        jsonObject.put("nodes" , subCps);
+                    }
                     jsonArray.add(jsonObject);
                 }
                 result = jsonArray.toString();

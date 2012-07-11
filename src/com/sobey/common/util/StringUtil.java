@@ -91,4 +91,47 @@ public class StringUtil {
         BigDecimal b2 = new BigDecimal(v2.toString());
         return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).intValue();
     }
+
+    public static String byteToUnit(Double value, String[] unit, String toUnit) {
+        //Byte >> GB
+        Double toGB = 1024 * 1024 * 1024 * 1d;
+        Double toMB = 1024 * 1024 * 1d;
+        Double toKB = 1024 * 1d;
+        if (toUnit != null) {
+            if (toUnit.equals("KB")) {
+                return String.format("%.2f", Arith.div(value, toKB, 2));
+            }
+            if (toUnit.equals("MB")) {
+                return String.format("%.2f", Arith.div(value, toMB, 2));
+            }
+            if (toUnit.equals("GB")) {
+                return String.format("%.2f", Arith.div(value, toGB, 2));
+            }
+            if(toUnit.equals("Byte")){
+                return String.format("%.2f", Arith.div(value, 1, 2));
+            }
+        }
+        if (value < 1024d) {
+            unit[0] = "Byte";
+            return String.format("%.2f", Arith.div(value, 1, 2));
+        } else if (value > 1024 && value < 1048576d) {
+            unit[0] = "KB";
+            return String.format("%.2f", Arith.div(value, toKB, 2));
+        } else if (value > 1048576d && value < 1073741824d) {
+            unit[0] = "MB";
+            return String.format("%.2f", Arith.div(value, toMB, 2));
+        } else if (value > 1073741824d) {
+            unit[0] = "GB";
+            return String.format("%.2f", Arith.div(value, toGB, 2));
+        } else {
+            unit[0] = "NaN";
+            return "0";
+        }
+    }
+    public static String byteToGB(Double value) {
+        //Byte >> GB
+        Double toGB = 1024 * 1024 * 1024 * 1d;
+        return String.format("%.2f", Arith.div(value, toGB, 2));
+
+    }
 }

@@ -10,11 +10,11 @@ function createXMLHttpRequest() {
     try {
         XMLHttpReq = new ActiveXObject("Msxml2.XMLHTTP");//IE高版本创建XMLHTTP
     }
-    catch(E) {
+    catch (E) {
         try {
             XMLHttpReq = new ActiveXObject("Microsoft.XMLHTTP");//IE低版本创建XMLHTTP
         }
-        catch(E) {
+        catch (E) {
             XMLHttpReq = new XMLHttpRequest();//兼容非IE浏览器，直接创建XMLHTTP对象
         }
     }
@@ -34,17 +34,17 @@ function initChannel(obj) {
     }
 }
 function initCp(obj) {
-    if (obj == "null" || obj == "无") {
-        return;
-    }
-    var cp = document.getElementById("cp");
-    var options = cp.options;
-    for (var i = 0; i < options.length; i++) {
-        var option = options[i];
-        if (option.value == obj) {
-            option.selected = "selected";
-        }
-    }
+//    if (obj == "null" || obj == "无") {
+//        return;
+//    }
+//    var cp = document.getElementById("cp");
+//    var options = cp.options;
+//    for (var i = 0; i < options.length; i++) {
+//        var option = options[i];
+//        if (option.value == obj) {
+//            option.selected = "selected";
+//        }
+//    }
 }
 function sendAjax(url) {
     createXMLHttpRequest();                                //创建XMLHttpRequest对象
@@ -58,10 +58,10 @@ function sendAjaxRequest(url) {
     XMLHttpReq.onreadystatechange = processResponse; //指定响应函数
     XMLHttpReq.send(null);
 }
-function sendAjaxRequestPost(url,obj) {
+function sendAjaxRequestPost(url, obj) {
     createXMLHttpRequest();                                //创建XMLHttpRequest对象
     XMLHttpReq.open("post", url, false);
-    XMLHttpReq.onreadystatechange = function (){
+    XMLHttpReq.onreadystatechange = function () {
 
     }; //指定响应函数
     XMLHttpReq.send("type=" + obj);
@@ -70,22 +70,42 @@ function sendAjaxRequestPost(url,obj) {
 function processResponse() {
     if (XMLHttpReq.readyState == 4) {
         if (XMLHttpReq.status == 200) {
-            var text = XMLHttpReq.responseText;
-
+            var text = eval('(' + XMLHttpReq.responseText + ')');
             /**
              *实现回调
              */
-            text = window.decodeURI(text);
+//            text = window.decodeURI(text);
             if (text != "" && text.length > 0) {
-                var cp = document.getElementById("cp");
-                cp.innerHTML = "";
-                var values = text.split("|");
-                for (var i = 0; i < values.length; i++) {
-                    var temp = document.createElement("option");
-                    temp.text = values[i];
-                    temp.value = values[i];
-                    cp.options.add(temp);
-                }
+
+//                var cp = document.getElementById("cp");
+//                cp.innerHTML = "";
+//                var all = document.createElement("option");
+//                all.text = "选择域名";
+//                all.value = "";
+//                cp.options.add(all);
+                $('#cc').combotree('loadData',text);
+//                var values = text[0];
+//                if (text.length > 1) {
+//                    var has = text[1];
+//                    var str = '';
+//                    if (has.length > 0) {
+//                        str = "<b>当月可查询域名：</b>";
+//                        for (var i = 0; i < has.length; i++) {
+//                            str += "<p>" + has[i] + "</p>";
+//                        }
+//                    } else {
+//                        str = "<b>当月无可查询域名！</b>"
+//                    }
+//
+//
+//                    window.parent.$.sticky(str, {"id":8888,speed:'slow', duplicates:false, autoclose:8000})
+//                }
+//                for (var i = 0; i < values.length; i++) {
+//                    var temp = document.createElement("option");
+//                    temp.text = values[i];
+//                    temp.value = values[i];
+//                    cp.options.add(temp);
+//                }
             }
         }
     }

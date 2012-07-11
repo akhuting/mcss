@@ -35,15 +35,6 @@ public class BroadBandStatService {
         return broadBandStatDao.query(hql.toString(), cp);
     }
 
-    public List getBroadbandstatListByHour(String cp, String type, String begin , String end) {
-        StringBuffer sql = new StringBuffer("SELECT id,cp,type,datetime,broadband FROM broadbandstat where 1=1");
-        sql.append(" and cp = ?");
-        sql.append(" and type = ?");
-        sql.append(" and DateTime >= ?");
-        sql.append(" and  DateTime <= ?");
-        sql.append(" ORDER BY datetime");
-        return broadBandStatDao.querySql(sql.toString(), cp, type, begin, end);
-    }
 
     public List getBroadbandstatListByDay(String cp, String type, String beginTime, String endTime) {
         StringBuffer sql = new StringBuffer("SELECT DATE(a.datetime) AS `date`, a.`datetime` AS datetime ,a.broadband AS broadband,");
@@ -66,5 +57,15 @@ public class BroadBandStatService {
 
     public List getBroadbandstatListBySql(String sql, Object... value) {
         return broadBandStatDao.querySql(sql, value);
+    }
+
+    public List getBroadbandstatListByHour(String cp, String type, String begin, String end){
+        StringBuffer sql = new StringBuffer("SELECT id,cp,type,datetime,broadband FROM broadbandstat where 1=1");
+        sql.append(" and " + cp);
+        sql.append(" and type = ?");
+        sql.append(" and DateTime >= ?");
+        sql.append(" and  DateTime <= ?");
+        sql.append(" ORDER BY datetime");
+        return broadBandStatDao.querySql(sql.toString(), new Object[]{ type, begin, end});
     }
 }

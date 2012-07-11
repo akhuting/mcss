@@ -168,7 +168,10 @@ public class HourStatItemService {
     }
 
     public List<Hourstatitem> getHourstatitemList(String cp, String type, String subType, String item, String... date) {
-        StringBuffer hql = new StringBuffer(" from Hourstatitem where cp = ?");
+        if(cp == null){
+            return null;
+        }
+        StringBuffer hql = new StringBuffer(" from Hourstatitem where 1=1 and " + cp);
         if (type != null && !type.equals("")) {
             hql.append(" and type = '").append(type).append("'");
         }
@@ -178,10 +181,10 @@ public class HourStatItemService {
         if (item != null && !item.equals("")) {
             hql.append(" and item = '").append(item).append("'");
         }
-        if (date.length > 0) {
+        if (date != null && date.length > 0) {
             hql.append(" and Period = '" + date[0] + "'");
         }
-        List<Hourstatitem> list = hourStatItemDao.query(hql.toString(), cp);
+        List<Hourstatitem> list = hourStatItemDao.query(hql.toString(), null);
         return list;
     }
 

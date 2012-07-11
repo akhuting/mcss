@@ -81,11 +81,11 @@
                     for (Object key : key_arr) {
                         if (!key.equals("xml") && !key.equals("type")) {
                             Object value = map.get(key);
-                            int mdn;
-                            int back;
+                            double mdn;
+                            double back;
                             if (type.equals("hour")) {
-                                mdn = Integer.parseInt(value.toString().split(";")[0]);
-                                back = Integer.parseInt(value.toString().split(";")[1]);
+                                mdn = Double.parseDouble(value.toString().split(";")[0]);
+                                back = Double.parseDouble(value.toString().split(";")[1]);
                                 if (key.equals("01")) {
 
                 %>
@@ -125,8 +125,8 @@
                     }
                     last = key.toString();
                 } else {
-                    mdn = Integer.parseInt(value.toString().split(";")[0]);
-                    back = Integer.parseInt(value.toString().split(";")[1]);
+                    mdn =Double.parseDouble(value.toString().split(";")[0]);
+                    back = Double.parseDouble(value.toString().split(";")[1]);
                 %>
                 <tr class=table-row>
                     <td><%=key%>

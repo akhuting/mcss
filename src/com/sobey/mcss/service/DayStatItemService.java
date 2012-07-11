@@ -132,7 +132,10 @@ public class DayStatItemService {
     }
 
     public List<Daystatitem> getDaystatitemList(String cp, String type, String subType, String item, String... date) {
-        StringBuffer hql = new StringBuffer(" from Daystatitem where cp = ? and type = ?  ");
+        if(cp == null){
+            return null;
+        }
+        StringBuffer hql = new StringBuffer(" from Daystatitem where 1=1 and " + cp + " and type = ?  ");
         if (subType != null) {
             hql.append(" and subType = '").append(subType).append("' ");
         }
@@ -142,7 +145,7 @@ public class DayStatItemService {
         if (date.length > 0) {
             hql.append(" and Period = " + date[0]);
         }
-        List<Daystatitem> list = dayStatItemDao.query(hql.toString(), cp, type);
+        List<Daystatitem> list = dayStatItemDao.query(hql.toString(), new Object[]{type});
         return list;
     }
 

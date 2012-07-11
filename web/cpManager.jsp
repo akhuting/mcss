@@ -129,14 +129,24 @@ function addNode(type) {
     ];
     if (type == "p") newNode[0].isParent = true;
     zTree1.addNodes(null, newNode);
-
+    alert(zTree1.transformToArray(zTree1.getNodes()));
 
 }
 var del = "0";
-function removeTreeNode(event, treeId, treeNode) {
-    if (treeNode.id != 0) {
-        del += "," + treeNode.id;
+function removeTreeNode(){
+    var srcNode = zTree1.getSelectedNode();
+    if (srcNode) {
+        if (srcNode.nodes && srcNode.nodes.length > 0) {
+                zTree1.removeNode(srcNode);
+
+        } else {
+            zTree1.removeNode(srcNode);
+        }
     }
+//
+//    if (treeNode.id != 0) {
+//        del += "," + treeNode.id;
+//    }
 }
 
 function getPreTreeNode(treeNode) {

@@ -91,7 +91,7 @@
                 %>
                 <tr>
                     <td>00:00-<%=key%>:00</td>
-                    <td><%=value.toString()%>MB
+                    <td><%=value.toString()%>GB
                         (<%=formatter.format(Double.parseDouble(value.toString()) / count)%>
                         )
                     </td>
@@ -102,7 +102,7 @@
                 %>
                 <tr>
                     <td><%=last%>:00-<%=key%>:00</td>
-                    <td><%=value.toString()%>MB
+                    <td><%=value.toString()%>GB
                         (<%=formatter.format(Double.parseDouble(value.toString()) / count)%>
                         )
                     </td>
@@ -116,7 +116,7 @@
                 <tr>
                     <td><%=key%>
                     </td>
-                    <td><%=value.toString()%>MB
+                    <td><%=value.toString()%>GB
                         (<%=formatter.format(Double.parseDouble(value.toString()) / count)%>
                         )
                     </td>

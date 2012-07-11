@@ -133,4 +133,57 @@ public class DateUtil {
         str = new SimpleDateFormat(formatStr).format(date);
         return str;
     }
+
+    /**
+     * 得到本周第一天
+     * @return  yyyy-mm-dd
+     */
+    public static String getFirstDayOfWeek() {
+        StringBuffer result = new StringBuffer();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -(calendar.get(Calendar.DAY_OF_WEEK) - 2));
+        result.append(calendar.get(Calendar.YEAR));
+        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        result.append("-").append(month).append("-");
+        String day = String.valueOf(calendar.get(Calendar.DATE));
+        if (day.length() == 1) {
+            day = "0" + day;
+        }
+        result.append(day);
+        return result.toString();
+    }
+
+    /**
+     * 得到本周最后一天
+     * @return yyyy-mm-dd
+     */
+    public static String getLastDayOfWeek() {
+        StringBuffer result = new StringBuffer();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 7-(calendar.get(Calendar.DAY_OF_WEEK)) + 1);
+        result.append(calendar.get(Calendar.YEAR));
+        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        result.append("-").append(month).append("-");
+        String day = String.valueOf(calendar.get(Calendar.DATE));
+        if (day.length() == 1) {
+            day = "0" + day;
+        }
+        result.append(day);
+        return result.toString();
+    }
+
+    /**
+     * 得到本月最后一天
+     * @return  dd
+     */
+    public static int getLastDayOfMonth(){
+        Calendar cal = Calendar.getInstance();
+        return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
 }

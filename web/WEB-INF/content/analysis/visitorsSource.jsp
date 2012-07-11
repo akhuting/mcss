@@ -41,7 +41,7 @@
         }
     </SCRIPT>
 </head>
-<body id="homepage">
+<body id="homepage" onload="goPage(1,12)">
 <!-- Right Side/Main Content Start -->
 <div id="rightside">
 
@@ -72,7 +72,7 @@
                     if (count == 0) {
                         count = 1;
                     }
-                    for (Map.Entry<String, String> entry : StringUtil.sortMapByValue(map)) {
+                    for (Map.Entry<String, String> entry : StringUtil.sortMapByValueDouble(map)) {
                         if (!entry.getKey().equals("xml") && !entry.getKey().equals("count")) {
                 %>
                 <tr class=table-row>

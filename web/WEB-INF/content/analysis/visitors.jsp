@@ -41,7 +41,7 @@
         }
     </SCRIPT>
 </head>
-<body id="homepage">
+<body id="homepage" onload="goPage(1,12)">
 <!-- Right Side/Main Content Start -->
 <div id="rightside">
 

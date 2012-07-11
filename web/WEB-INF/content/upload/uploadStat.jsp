@@ -75,13 +75,9 @@
                 </thead>
                 <tbody>
                 <%
-                    QueryResult result = null;
-                    Pager pager = null;
                     List<Uploadstat> list = null;
                     if (map.get("result") != null) {
-                        result = (QueryResult) map.get("result");
-                        list = (List<Uploadstat>) result.getList();
-                        pager = result.getPager();
+                        list = (List<Uploadstat>) map.get("result");
                     }
                     if (list != null && list.size() > 0) {
                         for (Uploadstat uploadstat : list) {
@@ -117,9 +113,9 @@
     <div style="clear:both;"></div>
 
 
-      <!--
-       <div id="footer">
-        	Copyright &copy; 1997 - 2011 Sobey Digital Technology Co.Ltd
+    <!--
+        <div id="footer">
+             Copyright &copy; 1997 - 2011 Sobey Digital Technology Co.Ltd
         </div>
         -->
 

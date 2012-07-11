@@ -1,9 +1,6 @@
-<%@ page import="java.util.Map" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.text.DecimalFormat" %>
-<%@ page import="java.util.Arrays" %>
+<%@ page import="com.sobey.common.util.StringUtil" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.sobey.mcss.domain.Hourstatitem" %>
+<%@ page import="java.util.Map" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -15,7 +12,7 @@
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
     Map<String, Object> map = (Map) request.getAttribute("result");
-
+    String unit ="Mbps";
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -84,25 +81,25 @@
                     <td><%=request.getAttribute("beginTime")%>
                         — <%=request.getAttribute("endTime")%>
                     </td>
-                    <td><%=map.get("max")%>(Mbps)</td>
+                    <td><%=map.get("max")%>(<%=unit%>)</td>
                     <td><%=map.get("maxtime")%>
                     </td>
-                    <td><%=map.get("avg")%>(Mbps)</td>
+                    <td><%=map.get("avg")%>(<%=unit%>)</td>
                 </tr>
                 <%
                 } else {
                     ArrayList list = (ArrayList) map.get("list");
                     if (list != null && list.size() > 0) {
                         for (int i = 0; i < list.size(); i++) {
-                            Hourstatitem hourstatitem = (Hourstatitem) list.get(i);
+                            Object []  objects= (Object[]) list.get(i);
                 %>
                 <tr class=table-row>
-                    <td><%=hourstatitem.getPeriod()%>
+                    <td><%=objects[1]%>
                     </td>
-                    <td><%=hourstatitem.getExpend2()%>(Mbps)</td>
-                    <td><%=hourstatitem.getExpend1()%>
+                    <td><%=objects[4].toString()%>(<%=unit%>)</td>
+                    <td><%=objects[1] + " " + objects[3]%>
                     </td>
-                    <td><%=Double.parseDouble(hourstatitem.getExpend2()) / hourstatitem.getTotal()%>(Mbps)</td>
+                    <td><%=objects[5].toString()%>(<%=unit%>)</td>
                 </tr>
                 <%
                                 }
