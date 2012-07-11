@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:spring/spring-config.xml
+        </param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+     <!--Hibernate Open Session In View filter -->
+    <filter>
+    <filter-name>hibernateOpenSessionInViewFilter</filter-name>
+    <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+
+
+    <!-- Struts2 filter -->
+    <filter>
+        <filter-name>struts2CleanUpFilter</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>struts2Filter</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    </filter>
+
+    <!-- Filter 映射 -->
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>*.action</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+    <filter-name>hibernateOpenSessionInViewFilter</filter-name>
+    <url-pattern>*.action</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>struts2CleanUpFilter</filter-name>
+        <url-pattern>*.action</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>struts2Filter</filter-name>
+        <url-pattern>*.action</url-pattern>
+    </filter-mapping>
+
+    <!--Spring的ApplicationContext 载入 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- Spring 刷新Introspector防止内存泄露 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <!-- session超时定义,单位为分钟 -->
+    <session-config>
+        <session-timeout>20</session-timeout>
+    </session-config>
+
+    <!--自定义Servlet-->
+    <servlet>
+        <description>统计接口</description>
+        <servlet-name>StatService</servlet-name>
+        <servlet-class>com.sobey.common.servlet.DelegatingServletProxy</servlet-class>
+    </servlet>
+    <servlet>
+        <description>文件下载</description>
+        <servlet-name>DownloadService</servlet-name>
+        <servlet-class>com.sobey.mcss.servlet.DownloadService</servlet-class>
+    </servlet>
+    <!--自定义Servlet结束-->
+
+    <!--Servlet映射-->
+    <servlet-mapping>
+        <servlet-name>StatService</servlet-name>
+        <url-pattern>/StatService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadService</servlet-name>
+        <url-pattern>/log/*</url-pattern>
+    </servlet-mapping>
+    <!--Servlet映射结束-->
+     <error-page>
+         <error-code>500</error-code>
+         <location>/WEB-INF/content/error.jsp</location>
+     </error-page>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
