@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<chart caption="Annual Sales Summary (2006-2009)"
+       useRoundEdges="1" showYAxisValues="0" formatNumberScale="0" formatNumber="0" animation="0">
+    <set label="2006" value="11610" link="newchart-xml-2006Quarters" />
+    <linkeddata id="2006Quarters">
+        <chart useRoundEdges="1" showYAxisValues="0" formatNumberScale="0" formatNumber="0">
+            <set label="Q1" value="2740"/>
+            <set label="Q2" value="2700"/>
+            <set label="Q3" value="3180"/>
+            <set label="Q4" value="2990"/>
+        </chart>
+    </linkeddata>
+    <set label="2007" value="10430" link="newchart-xml-2007Quarters"/>
+    <linkeddata id="2007Quarters">
+        <chart caption="Quarterly Sales Summary (2007)" subcaption="Click on a column to drill-down"
+               xAxisName="Quarter" yAxisName="Sales" numberPrefix="$" useRoundEdges="1">
+            <set label="Q1" value="3060"/>
+            <set label="Q2" value="2030"/>
+            <set label="Q3" value="2700"/>
+            <set label="Q4" value="2640"/>
+        </chart>
+    </linkeddata>
+    <set label="2008" value="10170" link="newchart-xml-2008Quarters"/>
+    <linkeddata id="2008Quarters">
+        <chart caption="Quarterly Sales Summary (2008)" subcaption="Click on a column to drill-down"
+               xAxisName="Quarter" yAxisName="Sales" numberPrefix="$" useRoundEdges="1">
+            <set label="Q1" value="3060"/>
+            <set label="Q2" value="2030"/>
+            <set label="Q3" value="2700"/>
+            <set label="Q4" value="2640"/>
+        </chart>
+    </linkeddata>
+    <set label="2009" value="11560" link="newchart-xml-2009Quarters"/>
+    <linkeddata id="2009Quarters">
+        <chart caption="Quarterly Sales Summary (2009)" subcaption="Click on a column to drill-down"
+               xAxisName="Quarter" yAxisName="Sales" numberPrefix="$" useRoundEdges="1">
+            <set label="Q1" value="3060"/>
+            <set label="Q2" value="2030"/>
+            <set label="Q3" value="2700"/>
+            <set label="Q4" value="2640"/>
+        </chart>
+    </linkeddata>
+    <styles>
+
+        <definition>
+            <style name='MyFirstAnimationStyle' type='animation' easing='none'/>
+        </definition>
+
+        <application>
+            <apply toObject='Canvas' styles='MyFirstAnimationStyle'/>
+        </application>
+
+    </styles>
+</chart>

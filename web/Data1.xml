@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<chart caption="Annual Sales Summary (2006-2009)" subcaption="Click on a column to drill-down"
+    xAxisName="Year" yAxisName="Sales" numberPrefix="$" useRoundEdges="1">
+    <set label="2006" value="11610" link="newchart-xml-2006Quarters"  />
+    <set label="2007" value="10430" link="newchart-xml-2007Quarters"  />
+    <set label="2008" value="10170" link="newchart-xml-2008Quarters"  />
+    <set label="2009" value="11560" link="newchart-xml-2009Quarters"  />
+
+    <linkeddata id="2006Quarters">
+        <chart caption="Quarterly Sales Summary (2006)" subcaption="Click on a column to drill-down"
+            xAxisName="Quarter" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+            <set label="Q1" value="2740" link="newchart-xml-2006Q1"/>
+            <set label="Q2" value="2700" link="newchart-xml-2006Q2"/>
+            <set label="Q3" value="3180" link="newchart-xml-2006Q3"/>
+            <set label="Q4" value="2990" link="newchart-xml-2006Q4"/>
+
+
+            <linkeddata id="2006Q1">
+                <chart caption="Monthly Sales Summary" subcaption="For the first quarter of year 2006"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" 	>
+                    <set label="January" value="1100" />
+                    <set label="February" value="760" />
+                    <set label="March" value="880" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2006Q2">
+                <chart caption="Monthly Sales Summary" subcaption="For the second quarter of year 2006"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="April" value="1160"  />
+                    <set label="May" value="920"  />
+                    <set label="June" value="620"  />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2006Q3">
+                <chart caption="Monthly Sales Summary" subcaption="For the third quarter of year 2006"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="July" value="1140" />
+                    <set label="August" value="860" />
+                    <set label="September" value="1180" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2006Q4">
+                <chart caption="Monthly Sales Summary" subcaption="For the fourth quarter of year 2006"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="October" value="920" />
+                    <set label="November" value="1020" />
+                    <set label="December" value="1050" />
+                </chart>
+            </linkeddata>
+
+			 </chart>
+    </linkeddata>
+
+    <linkeddata id="2007Quarters">
+        <chart caption="Quarterly Sales Summary (2007)" subcaption="Click on a column to drill-down"
+            xAxisName="Quarter" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+            <set label="Q1" value="3060" link="newchart-xml-2007Q1"/>
+            <set label="Q2" value="2030" link="newchart-xml-2007Q2"/>
+            <set label="Q3" value="2700" link="newchart-xml-2007Q3"/>
+            <set label="Q4" value="2640" link="newchart-xml-2007Q4"/>
+
+
+            <linkeddata id="2007Q1">
+                <chart caption="Monthly Sales Summary" subcaption="For the first quarter of year 2007"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="January" value="3700" />
+                    <set label="February" value="2900"  />
+                    <set label="March" value="3200" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2007Q2">
+                <chart caption="Monthly Sales Summary" subcaption="For the second quarter of year 2007"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="April" value="3700" />
+                    <set label="May" value="2900" />
+                    <set label="June" value="3200" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2007Q3">
+                <chart caption="Monthly Sales Summary" subcaption="For the third quarter of year 2007"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="July" value="3700" />
+                    <set label="August" value="2900" />
+                    <set label="September" value="3200" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2007Q4">
+                <chart caption="Monthly Sales Summary" subcaption="For the fourth quarter of year 2007"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="October" value="3700" />
+                    <set label="November" value="2900"  />
+                    <set label="December" value="3200"  />
+                </chart>
+            </linkeddata>
+			</chart>
+    </linkeddata>
+
+    <linkeddata id="2008Quarters">
+        <chart caption="Quarterly Sales Summary (2008)" subcaption="Click on a column to drill-down"
+            xAxisName="Quarter" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+            <set label="Q1" value="2410" link="newchart-xml-2008Q1"/>
+            <set label="Q2" value="2800" link="newchart-xml-2008Q2"/>
+            <set label="Q3" value="2550" link="newchart-xml-2008Q3"/>
+            <set label="Q4" value="2410" link="newchart-xml-2008Q4"/>
+
+
+            <linkeddata id="2008Q1">
+                <chart caption="Monthly Sales Summary" subcaption="For the first quarter of year 2008"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="January" value="870" />
+                    <set label="February" value="890" />
+                    <set label="March" value="650" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2008Q2">
+                <chart caption="Monthly Sales Summary" subcaption="For the second quarter of year 2008"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="April" value="1300" />
+                    <set label="May" value="440" />
+                    <set label="June" value="1060" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2008Q3">
+                <chart caption="Monthly Sales Summary" subcaption="For the third quarter of year 2008"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="July" value="850" />
+                    <set label="August" value="1030" />
+                    <set label="September" value="670" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2008Q4">
+                <chart caption="Monthly Sales Summary" subcaption="For the fourth quarter of year 2008"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="October" value="590"  />
+                    <set label="November" value="690" />
+                    <set label="December" value="1130" />
+                </chart>
+            </linkeddata>
+
+			 </chart>
+    </linkeddata>
+
+    <linkeddata id="2009Quarters">
+        <chart caption="Quarterly Sales Summary (2009)" subcaption="Click on a column to drill-down"
+            xAxisName="Quarter" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+            <set label="Q1" value="2690" link="newchart-xml-2009Q1"/>
+            <set label="Q2" value="2700" link="newchart-xml-2009Q2"/>
+            <set label="Q3" value="3180" link="newchart-xml-2009Q3"/>
+            <set label="Q4" value="2990" link="newchart-xml-2009Q4"/>
+
+
+            <linkeddata id="2009Q1">
+                <chart caption="Monthly Sales Summary" subcaption="For the first quarter of year 2009"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="January" value="1050" />
+                    <set label="February" value="760" />
+                    <set label="March" value="880" />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2009Q2">
+                <chart caption="Monthly Sales Summary" subcaption="For the second quarter of year 2009"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="April" value="1160"  />
+                    <set label="May" value="920" />
+                    <set label="June" value="620"  />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2009Q3">
+                <chart caption="Monthly Sales Summary" subcaption="For the third quarter of year 2009"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="July" value="1140"  />
+                    <set label="August" value="860"  />
+                    <set label="September" value="1180"  />
+                </chart>
+            </linkeddata>
+
+            <linkeddata id="2009Q4">
+                <chart caption="Monthly Sales Summary" subcaption="For the fourth quarter of year 2009"
+                    xAxisName="Month" yAxisName="Sales" numberPrefix="$" useRoundEdges="1" >
+                    <set label="October" value="920" />
+                    <set label="November" value="1020" />
+                    <set label="December" value="1050" />
+                </chart>
+            </linkeddata>
+
+			 </chart>
+    </linkeddata>
+
+</chart>

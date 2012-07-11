@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head lang="en">
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<title>Template Documentation Template</title>
+	<!-- Framework CSS -->
+	<link rel="stylesheet" href="assets/blueprint-css/screen.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="assets/blueprint-css/print.css" type="text/css" media="print">
+	<!--[if lt IE 8]><link rel="stylesheet" href="assets/blueprint-css/ie.css" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" href="assets/blueprint-css/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
+	<style type="text/css" media="screen">
+		p, table, hr, .box { margin-bottom:25px; }
+		.box p { margin-bottom:10px; }
+	</style>
+</head>
+
+
+<body>
+	<div class="container">
+	
+		<h3 class="center alt">&ldquo;Admin Pro&rdquo; Documentation by &ldquo;MrDesigner&rdquo; v1.0</h3>
+		
+		<hr>
+		
+		<h1 class="center">&ldquo;Admin Pro&rdquo;</h1>
+		
+		<div class="borderTop">
+			<div class="span-6 colborder info prepend-1">
+				<p class="prepend-top">
+					<strong>Created:</strong> 03/12/2010<br />
+					<strong>By:</strong> MrDesigner<br />
+					<strong>Profile:</strong> <br /><a href="http://themeforest.net/user/MrDesigner">http://themeforest.net/user/MrDesigner</a>
+					
+				</p>
+		  </div><!-- end div .span-6 -->		
+	
+			<div class="span-12 last">
+				<p class="prepend-top append-0">Thank you for purchasing my theme. If you have any questions that are beyond the scope of this help file, please feel free to email via my user page contact form <a href="http://themeforest.net/user/MrDesigner">here</a>. Thanks so much!</p>
+			</div>
+		</div><!-- end div .borderTop -->
+		
+		<hr>
+		
+		<h2 id="toc" class="alt">Table of Contents</h2>
+		<ol class="alpha">
+			<li><a href="#htmlStructure">HTML Structure</a></li>
+			<li><a href="#cssFiles">CSS Files and Structure</a></li>
+			<li><a href="#javascript">JavaScript</a></li>
+			<li><a href="#psdFiles">PNG Files</a></li>
+			<li><a href="#credits">Sources and Credits</a></li>
+		</ol>
+		
+		<hr>
+		
+		<h3 id="htmlStructure"><strong>A) HTML Structure</strong> - <a href="#toc">top</a></h3>
+		<p>This theme is a fluid/resizable layout with two columns. All of the information within the main content area is nested within a div with an id of "#rightside". The sidebar's content is within a div with an id of "leftside". The general template structure is the same throughout the template. All div's have been clearly labeled, for example the breadcrumb area with have the id #breadcrumb. Here is the general structure.</p>
+		
+		<img src="assets/images/htmlstructure.png" alt="HTML Structure" />
+        
+        <p>I've included helpful comments throughout the code to help you identify each section.</p>
+		
+		<p>3 colour styles have been included within this template: Blue, Reg &amp; Green which I will exaplain how easy it is to change the colour scheme within the <a href="#cssFiles">CSS section</a> below</p>
+        
+        <p>Link styles have been defined by their section, e.g. #leftside elements would have a different link colour to #rightside and the same applies for the #breadcrumb. 
+        
+        If you would like to edit the color, font, or style of any elements in one of these columns, you would do the following:</p>
+        
+<pre>	
+Right main content box styles:
+.contentbox a {color: #somecolour;}
+
+Breadcrumb:
+#breadcrumb a {color: #somecolour;}
+
+etc etc...
+</pre>
+
+		<p>You should be fine regarding changing colours and styles, but to ensure that your new styles are applied, make sure that they carry enough "weight" and that there isn't a style lower in the CSS file that is being applied after yours.</p>
+        
+        <p><strong>Section highlighting:</strong><br />
+        If you want to highlight the current section using the side navigation you will need to give the class "selected" to the li e.g. </p>
+        
+        <pre>li class="heading selected"</pre>
+        
+        <p><em>An example of this is included within the code of index.html</em></p>
+         
+
+		<hr>
+
+		<h3 id="cssFiles"><strong>B) CSS Files and Structure</strong> - <a href="#toc">top</a></h3>
+
+		<p>For the main content pages fo the website I'm using two CSS files, "layout.css" for the overall structure and generic elements. For the styling i'm using "/themename/styles.css" (Replace themename with colour e.g. blue, red or green). The login page also uses it's own stylesheet so you will need to include, "login.css". - this file contains structual styles, so much like the main content pages, the colours are handled within the "/themename/styles.css" so that will also need to be included.</p> 
+        
+        <p><strong>Example:</strong> To apply different themes simply change the theme from blue to red or green, you would do so within the code here:<br />
+        	themes/<span style="color: #09C">blue</span>/styles.css</span> and change it to red, like so; themes/<span style="color: #900;">red</span>/styles.css<br /><br />
+            
+            This path will need to be changed on both the login.html and index.html (All other content) pages.
+        </p>
+
+		<p>The layout.css file contains all of the specific stylings for the page. The file is separated into sections like so:</p>  
+<pre>	
+<strong>/* Header Elements */</strong>
+
+[code]
+
+<strong>/* Footer */</strong>
+
+[code]
+
+<strong>/* Top Breadcrumb */</strong>
+
+[code]
+
+etc etc.
+</pre>
+
+<p>You will also notice within the index.html file a stylesheet called "wysiwyg.css" - you don't really need to change anything here, as it's used to style the Rich HTML/WYSIWYG editor, it can be removed if you do not intend to use the WYSIWYG editor.</p>
+
+		<p>If you would like to edit a specific section of the site, simply find the appropriate label in the CSS file, and then scroll down until you find the appropriate style that needs to be edited, it all should be clearly labelled.</p> 
+
+		<hr>
+		
+		<h3 id="javascript"><strong>C) JavaScript</strong> - <a href="#toc">top</a></h3>
+		
+		<p>This theme imports seven Javascript files at the bottom of the document.</p>
+		
+		<ol>
+			<li>jQuery &amp; jQuery UI library</li>
+			<li><strong>For the dynamic graphs:</strong> enhance.js, excanvas.js &amp; visualize.jQuery.js</li>
+			<li><strong>WYSIWYG editor:</strong> jquery.wysiwyg.js</li>
+            <li><strong>Generic functions:</strong> e.g. Tabs, Sliding Nav, Lightbox etc. - functions.js</li>
+		</ol>
+
+		<ol>
+			<li>jQuery is a Javascript library that greatly reduces the amount of code that you must write.</li>
+			<li>Most of the animation in this site relies on jQuery and carried out from code within the functions.js file. Each script has been commented into it's own section.
+<pre>
+
+
+// Notifications Pop-Up
+
+	$(document).ready(function(){
+	   		$("a.notifypop").bind('click', function(){
+		 	 $("#notificationsbox").bPopup();
+		  	 return false
+			});
+		});
+    </pre>    
+ <p>Bascally what this code is saying is: when the link with the class .notifypop is clicked show the div 
+ with the id="notificationsbox" - in a lightbox. The div, #notificationsbox is included on all pages it's 
+ needed at the bottom of the page  and is hidden within the property display: none; - this is definied and 
+ edited within the stylesheet.</p>
+ 
+  <p><strong>Graphs:</strong><br />
+
+ I've made it so you can define different tables by adding a certain class e.g. class="pie" 
+ <em>(See code within the graphs examples section within index.html)</em> would create a pie chart 
+ from that table data. You can also adjust the width and height of the chart within the 
+ following section within functions.js...</p>
+<pre> 
+ // Charting script
+
+$(document).ready(function(){
+
+ 	$('table.pie').visualize({type: 'pie', height: '300px', width: '620px'});
+	$('table.bar').visualize({type: 'bar', height: '300px', width: '620px'});
+	$('table.area').visualize({type: 'area', height: '300px', width: '620px'});
+	$('table.line').visualize({type: 'line', height: '300px', width: '620px'});
+});
+</pre>
+<p>
+If you would like to change the colours of graph elements, you can do so within the top of visualize.jQuery.js</p>
+<pre>
+colors: ['#1488AE','#9FBA34','#E28800','#A72500','#B082AC','#FF6699','#CC6600','#21A0AB','#CC0000'],
+</pre>
+<p>(These are in order so if you only have 4 sets of data, it would use the first 4 styles)</p>
+
+</pre>
+			</li>
+		</ol>
+       
+       <p><strong>For more information about the charting script please visit:</strong> <br />
+       <a href="http://www.filamentgroup.com/lab/update_to_jquery_visualize_accessible_charts_with_html5_from_designing_with/">http://www.filamentgroup.com/lab/update_to_jquery_visualize_accessible_charts_with_html5_from_designing_with/</a></p>
+		
+		<hr>
+		
+		<h3 id="psdFiles"><strong>D) PNG Files</strong> - <a href="#toc">top</a></h3>
+		
+		<p>I've included 3 x main Fireworks .PNG files and a folder full of editable elements to help you further changes styles easily &amp; quickly.</p>
+		
+			<ol>
+				<li>Main Layout</li>
+				<li>Login</li>
+                <li>Notifications Box</li>
+				<li>
+                	<strong>33 x Editable elements:</strong><br />
+                    These are generic images used through-out the entire website and are named the same as the exported versions to help you find them quickly.
+                </li>
+                <li>
+                	<strong>9 x Editable elements:</strong><br />
+                    All within their own folder: - /editable_PNG/themes/themecolour/ - Created to make editing a breeze.
+                </li>
+			</ol>
+           
+           <p>To make the site highly optimised and fast loading you'll find many of the backgrounds are just 5px wide and are simply tiled horizontally to give a nice gradient effect</p>
+
+		<p>As mentioned above, all files have been named the same as the exported version, so you can find and export it with absolute ease.</p>
+        
+       <p><strong>For example:</strong><br />If you'd like to change the main image in the header background, open "bg_header.png", make the necessary adjustments, and then save the file within the /img/ "bg_header.png".</p>
+
+		<hr>
+		
+		<h3 id="credits"><strong>E) Sources and Credits</strong> - <a href="#toc">top</a></h3>
+		
+		<p>I've used the following images, icons or other files as listed.
+		
+		<ul>
+			<li>
+                Some Icons are Copyright © Yusuke Kamiyamane. <br />
+                All rights reserved. Licensed under a Creative Commons Attribution 3.0 license.<br />
+          http://p.yusukekamiyamane.com/</li>
+                
+	    	<li>Navigation menu: <a href="http://www.mathachew.com/sandbox/collapsible-menu/">http://www.mathachew.com/sandbox/collapsible-menu/</a></li>
+			<li>Notifications pop-up: <a href="http://dinbror.dk/bpopup">http://dinbror.dk/bpopup</a></li>
+			<li>Dynamic graphs: <a href="http://www.filamentgroup.com/lab/update_to_jquery_visualize_accessible_charts_with_html5_from_designing_with/">Click here</a></li>
+		</ul>
+		
+		<hr>
+		
+		<p>Once again, thank you so much for purchasing this theme. As I said at the beginning, I'd be glad to help you if you have any questions relating to this theme. No guarantees, but I'll do my best to assist. If you have a more general question relating to the themes on ThemeForest, you might consider visiting the forums and asking your question in the "Item Discussion" section.</p> 
+		
+		<p class="append-bottom alt large"><strong>MrDesigner</strong></p>
+		<p><a href="#toc">Go To Table of Contents</a></p>
+		
+		<hr class="space">
+	</div><!-- end div .container -->
+</body>
+</html>
