@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://cxf.apache.org/jaxws
+	   http://cxf.apache.org/schemas/jaxws.xsd">
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+          parent="abstractSessionFactory">
+        <property name="annotatedClasses">
+            <list>
+                <value>com.sobey.mcss.domain.Broadbandstat</value>
+                <value>com.sobey.mcss.domain.Daystatitem</value>
+                <value>com.sobey.mcss.domain.Hourstatitem</value>
+                <value>com.sobey.mcss.domain.Uploadstat</value>
+                <value>com.sobey.mcss.domain.Ipdaystatitem</value>
+                <value>com.sobey.mcss.domain.Urldaystatitem</value>
+                <value>com.sobey.mcss.domain.Userinfo</value>
+                <value>com.sobey.mcss.domain.Cp</value>
+                <value>com.sobey.mcss.domain.UserCp</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="abstractSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.MySQLInnoDBDialect
+                hibernate.show_sql=true
+                hibernate.format_sql=false
+                hibernate.query.substitutions=true 1, false 0
+                hibernate.jdbc.batch_size=20
+                <!--hibernate.hbm2ddl.auto=update-->
+            </value>
+
+        </property>
+        <property name="lobHandler">
+            <ref bean="lobHandler"/>
+        </property>
+    </bean>
+    <bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true"/>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <context:annotation-config/>
+    <context:component-scan base-package="com.sobey"/>
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+
+</beans>

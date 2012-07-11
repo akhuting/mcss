@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+        "http://struts.apache.org/dtds/struts-2.1.dtd">
+
+<struts>
+    <constant name="struts.convention.default.parent.package" value="mcss-default"/>
+    <constant name="struts.convention.package.locators.basePackage" value="com.sobey.mcss"/>
+    <package name="mcss-default" extends="convention-default">
+        <interceptors>
+            <!-- 登录验证拦截器 -->
+            <interceptor name="authority" class="com.sobey.common.interceptor.LoginInterceptor"/>
+            <interceptor-stack name="mcssStack">
+                <!-- 将登录验证拦截器加入默认的拦截器栈中 -->
+                <interceptor-ref name="authority">
+                    <param name="excludeMethods">index,login,forget</param>
+                </interceptor-ref>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="mcssStack"/>
+        <global-results>
+            <result name="login">/WEB-INF/content/login.jsp</result>
+            <result name="error">/WEB-INF/content/error.jsp</result>
+            <result name="uias_result" type="redirect">http://113.142.30.123:8080/roc_web/</result>
+        </global-results>
+         <global-exception-mappings>
+            <exception-mapping result="error" exception="java.lang.Exception">
+            </exception-mapping>
+        </global-exception-mappings>
+    </package>
+</struts>
