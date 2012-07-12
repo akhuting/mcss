@@ -31,7 +31,7 @@ import java.util.List;
 @SuppressWarnings({"deprecation"})
 @Controller
 @Results(@Result(name = "inputStream", type = "stream", params = {"contentType", "text/html;charset=utf-8", "inputName", "inputStream"}))
-public class CpAction extends ActionSupport  implements ServletRequestAware {
+public class CpAction extends ActionSupport implements ServletRequestAware {
     private InputStream inputStream;
     private String type;
     private String subType;
@@ -68,6 +68,7 @@ public class CpAction extends ActionSupport  implements ServletRequestAware {
     public void setItem(String item) {
         this.item = item;
     }
+
     private HttpServletRequest request;
 
     public void setServletRequest(HttpServletRequest request) {
@@ -86,7 +87,7 @@ public class CpAction extends ActionSupport  implements ServletRequestAware {
     public String field() {
         try {
             Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
-            List list  =   userService.getUserById(userinfo.getUserid()).get(0).getCps();
+            List list = userService.getUserById(userinfo.getUserid()).get(0).getCps();
             JSONArray roc_cp = new JSONArray();
 
             if (list.size() > 0) {
@@ -99,7 +100,7 @@ public class CpAction extends ActionSupport  implements ServletRequestAware {
                     JSONArray subCps = null;
                     for (int j = 0; j < list.size(); j++) {
                         Cp subCp = (Cp) list.get(j);
-                        if(subCp.getPid() == cp.getId()){
+                        if (subCp.getPid() == cp.getId()) {
                             if (subCps == null) {
                                 subCps = new JSONArray();
                             }
@@ -129,33 +130,35 @@ public class CpAction extends ActionSupport  implements ServletRequestAware {
         try {
             String result = "0";
             JSONArray jsonArray = new JSONArray();
-            Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
 
-            List<Cp> cps = userService.getUserById(userinfo.getUserid()).get(0).getCps();
+            List<Cp> cps = cpService.getAll();
+
             if (cps != null && cps.size() > 0) {
                 for (int i = 0; i < cps.size(); i++) {
                     Cp cp = cps.get(i);
-                    if(cp.getPid() !=0){
+                    if (cp.getPid() != 0) {
                         continue;
                     }
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("name", cp.getCp());
                     jsonObject.put("id", cp.getId());
+                    jsonObject.put("pid", 0);
                     JSONArray subCps = null;
                     for (int j = 0; j < cps.size(); j++) {
-                          Cp subCp = cps.get(j);
-                        if(subCp.getPid() == cp.getId()){
-                            if(subCps == null){
+                        Cp subCp = cps.get(j);
+                        if (subCp.getPid() == cp.getId()) {
+                            if (subCps == null) {
                                 subCps = new JSONArray();
                             }
                             JSONObject sub = new JSONObject();
-                            sub.put("name" , subCp.getCp());
-                            sub.put("id" , cp.getId());
+                            sub.put("name", subCp.getCp());
+                            sub.put("id", subCp.getId());
+                            sub.put("pid", cp.getId());
                             subCps.add(sub);
                         }
                     }
-                    if(subCps!=null){
-                        jsonObject.put("nodes" , subCps);
+                    if (subCps != null) {
+                        jsonObject.put("nodes", subCps);
                     }
                     jsonArray.add(jsonObject);
                 }
@@ -185,16 +188,43 @@ public class CpAction extends ActionSupport  implements ServletRequestAware {
                 cpService.delete(list);
             }
             List<Cp> list = new ArrayList<Cp>();
-            String cps[] = item.split(",");
-            for (int i = 0; i < cps.length; i++) {
-                String str[] = cps[i].split("_");
-                Cp cp = new Cp();
-                if (!str[1].equals("0")) {
-                    cp.setId(Integer.parseInt(str[1]));
+            JSONArray array = JSONArray.fromObject(item);
+            if (array != null && array.size() > 0) {
+                for (int i = 0; i < array.size(); i++) {
+                    Cp cp = new Cp();
+                    JSONObject object = array.getJSONObject(i);
+                    cp.setCp(object.getString("name"));
+                    if (!object.getString("id").equals("0")) {
+                        cp.setId(object.getInt("id"));
+                    }
+                    cp.setPid(0);
+                    list.add(cp);
+
+                    if (object.has("nodes")) {
+                        JSONArray nodes = object.getJSONArray("nodes");
+                        for (int j = 0; j < nodes.size(); j++) {
+                            Cp subCp = new Cp();
+                            JSONObject object1 = nodes.getJSONObject(j);
+                            subCp.setCp(object1.getString("name"));
+                            if (!object1.getString("id").equals("0")) {
+                                subCp.setId(object1.getInt("id"));
+                            }
+                            subCp.setPid(cp.getId());
+                            list.add(subCp);
+                        }
+                    }
                 }
-                cp.setCp(str[0]);
-                list.add(cp);
             }
+//            String cps[] = item.split(",");
+//            for (int i = 0; i < cps.length; i++) {
+//                String str[] = cps[i].split("_");
+//                Cp cp = new Cp();
+//                if (!str[1].equals("0")) {
+//                    cp.setId(Integer.parseInt(str[1]));
+//                }
+//                cp.setCp(str[0]);
+//                list.add(cp);
+//            }
 
             cpService.saveCp(list);
             inputStream = new ByteArrayInputStream("1".getBytes());
@@ -206,7 +236,7 @@ public class CpAction extends ActionSupport  implements ServletRequestAware {
     }
 
 
-        public String channel() {
+    public String channel() {
         try {
             List list = null;
             StringBuffer sql = new StringBuffer("select ");

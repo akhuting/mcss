@@ -29,6 +29,7 @@
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery.ztree-2.6.min.js"></script>
 <script src="js/jquery.bubblepopup.v2.3.1.min.js" type="text/javascript"></script>
+<script src="js/jquery.json-2.3.min.js" type="text/javascript"></script>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 var zTree1;
@@ -124,29 +125,44 @@ function expandNode(expandSign) {
 
 var addCount = 1;
 function addNode(type) {
+    var srcNode = zTree1.getSelectedNode();
     var newNode = [
         { name:"cp" + (addCount++),id :0}
     ];
-    if (type == "p") newNode[0].isParent = true;
-    zTree1.addNodes(null, newNode);
-    alert(zTree1.transformToArray(zTree1.getNodes()));
+
+    if(srcNode){
+        if(srcNode.isParent){
+            zTree1.addNodes(srcNode, newNode);
+        }else{
+            zTree1.addNodes(null, newNode);
+        }
+    }else{
+        zTree1.addNodes(null, newNode);
+    }
 
 }
 var del = "0";
 function removeTreeNode(){
+    alert("asd");
     var srcNode = zTree1.getSelectedNode();
-    if (srcNode) {
-        if (srcNode.nodes && srcNode.nodes.length > 0) {
-                zTree1.removeNode(srcNode);
 
-        } else {
-            zTree1.removeNode(srcNode);
+    if (srcNode) {
+        if (srcNode.id != 0) {
+            if (srcNode.nodes && srcNode.nodes.length > 0) {
+                for(var i = 0; i < srcNode.nodes.length; i++){
+                    var node = srcNode.nodes[i];
+                    del += "," + node.id;
+                }
+
+            } else {
+                del += "," + srcNode.id;
+
+            }
         }
+        zTree1.removeNode(srcNode);
     }
-//
-//    if (treeNode.id != 0) {
-//        del += "," + treeNode.id;
-//    }
+
+
 }
 
 function getPreTreeNode(treeNode) {
@@ -272,18 +288,26 @@ function clone(jsonObj, newName) {
 
 function ok() {
 
-    var cps = "";
     var node = zTree1.getNodes();
+    var arr = new Array();
     for (var i = 0; i < node.length; i++) {
-        if (i != 0) {
-            cps += "," + node[i].name + "_" + node[i].id;
-        } else {
-            cps += node[i].name + "_" + node[i].id;
+        var obj;
+        if(node[i].nodes && node[i].nodes.length > 0){
+            var a = new Array();
+            for(var j = 0; j < node[i].nodes.length; j++){
+                var temp = {name:node[i].nodes[j].name , id:node[i].nodes[j].id};
+                a.push(temp);
+            }
+            obj = {name:node[i].name , id:node[i].id , nodes:a};
+        }else{
+            obj = {name:node[i].name , id:node[i].id};
         }
+        arr.push(obj);
     }
+    alert(del);
     $.ajax({
                 url: "<%=basePath%>cp!saveCp.action",
-                data:{item:cps,field:del},
+                data:{item:jQuery.toJSON(arr),field:del},
                 type:"POST",
                 cache: false,
                 success: function(html) {

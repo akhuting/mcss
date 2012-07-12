@@ -681,7 +681,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         sql.append(" And type = 'WebAccess' And subtype = 'IP'");
         List ips = null;
         try {
-            ips = ipDayStatItemService.getIpdaystatitemListBySql(sql.toString(), 0, 10);
+            ips = ipDayStatItemService.getIpdaystatitemListBySql(sql.toString(), 0, 10 , null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2119,7 +2119,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         sql.append(" And period = '").append(_yymmdd).append("'");
         sql.append(" And type = 'Flow' And subtype = 'URL' Order By ").append(total).append(" Desc");
         List ips = null;
-        ips =  urlDayStatItemService.getUrldaystatitemListBySql(sql.toString(), 0, 10);
+        ips =  urlDayStatItemService.getUrldaystatitemListBySql(sql.toString(), 0, 10 , null);
 
 
         List nextIps = null;
@@ -2145,7 +2145,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
                     }
                     sql.append(" And period = '").append(yymmdd).append("'");
                     sql.append(" And type = 'Flow' And subtype = 'URL' Order By ").append(nextTotal).append(" Desc");
-                    nextIps = urlDayStatItemService.getUrldaystatitemListBySql(sql.toString(), 0, 10);
+                    nextIps = urlDayStatItemService.getUrldaystatitemListBySql(sql.toString(), 0, 10 , null);
                     if (nextIps != null && nextIps.size() > 0) {
                         for (int j = 0; j < nextIps.size(); j++) {
                             Object[] next = (Object[]) nextIps.get(j);
