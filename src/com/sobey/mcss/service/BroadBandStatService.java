@@ -46,7 +46,7 @@ public class BroadBandStatService {
         return broadBandStatDao.querySql(sql.toString(), cp, type, beginTime, endTime);
     }
 
-    public void saveBroadbandstat(String cp, String type, String dateTime, long value) {
+    public void saveBroadbandstat(String cp, String type, String dateTime, double value) {
         Broadbandstat broadbandstat = new Broadbandstat();
         broadbandstat.setBroadband(value);
         broadbandstat.setCp(cp);
@@ -67,5 +67,9 @@ public class BroadBandStatService {
         sql.append(" and  DateTime <= ?");
         sql.append(" ORDER BY datetime");
         return broadBandStatDao.querySql(sql.toString(), new Object[]{ type, begin, end});
+    }
+
+    public void executeSql(String sql, Object... values){
+        broadBandStatDao.executeSql(sql , values);
     }
 }

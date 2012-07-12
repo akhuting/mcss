@@ -1,9 +1,6 @@
 package com.sobey.mcss.domain;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 /**
  * Created by IntelliJ IDEA.
@@ -63,15 +60,15 @@ public class Broadbandstat {
         this.datetime = datetime;
     }
 
-    private long broadband;
+    private double broadband;
 
     @javax.persistence.Column(name = "BroadBand", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
     @Basic
-    public long getBroadband() {
+    public double getBroadband() {
         return broadband;
     }
 
-    public void setBroadband(long broadband) {
+    public void setBroadband(double broadband) {
         this.broadband = broadband;
     }
 
@@ -97,7 +94,6 @@ public class Broadbandstat {
         result = 31 * result + (cp != null ? cp.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (datetime != null ? datetime.hashCode() : 0);
-        result = 31 * result + (int) (broadband ^ (broadband >>> 32));
         return result;
     }
 }

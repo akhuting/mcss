@@ -142,8 +142,7 @@ function addNode(type) {
 
 }
 var del = "0";
-function removeTreeNode(){
-    alert("asd");
+function removeTreeNode(event, treeId, treeNode){
     var srcNode = zTree1.getSelectedNode();
 
     if (srcNode) {
@@ -161,8 +160,21 @@ function removeTreeNode(){
         }
         zTree1.removeNode(srcNode);
     }
+    if (treeNode) {
+        if (treeNode.id != 0) {
+            if (treeNode.nodes && treeNode.nodes.length > 0) {
+                for(var i = 0; i < treeNode.nodes.length; i++){
+                    var node = treeNode.nodes[i];
+                    del += "," + node.id;
+                }
 
+            } else {
+                del += "," + treeNode.id;
 
+            }
+        }
+        zTree1.removeNode(treeNode);
+    }
 }
 
 function getPreTreeNode(treeNode) {
@@ -304,7 +316,6 @@ function ok() {
         }
         arr.push(obj);
     }
-    alert(del);
     $.ajax({
                 url: "<%=basePath%>cp!saveCp.action",
                 data:{item:jQuery.toJSON(arr),field:del},

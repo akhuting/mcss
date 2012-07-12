@@ -93,6 +93,9 @@ public class CpAction extends ActionSupport implements ServletRequestAware {
             if (list.size() > 0) {
                 for (int i = 0; i < list.size(); i++) {
                     Cp cp = (Cp) list.get(i);
+                    if(cp.getPid()!=0){
+                        continue;
+                    }
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("id", cp.getCp());
                     jsonObject.put("text", cp.getCp());
