@@ -33,6 +33,7 @@ import java.util.Map;
 @Controller
 @Results({@Result(name = Action.SUCCESS, location = "index.jsp"),
         @Result(name = "userManager", location = "userManager.jsp"),
+        @Result(name = "main", location = "/user!index.action" , type = "redirect"),
         @Result(name = "reg", location = "reg.jsp"),
         @Result(name = "edit", location = "edit.jsp"),
         @Result(name = "inputStream", type = "stream", params = {"contentType", "text/html;charset=utf-8", "inputName", "inputStream"})})
@@ -73,7 +74,7 @@ public class UserAction extends ActionSupport {
             userinfo.setLastLogin(DateUtil.getCurrentTime(DateUtil._YY_MM_DD_TIME));
             userService.updateUser(userinfo);
             ac.getSession().put("user", userinfo);
-        return SUCCESS;
+        return "main";
     }
 
 

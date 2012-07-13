@@ -9,10 +9,7 @@ import com.sobey.common.util.StringUtil;
 import com.sobey.mcss.action.Common;
 import com.sobey.mcss.action.McssService;
 import com.sobey.mcss.domain.*;
-import com.sobey.mcss.service.DayStatItemService;
-import com.sobey.mcss.service.HourStatItemService;
-import com.sobey.mcss.service.IpDayStatItemService;
-import com.sobey.mcss.service.UserService;
+import com.sobey.mcss.service.*;
 import net.sf.json.JSONArray;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Result;
@@ -1225,8 +1222,14 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
         }
     }
 
+    @Autowired
+    private CpService cpService;
+
     private List<Cp> getAllCp(){
         Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
+        if(userinfo.getUserStatus() == 1){
+            return cpService.getAll();
+        }
         return  userService.getUserById(userinfo.getUserid()).get(0).getCps();
     }
 }

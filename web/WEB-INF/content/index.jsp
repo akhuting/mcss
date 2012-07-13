@@ -91,14 +91,14 @@
             <a class=slider-link-1 href="<%=basePath%>index.jsp">首　　页</a>
             <a class=slider-link-2 href="<%=basePath%>modify.jsp" target="detail">账户管理</a>
             <a class=slider-link-3 href="<%=basePath%>content.jsp" target="detail">内容管理</a>
-            <a class=slider-link-4 href="<%=basePath%>monitor1.jsp" target="_self">数据监控</a>
-            <a class=slider-link-5 href="<%=basePath%>log.jsp" target="detail">日志管理</a>
-            <a class=slider-link-6 href="<%=basePath%>about.jsp" target="detail">客户中心</a>
-            <a class=slider-link-7 href="javascript:onLogout();" target="_self">退　　出</a>
+            <%--<a class=slider-link-4 href="<%=basePath%>monitor1.jsp" target="_self">数据监控</a>--%>
+            <a class=slider-link-4 href="<%=basePath%>log.jsp" target="detail">日志管理</a>
+            <a class=slider-link-5 href="<%=basePath%>about.jsp" target="detail">客户中心</a>
+            <a class=slider-link-6 href="javascript:onLogout();" target="_self">退　　出</a>
         </div>
     </div>
     <script type="text/javascript">
-        $(".slider-link-1, .slider-link-2, .slider-link-3, .slider-link-4, .slider-link-5, .slider-link-6,.slider-link-7").hover(function() {
+        $(".slider-link-1, .slider-link-2, .slider-link-3, .slider-link-4, .slider-link-5, .slider-link-6").hover(function() {
             $(this).animate({
                 marginTop: "8px"
             }, 250);
@@ -122,7 +122,7 @@
 
         <p class="userbtn"><a href="javascript:onLogout();" title="">注销</a></p>
 
-        <p style="float: left;">上次登录:${sessionScope.user.lastLogin}</p>
+        <%--<p style="float: left;">上次登录:${sessionScope.user.lastLogin}</p>--%>
     </div>
     <ul id="nav">
         <li>
@@ -132,7 +132,7 @@
                 </li>
                 <li><a href="<%=basePath%>flow/flow!mediaSpeedUp.action">流媒体加速流量</a>
                 </li>
-                <li><a href="<%=basePath%>flow/flow!uploadSpeedUp.action">上传加速流量</a></li>
+                <%--<li><a href="<%=basePath%>flow/flow!uploadSpeedUp.action">上传加速流量</a></li>--%>
                 <li><a href="<%=basePath%>flow/flow!areaWebSpeedUp.action">各地区网页加速流量</a></li>
                 <li><a href="<%=basePath%>flow/flow!areaMediaSpeedUp.action">各地区流媒体加速流量</a></li>
             </ul>
@@ -142,7 +142,7 @@
             <ul class="navigation">
                 <li><a href="<%=basePath%>bandwidth/bandwidth!webSpeedUp.action">网页带宽统计</a></li>
                 <li><a href="<%=basePath%>bandwidth/bandwidth!mediaSpeedUp.action">流媒体带宽统计</a></li>
-                <li><a href="<%=basePath%>bandwidth/bandwidth!uploadSpeedUp.action">上传带宽统计</a></li>
+                <%--<li><a href="<%=basePath%>bandwidth/bandwidth!uploadSpeedUp.action">上传带宽统计</a></li>--%>
             </ul>
         </li>
         <li><a class="collapsed heading">数据分析</a>
@@ -199,7 +199,7 @@
                         </li>
                     </ul>
                 </li>
-                <li><a href="<%=basePath%>upload/upload!uploadStat.action" style="font-size: 13px;font-weight: bold;">上传带宽统计</a>
+                <%--<li><a href="<%=basePath%>upload/upload!uploadStat.action" style="font-size: 13px;font-weight: bold;">上传带宽统计</a>--%>
                 </li>
             </ul>
         </li>

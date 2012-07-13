@@ -129,9 +129,8 @@ function addNode(type) {
     var newNode = [
         { name:"cp" + (addCount++),id :0}
     ];
-
     if(srcNode){
-        if(srcNode.isParent){
+        if(srcNode.isParent || srcNode.level == 0){
             zTree1.addNodes(srcNode, newNode);
         }else{
             zTree1.addNodes(null, newNode);

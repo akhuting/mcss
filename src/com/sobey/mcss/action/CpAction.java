@@ -87,7 +87,12 @@ public class CpAction extends ActionSupport implements ServletRequestAware {
     public String field() {
         try {
             Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
-            List list = userService.getUserById(userinfo.getUserid()).get(0).getCps();
+            List list = null;
+            if(userinfo.getUserStatus() == 1){
+                list = cpService.getAll();
+            }else{
+                list = userService.getUserById(userinfo.getUserid()).get(0).getCps();
+            }
             JSONArray roc_cp = new JSONArray();
 
             if (list.size() > 0) {

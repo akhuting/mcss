@@ -2513,8 +2513,13 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         }
     }
 
+    @Autowired
+    private CpService cpService;
     private List<Cp> getAllCp(){
         Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
+        if(userinfo.getUserStatus() == 1){
+            return cpService.getAll();
+        }
         return  userService.getUserById(userinfo.getUserid()).get(0).getCps();
     }
 }

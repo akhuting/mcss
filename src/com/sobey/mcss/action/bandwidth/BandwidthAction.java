@@ -6,6 +6,7 @@ import com.sobey.common.util.StringUtil;
 import com.sobey.mcss.domain.Cp;
 import com.sobey.mcss.domain.Userinfo;
 import com.sobey.mcss.service.BroadBandStatService;
+import com.sobey.mcss.service.CpService;
 import com.sobey.mcss.service.DayStatItemService;
 import com.sobey.mcss.service.UserService;
 import org.apache.struts2.convention.annotation.Results;
@@ -392,8 +393,14 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
             userCps = " cp = '" + this.cp + "'";
         }
     }
+
+    @Autowired
+    private CpService cpService;
     private List<Cp> getAllCp(){
         Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
+        if(userinfo.getUserStatus() == 1){
+            return cpService.getAll();
+        }
         return  userService.getUserById(userinfo.getUserid()).get(0).getCps();
     }
 }
