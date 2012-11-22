@@ -85,9 +85,9 @@
         <servlet-class>com.sobey.common.servlet.DelegatingServletProxy</servlet-class>
     </servlet>
     <servlet>
-        <description>文件下载</description>
-        <servlet-name>DownloadService</servlet-name>
-        <servlet-class>com.sobey.mcss.servlet.DownloadService</servlet-class>
+        <description>VMS流量接口</description>
+        <servlet-name>FlowService</servlet-name>
+        <servlet-class>com.sobey.common.servlet.DelegatingServletProxy</servlet-class>
     </servlet>
     <!--自定义Servlet结束-->
 
@@ -97,8 +97,8 @@
         <url-pattern>/StatService</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DownloadService</servlet-name>
-        <url-pattern>/log/*</url-pattern>
+        <servlet-name>FlowService</servlet-name>
+        <url-pattern>/FlowService</url-pattern>
     </servlet-mapping>
     <!--Servlet映射结束-->
      <error-page>

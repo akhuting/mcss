@@ -84,11 +84,11 @@ public class StatService extends HttpServlet {
             if ("live".equals(method)) {
 
                 String cp = stat.elementText("cpid");
-                try{
-                    if(cp.indexOf(":")!=-1){
+                try {
+                    if (cp.indexOf(":") != -1) {
                         cp = cp.split(":")[0];
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 String date = stat.elementText("date");
@@ -97,7 +97,7 @@ public class StatService extends HttpServlet {
                 List channels = stat.element("channels").elements("channel");
                 double broadband = Long.parseLong(stat.elementText("broadband"));
 
-                broadband = broadband / 1048576d ;
+                broadband = broadband / 1048576d;
 
                 //保存带宽统计数据
 //                if (broadband != 0)
@@ -119,12 +119,12 @@ public class StatService extends HttpServlet {
                 } else {
                     double max = Double.parseDouble(broad[4].toString());
                     double total = Double.parseDouble(broad[6].toString()) + broadband;
-                    double avg =  total / hour;
+                    double avg = total / hour;
                     if (broadband > max) {
                         String time = date.split(" ")[1];
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ？, max_value = ？, avg_value = ? ,  total = ? WHERE period = ？", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD)});
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ？, max_value = ？, avg_value = ? ,  total = ? WHERE period = ？AND type='Media' AND cp=?", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp});
                     } else {
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ？", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD)});
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ？AND type='Media' AND cp=?", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp});
                     }
                 }
                 for (Object object : channels) {
@@ -194,11 +194,11 @@ public class StatService extends HttpServlet {
             if ("vod".equals(method)) {
 
                 String cp = stat.elementText("cpid");
-                try{
-                    if(cp.indexOf(":")!=-1){
+                try {
+                    if (cp.indexOf(":") != -1) {
                         cp = cp.split(":")[0];
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 String date = stat.elementText("date");
@@ -225,12 +225,12 @@ public class StatService extends HttpServlet {
                 } else {
                     double max = Double.parseDouble(broad[4].toString());
                     double total = Double.parseDouble(broad[6].toString()) + broadband;
-                    double avg =  total / hour;
+                    double avg = total / hour;
                     if (broadband > max) {
                         String time = date.split(" ")[1];
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ？, max_value = ？, avg_value = ? ,  total = ? WHERE period = ？", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD)});
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ？, max_value = ？, avg_value = ? ,  total = ? WHERE period = ？AND type='Media' AND cp=?", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp});
                     } else {
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ？", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD)});
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ？AND type='Media' AND cp=?", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp});
                     }
                 }
                 //保存小时数据

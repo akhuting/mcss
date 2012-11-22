@@ -1059,7 +1059,6 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
                 yymmdd.append(endMonth);
             }
         }
-
     }
 
     private void initHour() {
