@@ -66,7 +66,8 @@
 
         var setting = {
             showLine: true,
-            checkable: true
+            checkable: true,
+            checkType: { "Y": "s", "N": "s" }
         };
         var zTree;
         $(document).ready(function() {
@@ -155,7 +156,7 @@
                             <ul id="tree" class="tree" style="width:300px;height: 200px; overflow-y: scroll;"></ul>
                         </fieldset>
                         <fieldset class="step">
-                            <legend>流量设置</legend>
+                            <legend>演示流量设置</legend>
                             <p>
                                 <label>静态加速</label>
                                 <input style="width: 50px;" onkeyup="checkdig('smin')" id="smin" name="smin"><input

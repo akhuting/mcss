@@ -73,26 +73,36 @@
         }
         var setting = {
             showLine: true,
-            checkable: true
+            checkable: true,
+            checkType: { "Y": "s", "N": "s" }
         };
         var zTree;
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             var zTreeNodes;
             $.ajax({
                 url: "<%=basePath%>cp!allCp.action",
                 cache: false,
-                async:false,
-                success: function(html) {
+                async: false,
+                success: function (html) {
                     zTreeNodes = eval(html);
                 }
             });
             var cps = $("#cp").val().split(",");
             for (var i = 0; i < zTreeNodes.length; i++) {
+
                 for (var j = 0; j < cps.length; j++) {
                     if (zTreeNodes[i].id == cps[j]) {
                         zTreeNodes[i].checked = true;
-                        break;
+                    }
+                }
+                if (zTreeNodes[i].nodes != undefined) {
+                    for (var j = 0; j < zTreeNodes[i].nodes.length; j++) {
+                        for (var l = 0; l < cps.length; l++) {
+                            if (zTreeNodes[i].nodes[j].id == cps[l]) {
+                                zTreeNodes[i].nodes[j].checked = true;
+                            }
+                        }
                     }
                 }
             }
@@ -174,20 +184,24 @@
                             <ul id="tree" class="tree" style="width:300px;height: 200px; overflow-y: scroll;"></ul>
                         </fieldset>
                         <fieldset class="step">
-                            <legend>流量设置</legend>
+                            <legend>演示流量设置</legend>
                             <p>
                                 <label>静态加速</label>
                                 <%
-                                    String [] range = user.getUserRange().split("-");
+                                    String[] range = user.getUserRange().split("-");
                                 %>
-                                <input style="width: 50px;" onkeyup="checkdig('smin')" id="smin" name="smin" value="<%=range[0]%>"><input
-                                    style="width: 50px;" id="smax" onkeyup="checkdig('smax')" name="smax" value="<%=range[1]%>">
+                                <input style="width: 50px;" onkeyup="checkdig('smin')" id="smin" name="smin"
+                                       value="<%=range[0]%>"><input
+                                    style="width: 50px;" id="smax" onkeyup="checkdig('smax')" name="smax"
+                                    value="<%=range[1]%>">
                             </p>
 
                             <p>
                                 <label>流媒体加速</label>
-                                <input style="width: 50px;" onkeyup="checkdig('fmin')" id="fmin" name="fmin" value="<%=range[2]%>">&nbsp;<input
-                                    style="width: 50px;" id="fmax" onkeyup="checkdig('fmax')" name="fmax" value="<%=range[3]%>">
+                                <input style="width: 50px;" onkeyup="checkdig('fmin')" id="fmin" name="fmin"
+                                       value="<%=range[2]%>">&nbsp;<input
+                                    style="width: 50px;" id="fmax" onkeyup="checkdig('fmax')" name="fmax"
+                                    value="<%=range[3]%>">
                             </p>
                         </fieldset>
                         <fieldset class="step">
