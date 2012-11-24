@@ -1,31 +1,31 @@
 package com.sobey.mcss.action.flow;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import com.sobey.common.util.CookieUtil;
 import com.sobey.common.util.DateUtil;
 import com.sobey.common.util.MirrorUtil;
-import com.sobey.common.util.R;
 import com.sobey.common.util.StringUtil;
 import com.sobey.mcss.action.Common;
-import com.sobey.mcss.action.McssService;
-import com.sobey.mcss.domain.*;
+import com.sobey.mcss.domain.Cp;
+import com.sobey.mcss.domain.Daystatitem;
+import com.sobey.mcss.domain.Hourstatitem;
+import com.sobey.mcss.domain.Userinfo;
 import com.sobey.mcss.service.*;
-import net.sf.json.JSONArray;
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.io.ByteArrayInputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Yanggang.
@@ -44,7 +44,7 @@ import java.util.*;
         @Result(name = "areaWeb", location = "areaWebSpeedUp.jsp"),
         @Result(name = "areaMedia", location = "areaMediaSpeedUp.jsp"),
         @Result(name = "inputStream", type = "stream", params = {"contentType", "text/html;charset=utf-8", "inputName", "inputStream"})})
-public class FlowAction extends ActionSupport  implements ServletRequestAware {
+public class FlowAction extends ActionSupport implements ServletRequestAware, ServletResponseAware {
 
 
     @Autowired
@@ -84,6 +84,7 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
     private String area;
 
     private HttpServletRequest request;
+    private HttpServletResponse response;
 
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
@@ -167,14 +168,15 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
         } else {
             initDay();
             if (cp == null) {
-                getMaxCp(" from daystatitem where type ='Flow' and subtype ='AreaWeb' ");
+                getMaxCp("webSpeedUp");
                 initCp();
             }
             flowDay("网页加速流量统计", "Web");
             result.put("type", "day");
         }
-
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "webSpeedUp", cp, 2592000);
+        }
         return "web";
     }
 
@@ -201,13 +203,15 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
         } else {
             initDay();
             if (cp == null) {
-                getMaxCp("  from daystatitem where type ='Flow' and subtype ='AreaMedia' ");
+                getMaxCp("mediaSpeedUp");
                 initCp();
             }
             mediaFolwDay();
             result.put("type", "day");
         }
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "mediaSpeedUp", cp, 2592000);
+        }
         return "media";
     }
 
@@ -262,10 +266,13 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
         } else {
             initDay();
             if (cp == null) {
-                getMaxCp(" from daystatitem where type ='Flow' and subtype ='AreaWeb' ");
+                getMaxCp("areaWebSpeedUp");
                 initCp();
             }
             areaSpeedUpDay("AreaWeb");
+        }
+        if (cp != null) {
+            CookieUtil.addCookie(response, "areaWebSpeedUp", cp, 2592000);
         }
         return "areaWeb";
     }
@@ -292,13 +299,15 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
         } else {
             initDay();
             if (cp == null) {
-                getMaxCp("  from daystatitem where type ='Flow' and subtype ='AreaMedia' ");
+                getMaxCp("areaMediaSpeedUp");
                 initCp();
             }
 
             areaSpeedUpDay("AreaMedia");
         }
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "areaMediaSpeedUp", cp, 2592000);
+        }
         return "areaMedia";
     }
 
@@ -1092,100 +1101,39 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
          */
         if (begin == 0) {
             begin = 1;
-        }else{
+        } else {
             begin = begin + 1;
         }
         if (end == 0) {
             end = 24;
-        }else{
+        } else {
             end = end + 1;
         }
 
 
     }
 
-
-
-
     /**
-     * 查询本周值最大的CP
+     * 获取Cookie中保存的CP
      *
-     * @param sql
+     * @param name cookie name
      */
-    private void getMaxCp(String sql) {
-        StringBuffer sum = new StringBuffer();
-
-        //本周结束日期小于本周开始日期，表示结束日期已是下月
-        if (end < begin) {
-            /**
-             * 如果结束日期在下月，先查出本月本周开始日期到月底最大的CP
-             * 再查出下月月初到本周结束最大的CP，返回两者最大
-             */
-            int lastDayOfMonth = DateUtil.getLastDayOfMonth();//本月最后有一天
-            for (int i = begin; i <= lastDayOfMonth; i++) {
-                if (sum.length() == 0) {
-                    sum.append("count" + i);
-                } else {
-                    sum.append("+count" + i);
+    private void getMaxCp(String name) {
+        this.cp = null;
+        Cookie cookie = CookieUtil.getCookieByName(request, name);
+        if (cookie != null) {
+            String temp = cookie.getValue();
+            for (Cp _cp : getAllCp()) {
+                if (temp.equals(_cp.getCp())) {
+                    this.cp = temp;
                 }
-            }
-            List list = dayStatItemService.getDaystatitemListBySql("select cp , " + sum.toString() + sql + " and Period='" + _yymmdd.toString() + "'  ORDER BY (" + sum.toString() + ") desc limit 0 , 1", null);
-            if (list != null && list.size() > 0) {
-                Object[] objects = (Object[]) list.get(0);
-                sum.setLength(0);
-                for (int i = 1; i <= end; i++) {
-                    if (sum.length() == 0) {
-                        sum.append("count" + i);
-                    } else {
-                        sum.append("+count" + i);
-                    }
-                }
-                list = dayStatItemService.getDaystatitemListBySql("select cp , " + sum.toString() + sql + " and Period='" + yymmdd.toString() + "'  ORDER BY (" + sum.toString() + ") desc limit 0 , 1", null);
-                if (list != null && list.size() > 0) {
-                    Object[] _objects = (Object[]) list.get(0);
-                    double one = Double.parseDouble(objects[1].toString());
-                    double two = Double.parseDouble(_objects[1].toString());
-                    if (!objects[1].equals("0") && !_objects[1].equals("0")) {
-                        if (two > one) {
-                            this.cp = _objects[0].toString();
-                        } else {
-                            this.cp = objects[0].toString();
-                        }
-                    }
-                } else {
-                    if (!objects[1].toString().equals("0")) {
-                        this.cp = objects[0].toString();
-                    }
-                }
-            }
-        } else {
-            //如果本周开始和结束都是当月，那直接累加出最大值即可！
-            for (int i = begin; i <= end; i++) {
-                if (sum.length() == 0) {
-                    sum.append("count" + i);
-                } else {
-                    sum.append("+count" + i);
-                }
-            }
-            List list = dayStatItemService.getDaystatitemListBySql("select cp , " + sum.toString() + sql + " and Period='" + _yymmdd.toString() + "'  ORDER BY (" + sum.toString() + ") desc limit 0 , 1", null);
-            if (list != null && list.size() > 0) {
-                Object[] _objects = (Object[]) list.get(0);
-                this.cp = _objects[0].toString();
             }
         }
-        if(cp ==null)
-            return;
-        boolean find = false;
-
-
-        for(Cp _cp : getAllCp()){
-            if(cp.equalsIgnoreCase(_cp.getCp())){
-                find = true;
+        if (cp == null || cp.equals("")) {
+            for (Cp _cp : getAllCp()) {
+                this.cp = _cp.getCp();
                 break;
             }
-        }
-        if(!find){
-            this.cp = null;
         }
     }
 
@@ -1200,7 +1148,7 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
                     }
                     temp.append("( cp = '").append(_cp.getCp()).append("' ");
                     for (Cp subCp : cps) {
-                        if(subCp.getPid() == _cp.getId())
+                        if (subCp.getPid() == _cp.getId())
                             temp.append(" or cp = '").append(subCp.getCp()).append("'");
                     }
                     temp.append(")");
@@ -1224,11 +1172,16 @@ public class FlowAction extends ActionSupport  implements ServletRequestAware {
     @Autowired
     private CpService cpService;
 
-    private List<Cp> getAllCp(){
+    private List<Cp> getAllCp() {
         Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
-        if(userinfo.getUserStatus() == 1){
+        if (userinfo.getUserStatus() == 1) {
             return cpService.getAll();
         }
-        return  userService.getUserById(userinfo.getUserid()).get(0).getCps();
+        return userService.getUserById(userinfo.getUserid()).get(0).getCps();
+    }
+
+    @Override
+    public void setServletResponse(HttpServletResponse httpServletResponse) {
+        this.response = httpServletResponse;
     }
 }

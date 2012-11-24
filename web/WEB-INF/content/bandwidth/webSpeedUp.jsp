@@ -69,7 +69,7 @@
                     <th>时间</th>
                     <th>峰值带宽</th>
                     <th>峰值时间点</th>
-                    <th>峰值平均带宽</th>
+                    <th>平均带宽</th>
                 </tr>
                 </thead>
                 <tbody>

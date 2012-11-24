@@ -1,6 +1,7 @@
 package com.sobey.mcss.action.bandwidth;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.sobey.common.util.CookieUtil;
 import com.sobey.common.util.DateUtil;
 import com.sobey.common.util.StringUtil;
 import com.sobey.mcss.domain.Cp;
@@ -11,15 +12,18 @@ import com.sobey.mcss.service.DayStatItemService;
 import com.sobey.mcss.service.UserService;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Controller
 @Results({@org.apache.struts2.convention.annotation.Result(name = "Web", location = "webSpeedUp.jsp"), @org.apache.struts2.convention.annotation.Result(name = "Media", location = "mediaSpeedUp.jsp"), @org.apache.struts2.convention.annotation.Result(name = "Upload", location = "uploadSpeedUp.jsp")})
-public class BandwidthAction extends ActionSupport implements ServletRequestAware {
+public class BandwidthAction extends ActionSupport implements ServletRequestAware, ServletResponseAware {
     private String cp;
     private String beginTime;
     private String endTime;
@@ -37,7 +41,7 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
     private UserService userService;
 
 
-
+    private HttpServletResponse response;
     private HttpServletRequest request;
 
     public void setServletRequest(HttpServletRequest request) {
@@ -245,8 +249,8 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                 }
                 String[] temp = new String[1];
 //                StringUtil.byteToUnit(Double.parseDouble(max), temp, null);
-                unit =temp[0];
-                this.result.put("max",  max);
+                unit = temp[0];
+                this.result.put("max", max);
                 this.result.put("avg", avg);
 //                this.result.put("max",  StringUtil.byteToUnit(Double.parseDouble(max), temp, unit));
 //                this.result.put("avg", StringUtil.byteToUnit(Double.parseDouble(avg), temp, unit));
@@ -324,7 +328,7 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                 }
                 String[] t = new String[1];
 //                StringUtil.byteToUnit(Double.parseDouble(String.valueOf(min)), t, null);
-                unit =t[0];
+                unit = t[0];
                 categories.append("</categories>");
                 values.append("</dataset>");
                 values1.append("</dataset>");
@@ -336,7 +340,10 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
             }
             sb.append("</chart>");
             this.result.put("xml", sb.toString());
-            this.result.put("unit" , unit);
+            this.result.put("unit", unit);
+            if (cp != null) {
+                CookieUtil.addCookie(response, type, cp, 2592000);
+            }
             return type;
         } catch (Exception e) {
             e.printStackTrace();
@@ -344,24 +351,27 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
         return null;
     }
 
-    private void getMaxCp(String type) {
-        String sql = "select cp from broadbanddaystat where period BETWEEN '" + beginTime + "' and '" + endTime + "' " + " and type ='" + type + "'" + " ORDER BY max_value DESC LIMIT 0,1";
-        List list = this.dayStatItemService.getDaystatitemListBySql(sql, null);
-        if (list != null && list.size() > 0) {
-            Object object = list.get(0);
-            this.cp = object.toString();
-        }
-        if(cp ==null)
-            return;
-        boolean find = false;
-        for(Cp _cp : getAllCp()){
-            if(cp.equalsIgnoreCase(_cp.getCp())){
-                find = true;
-                break;
+    /**
+     * 获取Cookie中保存的CP
+     *
+     * @param name cookie name
+     */
+    private void getMaxCp(String name) {
+        this.cp = null;
+        Cookie cookie = CookieUtil.getCookieByName(request, name);
+        if (cookie != null) {
+            String temp = cookie.getValue();
+            for (Cp _cp : getAllCp()) {
+                if (temp.equals(_cp.getCp())) {
+                    this.cp = temp;
+                }
             }
         }
-        if(!find){
-            this.cp = null;
+        if (cp == null || cp.equals("")) {
+            for (Cp _cp : getAllCp()) {
+                this.cp = _cp.getCp();
+                break;
+            }
         }
     }
 
@@ -370,13 +380,13 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
             List<Cp> cps = getAllCp();
             StringBuffer temp = null;
             for (Cp _cp : cps) {
-                if (_cp.getCp().equals(this.cp) && _cp.getPid() == 0 ) {
+                if (_cp.getCp().equals(this.cp) && _cp.getPid() == 0) {
                     if (temp == null) {
                         temp = new StringBuffer();
                     }
                     temp.append("( cp = '").append(_cp.getCp()).append("' ");
                     for (Cp subCp : cps) {
-                        if(subCp.getPid() == _cp.getId())
+                        if (subCp.getPid() == _cp.getId())
                             temp.append(" or cp = '").append(subCp.getCp()).append("'");
                     }
                     temp.append(")");
@@ -396,11 +406,17 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
 
     @Autowired
     private CpService cpService;
-    private List<Cp> getAllCp(){
+
+    private List<Cp> getAllCp() {
         Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
-        if(userinfo.getUserStatus() == 1){
+        if (userinfo.getUserStatus() == 1) {
             return cpService.getAll();
         }
-        return  userService.getUserById(userinfo.getUserid()).get(0).getCps();
+        return userService.getUserById(userinfo.getUserid()).get(0).getCps();
+    }
+
+    @Override
+    public void setServletResponse(HttpServletResponse httpServletResponse) {
+        this.response = httpServletResponse;
     }
 }

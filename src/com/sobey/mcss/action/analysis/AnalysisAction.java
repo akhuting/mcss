@@ -1,6 +1,7 @@
 package com.sobey.mcss.action.analysis;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.sobey.common.util.CookieUtil;
 import com.sobey.common.util.DateUtil;
 import com.sobey.common.util.MirrorUtil;
 import com.sobey.common.util.StringUtil;
@@ -13,10 +14,13 @@ import com.sobey.mcss.service.*;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -37,7 +41,7 @@ import java.util.*;
         @Result(name = "vodPlay", location = "vodPlay.jsp"),
         @Result(name = "vodStay", location = "vodStay.jsp"),
         @Result(name = "vodArea", location = "vodArea.jsp")})
-public class AnalysisAction extends ActionSupport  implements ServletRequestAware {
+public class AnalysisAction extends ActionSupport implements ServletRequestAware, ServletResponseAware {
 
     private int year;
     private int month;
@@ -59,7 +63,6 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
     private String area;
 
 
-
     @Autowired
     private UserService userService;
 
@@ -76,6 +79,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
     private UrlDayStatItemService urlDayStatItemService;
 
     private HttpServletRequest request;
+    private HttpServletResponse response;
 
     public void setServletRequest(HttpServletRequest request) {
         this.request = request;
@@ -135,11 +139,13 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         }
         initDay();
         if (cp == null) {
-            getMaxCp("  from urldaystatitem where type ='Flow' and subtype ='URL' ");
+            getMaxCp("visitorsSource");
         }
         initCp();
         visitorsSourceDay();
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "visitorsSource", cp, 2592000);
+        }
         return "visitorsSource";
     }
 
@@ -157,10 +163,13 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         }
         initDay();
         if (cp == null) {
-            getMaxCp("  from daystatitem where type ='Analysis' and subtype ='Viewed' and item='IP' ");
+            getMaxCp("webAccess");
         }
         initCp();
         webAccessDay();
+        if (cp != null) {
+            CookieUtil.addCookie(response, "webAccess", cp, 2592000);
+        }
         return "visitors";
     }
 
@@ -184,11 +193,14 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         } else {
             initDay();
             if (cp == null) {
-                getMaxCp("  from daystatitem where type ='Analysis' and subtype ='Viewed' and item='PV' ");
+                getMaxCp("webView");
                 initCp();
             }
             webViewDay();
             result.put("type", "day");
+        }
+        if (cp != null) {
+            CookieUtil.addCookie(response, "webView", cp, 2592000);
         }
         return "viewed";
     }
@@ -207,11 +219,13 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         }
         initDay();
         if (cp == null) {
-            getMaxCp(" from daystatitem where type ='Analysis' and subtype ='WebArea' ");
+            getMaxCp("webArea");
         }
         initCp();
         webAreaDay();
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "webArea", cp, 2592000);
+        }
         return "area";
     }
 
@@ -231,7 +245,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
             } else {
                 initDay();
                 if (cp == null) {
-                    getMaxCp("  from daystatitem where type ='LiveWatch' and subtype ='Highest' ");
+                    getMaxCp("liveWatch");
                     initCp();
                 }
                 liveWatchChannelDay();
@@ -249,7 +263,9 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
                 result.put("type", "day");
             }
         }
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "liveWatch", cp, 2592000);
+        }
         return "watch";
     }
 
@@ -265,7 +281,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         initCp();
         if (channel != null && channel.equals("all")) {
             if (cp == null) {
-                getMaxCp(" from daystatitem where type ='Live' and subtype ='5Min' ");
+                getMaxCp("liveStay");
                 initCp();
             }
             liveStayChannelDay();
@@ -276,6 +292,9 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
             } else {
                 liveStayDay();
             }
+        }
+        if (cp != null) {
+            CookieUtil.addCookie(response, "liveStay", cp, 2592000);
         }
         return "liveStay";
     }
@@ -292,7 +311,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         initCp();
         if (channel != null && channel.equals("all")) {
             if (cp == null) {
-                getMaxCp("  from daystatitem where type ='LiveArea' ");
+                getMaxCp("liveArea");
                 initCp();
             }
             liveAreaChannelDay();
@@ -304,7 +323,9 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
                 liveAreaDay();
             }
         }
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "liveArea", cp, 2592000);
+        }
         return "liveArea";
     }
 
@@ -324,11 +345,14 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         } else {
             initDay();
             if (cp == null) {
-                getMaxCp("  from daystatitem where type ='Analysis' and subtype ='VodPlay' and item = 'Highest'");
+                getMaxCp("vodPlay");
                 initCp();
             }
             vodPlayDay();
             result.put("type", "day");
+        }
+        if (cp != null) {
+            CookieUtil.addCookie(response, "vodPlay", cp, 2592000);
         }
         return "vodPlay";
     }
@@ -342,11 +366,13 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         }
         initDay();
         if (cp == null) {
-            getMaxCp("  from daystatitem where type ='Analysis' and subtype ='Vod' and item='5Min' ");
+            getMaxCp("vodStay");
         }
         initCp();
         vodStayDay();
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "vodStay", cp, 2592000);
+        }
         return "vodStay";
     }
 
@@ -359,11 +385,13 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         }
         initDay();
         if (cp == null) {
-            getMaxCp("  from daystatitem where type ='Analysis' and subtype ='VodArea' ");
+            getMaxCp("vodArea");
         }
         initCp();
         vodAreaDay();
-
+        if (cp != null) {
+            CookieUtil.addCookie(response, "vodArea", cp, 2592000);
+        }
         return "vodArea";
     }
 
@@ -681,7 +709,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         sql.append(" And type = 'WebAccess' And subtype = 'IP'");
         List ips = null;
         try {
-            ips = ipDayStatItemService.getIpdaystatitemListBySql(sql.toString(), 0, 10 , null);
+            ips = ipDayStatItemService.getIpdaystatitemListBySql(sql.toString(), 0, 10, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2119,7 +2147,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
         sql.append(" And period = '").append(_yymmdd).append("'");
         sql.append(" And type = 'Flow' And subtype = 'URL' Order By ").append(total).append(" Desc");
         List ips = null;
-        ips =  urlDayStatItemService.getUrldaystatitemListBySql(sql.toString(), 0, 10 , null);
+        ips = urlDayStatItemService.getUrldaystatitemListBySql(sql.toString(), 0, 10, null);
 
 
         List nextIps = null;
@@ -2145,7 +2173,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
                     }
                     sql.append(" And period = '").append(yymmdd).append("'");
                     sql.append(" And type = 'Flow' And subtype = 'URL' Order By ").append(nextTotal).append(" Desc");
-                    nextIps = urlDayStatItemService.getUrldaystatitemListBySql(sql.toString(), 0, 10 , null);
+                    nextIps = urlDayStatItemService.getUrldaystatitemListBySql(sql.toString(), 0, 10, null);
                     if (nextIps != null && nextIps.size() > 0) {
                         for (int j = 0; j < nextIps.size(); j++) {
                             Object[] next = (Object[]) nextIps.get(j);
@@ -2398,90 +2426,37 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
          */
         if (begin == 0) {
             begin = 1;
-        }else{
+        } else {
             begin = begin + 1;
         }
         if (end == 0) {
             end = 24;
-        }else{
+        } else {
             end = end + 1;
         }
     }
 
     /**
-     * 查询本周值最大的CP
+     * 获取Cookie中保存的CP
      *
-     * @param sql
+     * @param name cookie name
      */
-    private void getMaxCp(String sql) {
-        StringBuffer sum = new StringBuffer();
-
-        //本周结束日期小于本周开始日期，表示结束日期已是下月
-        if (end < begin) {
-            /**
-             * 如果结束日期在下月，先查出本月本周开始日期到月底最大的CP
-             * 再查出下月月初到本周结束最大的CP，返回两者最大
-             */
-            int lastDayOfMonth = DateUtil.getLastDayOfMonth();//本月最后有一天
-            for (int i = begin; i <= lastDayOfMonth; i++) {
-                if (sum.length() == 0) {
-                    sum.append("count" + i);
-                } else {
-                    sum.append("+count" + i);
+    private void getMaxCp(String name) {
+        this.cp = null;
+        Cookie cookie = CookieUtil.getCookieByName(request, name);
+        if (cookie != null) {
+            String temp = cookie.getValue();
+            for (Cp _cp : getAllCp()) {
+                if (temp.equals(_cp.getCp())) {
+                    this.cp = temp;
                 }
-            }
-            List list = dayStatItemService.getDaystatitemListBySql("select cp , " + sum.toString() + sql + " and Period='" + _yymmdd.toString() + "'  ORDER BY (" + sum.toString() + ") desc limit 0 , 1", null);
-            if (list != null && list.size() > 0) {
-                Object[] objects = (Object[]) list.get(0);
-                sum.setLength(0);
-                for (int i = 1; i <= end; i++) {
-                    if (sum.length() == 0) {
-                        sum.append("count" + i);
-                    } else {
-                        sum.append("+count" + i);
-                    }
-                }
-                list = dayStatItemService.getDaystatitemListBySql("select cp , " + sum.toString() + sql + " and Period='" + yymmdd.toString() + "'  ORDER BY (" + sum.toString() + ") desc limit 0 , 1", null);
-                if (list != null && list.size() > 0) {
-                    Object[] _objects = (Object[]) list.get(0);
-                    double one = Double.parseDouble(objects[1].toString());
-                    double two = Double.parseDouble(_objects[1].toString());
-                    if (!objects[1].equals("0") && !_objects[1].equals("0")) {
-                        if (two > one) {
-                            this.cp = _objects[0].toString();
-                        } else {
-                            this.cp = objects[0].toString();
-                        }
-                    }
-
-                }
-            }
-        } else {
-            //如果本周开始和结束都是当月，那直接累加出最大值即可！
-            for (int i = begin; i <= end; i++) {
-                if (sum.length() == 0) {
-                    sum.append("count" + i);
-                } else {
-                    sum.append("+count" + i);
-                }
-            }
-            List list = dayStatItemService.getDaystatitemListBySql("select cp , " + sum.toString() + sql + " and Period='" + _yymmdd.toString() + "'  ORDER BY (" + sum.toString() + ") desc limit 0 , 1", null);
-            if (list != null && list.size() > 0) {
-                Object[] _objects = (Object[]) list.get(0);
-                this.cp = _objects[0].toString();
             }
         }
-        if(cp ==null)
-            return;
-        boolean find = false;
-        for(Cp _cp : getAllCp()){
-            if(cp.equalsIgnoreCase(_cp.getCp())){
-                find = true;
+        if (cp == null || cp.equals("")) {
+            for (Cp _cp : getAllCp()) {
+                this.cp = _cp.getCp();
                 break;
             }
-        }
-        if(!find){
-            this.cp = null;
         }
     }
 
@@ -2496,7 +2471,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
                     }
                     temp.append("( cp = '").append(_cp.getCp()).append("' ");
                     for (Cp subCp : cps) {
-                        if(subCp.getPid() == _cp.getId())
+                        if (subCp.getPid() == _cp.getId())
                             temp.append(" or cp = '").append(subCp.getCp()).append("'");
                     }
                     temp.append(")");
@@ -2507,6 +2482,7 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
             }
         }
     }
+
     private void setCp() {
         if (cp != null && userCps == null) {
             userCps = " cp = '" + this.cp + "'";
@@ -2515,11 +2491,17 @@ public class AnalysisAction extends ActionSupport  implements ServletRequestAwar
 
     @Autowired
     private CpService cpService;
-    private List<Cp> getAllCp(){
+
+    private List<Cp> getAllCp() {
         Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
-        if(userinfo.getUserStatus() == 1){
+        if (userinfo.getUserStatus() == 1) {
             return cpService.getAll();
         }
-        return  userService.getUserById(userinfo.getUserid()).get(0).getCps();
+        return userService.getUserById(userinfo.getUserid()).get(0).getCps();
+    }
+
+    @Override
+    public void setServletResponse(HttpServletResponse httpServletResponse) {
+        this.response = httpServletResponse;
     }
 }

@@ -187,7 +187,7 @@
                         <li class="selected"><a href="reg.jsp#">账户</a></li>
                         <li><a href="reg.jsp#">个人资料</a></li>
                         <li><a href="reg.jsp#">域名设置</a></li>
-                        <li><a href="reg.jsp#">流量设置</a></li>
+                        <li><a href="reg.jsp#">演示流量设置</a></li>
                         <li><a href="reg.jsp#">完成</a></li>
                     </ul>
                 </div>

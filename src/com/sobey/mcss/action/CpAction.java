@@ -88,9 +88,9 @@ public class CpAction extends ActionSupport implements ServletRequestAware {
         try {
             Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
             List list = null;
-            if(userinfo.getUserStatus() == 1){
+            if (userinfo.getUserStatus() == 1) {
                 list = cpService.getAll();
-            }else{
+            } else {
                 list = userService.getUserById(userinfo.getUserid()).get(0).getCps();
             }
             JSONArray roc_cp = new JSONArray();
@@ -98,8 +98,24 @@ public class CpAction extends ActionSupport implements ServletRequestAware {
             if (list.size() > 0) {
                 for (int i = 0; i < list.size(); i++) {
                     Cp cp = (Cp) list.get(i);
-                    if(cp.getPid()!=0){
-                        continue;
+                    if (cp.getPid() != 0) {
+                        boolean find = false;
+                        for (Object o : list) {
+                            Cp subCp = (Cp) o;
+                            if (subCp.getId() == cp.getPid()) {
+                                find = true;
+                                break;
+                            }
+                        }
+                        if (find) {
+                            continue;
+                        } else {
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("id", cp.getCp());
+                            jsonObject.put("text", cp.getCp());
+                            roc_cp.add(jsonObject);
+                            continue;
+                        }
                     }
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("id", cp.getCp());
