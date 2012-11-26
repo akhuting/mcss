@@ -15,7 +15,7 @@ import java.util.List;
 @javax.persistence.Table(name = "userinfo")
 @Entity
 public class Userinfo {
-      private int userid;
+    private int userid;
 
     @javax.persistence.Column(name = "USERID", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
     @Id
@@ -63,6 +63,18 @@ public class Userinfo {
         this.password = password;
     }
 
+    private int userCn = 1;
+
+    @javax.persistence.Column(name = "USER_CN", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    @Basic
+    public int getUserCn() {
+        return userCn;
+    }
+
+    public void setUserCn(int userCn) {
+        this.userCn = userCn;
+    }
+
     private int userStatus;
 
     @javax.persistence.Column(name = "USER_STATUS", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
@@ -70,6 +82,7 @@ public class Userinfo {
     public int getUserStatus() {
         return userStatus;
     }
+
 
     public void setUserStatus(int userStatus) {
         this.userStatus = userStatus;

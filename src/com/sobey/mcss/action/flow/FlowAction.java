@@ -340,6 +340,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             }
 
         }
+        min = min * Common.getCN(request);
         String[] unit = new String[1];
         StringUtil.byteToUnit(min, unit, null);
         unit_lable = unit[0];
@@ -357,7 +358,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                     mdn = mdnList.get(j);
                     value += Double.parseDouble(MirrorUtil.getValue(Hourstatitem.class, mdn, "count" + (i)).toString());
                 }
-
+                 value = value * Common.getCN(request);
                 mdnSb.append("<set value='");
                 mdnSb.append(StringUtil.byteToUnit(value, unit, unit[0]));
                 mdnSb.append("'/>");
@@ -409,6 +410,8 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             }
         }
         String[] unit = new String[1];
+        //结果乘以基数
+        min = min * Common.getCN(request);
         StringUtil.byteToUnit(min, unit, null);
         unit_lable = unit[0];
         sb.append("<chart caption='");
@@ -429,6 +432,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                     Hourstatitem mdn = mdnList.get(j);
                     String value = String.valueOf(MirrorUtil.getValue(Hourstatitem.class, mdn, "count" + (i)));
                     count += Double.parseDouble(value);
+                    count = count * Common.getCN(request);
                 }
             }
             String day = i + "";
@@ -505,6 +509,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                 }
             }
             init = false;
+            min = min * Common.getCN(request);
             String unit[] = new String[1];
             StringUtil.byteToUnit(min, unit, null);
             unit_lable = unit[0];
@@ -532,6 +537,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                             count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                         }
                     }
+                    count = count * Common.getCN(request);
                     mdnSb.append("<set value='");
                     mdnSb.append(StringUtil.byteToUnit(count, null, unit[0]));
                     mdnSb.append("'/>");
@@ -548,6 +554,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                             count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                         }
                     }
+                    count = count * Common.getCN(request);
                     mdnSb.append("<set value='");
                     mdnSb.append(StringUtil.byteToUnit(count, null, unit[0]));
                     mdnSb.append("'/>");
@@ -623,6 +630,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                 }
             }
             String[] unit = new String[1];
+            min = min * Common.getCN(request);
             StringUtil.byteToUnit(min, unit, null);
             unit_lable = unit[0];
             init = false;
@@ -648,6 +656,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                             count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                         }
                     }
+                    count = count * Common.getCN(request);
                     mdnSb.append("<set value='");
                     mdnSb.append(StringUtil.byteToUnit(count, unit, unit[0]));
                     mdnSb.append("'/>");
@@ -664,6 +673,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                             count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                         }
                     }
+                    count = count * Common.getCN(request);
                     mdnSb.append("<set value='");
                     mdnSb.append(StringUtil.byteToUnit(count, unit, unit[0]));
                     mdnSb.append("'/>");
@@ -755,6 +765,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                 }
             }
         }
+        min = min * Common.getCN(request);
         String[] unit = new String[1];
         StringUtil.byteToUnit(min, unit, null);
         unit_lable = unit[0];
@@ -812,6 +823,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             }
 
             if (count != 0) {
+                count = count * Common.getCN(request);
                 sb.append("<entity id='").append(entry.getKey()).append("'");
                 sb.append(" displayValue='").append(value).append("'");
                 sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count, null, unit[0])).append(unit[0]);
@@ -875,6 +887,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             }
         }
 
+        min = min * Common.getCN(request);
         String unit[] = new String[1];
         StringUtil.byteToUnit(min, unit, null);
         unit_lable = unit[0];
@@ -897,6 +910,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                                 e.printStackTrace();
                             }
                         }
+                        count = count * Common.getCN(request);
                         sb.append("<entity id='").append(entry.getKey()).append("'");
                         sb.append(" displayValue='").append(value).append("'");
                         sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count, null, unit[0])).append(unit[0]);

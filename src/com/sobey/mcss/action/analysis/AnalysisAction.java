@@ -435,6 +435,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                     pvValue += Double.parseDouble(MirrorUtil.getValue(Hourstatitem.class, pv, "count" + (i)).toString());
                 }
             }
+            ipValue = ipValue * Common.getCN(request);
+            pvValue = pvValue * Common.getCN(request);
             value = ipValue + ";" + pvValue;
             pvSb.append("<set value='");
             pvSb.append(pvValue);
@@ -496,6 +498,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         pvValue += Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, pv, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
                     }
                 }
+                ipValue = ipValue * Common.getCN(request);
+                pvValue = pvValue * Common.getCN(request);
                 value = ipValue + ";" + pvValue;
                 pvSb.append("<set value='");
                 pvSb.append(pvValue);
@@ -531,6 +535,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         pvValue += Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, pv, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
                     }
                 }
+                ipValue = ipValue * Common.getCN(request);
+                pvValue = pvValue * Common.getCN(request);
                 value = ipValue + ";" + pvValue;
                 pvSb.append("<set value='");
                 pvSb.append(pvValue);
@@ -656,7 +662,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                 } else {
                     value = MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
                 }
-
+                value = (Integer.parseInt(value) * Common.getCN(request)) + "";
                 dataset.append("<set value='");
                 dataset.append(value);
                 dataset.append("'/>");
@@ -680,7 +686,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                 } else {
                     value = MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
                 }
-
+                value = Integer.parseInt(value) * Common.getCN(request) + "";
                 dataset.append("<set value='");
                 dataset.append(value);
                 dataset.append("'/>");
@@ -748,10 +754,11 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         }
                     }
                 }
+                num = num * Common.getCN(request);
                 result.put(object[1].toString(), String.valueOf(num));
             }
         }
-
+        count = count * Common.getCN(request);
         categories.append("</categories>");
         dataset.append("</dataset>");
         chart.append(categories);
@@ -888,6 +895,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                     }
                 }
             }
+            count = count * Common.getCN(request);
             sb.append("<entity id='").append(entry.getKey()).append("'");
             sb.append(" displayValue='").append(value).append("'");
             sb.append(" toolText='").append(value).append("  访客数:").append(count);
@@ -936,6 +944,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                     lowValue += Double.parseDouble(MirrorUtil.getValue(Hourstatitem.class, low, "count" + (i)).toString());
                 }
             }
+            lowValue = lowValue * Common.getCN(request);
+            highValue = highValue * Common.getCN(request);
             sbOne.append("<set value='").append(highValue).append("'/>");
             sbTwo.append("<set value='").append(lowValue).append("'/>");
             String day = i + "";
@@ -989,6 +999,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         lowValue += Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, low, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
                     }
                 }
+                highValue = highValue * Common.getCN(request);
+                lowValue = lowValue * Common.getCN(request);
                 sbOne.append("<set value='").append(highValue).append("'/>");
                 sbTwo.append("<set value='").append(lowValue).append("'/>");
                 result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), highValue + ";" + lowValue);
@@ -1012,6 +1024,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         lowValue += Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, low, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
                     }
                 }
+                lowValue = lowValue * Common.getCN(request);
+                highValue = highValue * Common.getCN(request);
                 sbOne.append("<set value='").append(highValue).append("'/>");
                 sbTwo.append("<set value='").append(lowValue).append("'/>");
                 result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), highValue + ";" + lowValue);
@@ -1217,6 +1231,11 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         }
                 }
             }
+            five = five * Common.getCN(request);
+            ten = ten * Common.getCN(request);
+            thirty = thirty * Common.getCN(request);
+            sixty = sixty * Common.getCN(request);
+            n = n * Common.getCN(request);
             charts.append("<set label='0-5 min' value='").append(five).append("' isSliced='0'/>");
             charts.append("<set label='5-10 min' value='").append(ten).append("' isSliced='0'/>");
             charts.append("<set label='10-30 min' value='").append(thirty).append("' isSliced='0'/>");
@@ -1315,6 +1334,11 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         }
                 }
             }
+            five = five * Common.getCN(request);
+            ten = ten * Common.getCN(request);
+            thirty = thirty * Common.getCN(request);
+            sixty = sixty * Common.getCN(request);
+            n = n * Common.getCN(request);
             charts.append("<set label='0-5 min' value='").append(five).append("' isSliced='0'/>");
             charts.append("<set label='5-10 min' value='").append(ten).append("' isSliced='0'/>");
             charts.append("<set label='10-30 min' value='").append(thirty).append("' isSliced='0'/>");
@@ -1519,6 +1543,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             }
 
             if (count != 0) {
+                count = count * Common.getCN(request);
                 sb.append("<entity id='").append(entry.getKey()).append("'");
                 sb.append(" displayValue='").append(value).append("'");
                 sb.append(" toolText='").append(value).append("  访客数:").append(count);
@@ -1608,6 +1633,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             }
 
             if (count != 0) {
+                count = count * Common.getCN(request);
                 sb.append("<entity id='").append(entry.getKey()).append("'");
                 sb.append(" displayValue='").append(value).append("'");
                 sb.append(" toolText='").append(value).append("  访客数:").append(count);
@@ -1663,6 +1689,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                     lowValue = Double.parseDouble(MirrorUtil.getValue(Hourstatitem.class, low, "count" + (i)).toString());
                 }
             }
+            highValue = highValue * Common.getCN(request);
+            lowValue = lowValue * Common.getCN(request);
             sbOne.append("<set value='").append(highValue).append("'/>");
             sbTwo.append("<set value='").append(lowValue).append("'/>");
             String day = i + "";
@@ -1719,7 +1747,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         lowValue = Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, low, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
                     }
                 }
-
+                lowValue = lowValue * Common.getCN(request);
+                highValue = highValue * Common.getCN(request);
                 sbOne.append("<set value='").append(highValue).append("'/>");
                 sbTwo.append("<set value='").append(lowValue).append("'/>");
                 result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), highValue + ";" + lowValue);
@@ -1747,6 +1776,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                 } else {
                     lowValue = MirrorUtil.getValue(Daystatitem.class, low, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
                 }
+                lowValue = Integer.parseInt(lowValue) * Common.getCN(request) + "";
+                highValue = Integer.parseInt(highValue) * Common.getCN(request) + "";
                 sbOne.append("<set value='").append(highValue).append("'/>");
                 sbTwo.append("<set value='").append(lowValue).append("'/>");
                 result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), highValue + ";" + lowValue);
@@ -1936,6 +1967,11 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                     }
                 }
             }
+            five = five * Common.getCN(request);
+            ten = ten * Common.getCN(request);
+            thirty = thirty * Common.getCN(request);
+            sixty = sixty * Common.getCN(request);
+            n = n * Common.getCN(request);
             charts.append("<set label='0-5 min' value='").append(five).append("' isSliced='0'/>");
             charts.append("<set label='5-10 min' value='").append(ten).append("' isSliced='0'/>");
             charts.append("<set label='10-30 min' value='").append(thirty).append("' isSliced='0'/>");
@@ -2079,6 +2115,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             }
 
             if (count != 0) {
+                count = count * Common.getCN(request);
                 sb.append("<entity id='").append(entry.getKey()).append("'");
                 sb.append(" displayValue='").append(value).append("'");
                 sb.append(" toolText='").append(value).append("  流量:").append(count);
@@ -2187,8 +2224,10 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 
                 }
 //                System.out.println(object[1].toString());
+                num = num * Common.getCN(request);
                 result.put(object[1].toString(), String.valueOf(num));
             }
+            count = count * Common.getCN(request);
             result.put("count", String.valueOf(count));
         }
     }
@@ -2244,6 +2283,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 //                higthNum += Integer.parseInt(highValue);
 //                lowNum += Integer.parseInt(lowValue);
             }
+            lowNum = lowNum * Common.getCN(request);
+            higthNum = higthNum * Common.getCN(request);
             sbOne.append("<set value='").append(higthNum).append("'/>");
             sbTwo.append("<set value='").append(lowNum).append("'/>");
             result.put(hourstatitem.getItem(), higthNum + ";" + lowNum);
@@ -2345,6 +2386,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                     }
                 }
             }
+            lowValue = lowValue * Common.getCN(request);
+            highValue = highValue * Common.getCN(request);
             sbOne.append("<set value='").append(highValue).append("'/>");
             sbTwo.append("<set value='").append(lowValue).append("'/>");
             result.put(value, highValue + ";" + lowValue);

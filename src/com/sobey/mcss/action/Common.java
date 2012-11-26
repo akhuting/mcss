@@ -1,5 +1,8 @@
 package com.sobey.mcss.action;
 
+import com.sobey.mcss.domain.Userinfo;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,5 +53,14 @@ public class Common {
         maps.put("CN.MA", "澳门");
         maps.put("CN.HK", "香港");
         return maps;
+    }
+
+    public static int getCN(HttpServletRequest request) {
+        Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
+        if (userinfo != null) {
+            return userinfo.getUserCn();
+        } else {
+            return 1;
+        }
     }
 }
