@@ -260,10 +260,10 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                 sb.append(values);
             } else {
                 float min = 0;
-                initCp();
                 if (cp == null) {
                     getMaxCp(type);
                 }
+                initCp();
                 StringBuffer categories = new StringBuffer();
                 StringBuffer values = new StringBuffer();
                 StringBuffer values1 = new StringBuffer();

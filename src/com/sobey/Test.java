@@ -1,5 +1,6 @@
 package com.sobey;
 
+import com.sobey.common.util.HttpUtil;
 import com.sobey.common.util.IPUtil;
 import org.dom4j.DocumentException;
 
@@ -12,8 +13,16 @@ import org.dom4j.DocumentException;
  */
 public class Test {
     public static void main(String args[]) throws DocumentException {
-//        HttpUtil.sendPost("http://localhost:8080/FlowService", "{cp:'113.142.30.222',begin:'2012-10-1' , end : '2012-10-7'}");
-        System.out.println(IPUtil.getInstance().getAddress("216.252.128.1"));
+        HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
+                "    <stat>\n" +
+                "        <cpid>vodhyw.sobeycache.com</cpid>\n" +
+                "        <date>2012-11-27 11:10:52</date>\n" +
+                "        <type>vod</type>\n" +
+                "        <broadband>6078512</broadband>\n" +
+                "        <playCount>2</playCount>\n" +
+                "    </stat>\n" +
+                "</root>");
+//        System.out.println(IPUtil.getInstance().getAddress("216.252.128.1"));
 
     }
 
