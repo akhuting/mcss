@@ -489,7 +489,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                         }
                     } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
                         if (!init) {
-                            mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaMedia", null, _yymmdd.toString());
+                            mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaMedia", null, yymmdd.toString());
                             init = true;
                         }
                         if (mdnList != null) {
@@ -544,7 +544,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                     result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), StringUtil.byteToUnit(count, null, unit[0]));
                 } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
                     if (!init) {
-                        mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaMedia", null, _yymmdd.toString());
+                        mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaMedia", null, yymmdd.toString());
                         init = true;
                     }
                     categories.append("<category label='").append(calendar.get(Calendar.DAY_OF_MONTH)).append("'/>");
@@ -611,7 +611,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                         }
                     } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
                         if (!init) {
-                            mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, _yymmdd.toString());
+                            mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, yymmdd.toString());
                             init = true;
                         }
                         if (mdnList != null) {
@@ -663,7 +663,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                     result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), StringUtil.byteToUnit(count, unit, unit[0]));
                 } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
                     if (!init) {
-                        mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, _yymmdd.toString());
+                        mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, yymmdd.toString());
                         init = true;
                     }
                     categories.append("<category label='").append(calendar.get(Calendar.DAY_OF_MONTH)).append("'/>");

@@ -1,5 +1,6 @@
 package com.sobey;
 
+import com.sobey.common.util.IPUtil;
 import org.dom4j.DocumentException;
 
 
@@ -12,8 +13,7 @@ import org.dom4j.DocumentException;
 public class Test {
     public static void main(String args[]) throws DocumentException {
 //        HttpUtil.sendPost("http://localhost:8080/FlowService", "{cp:'113.142.30.222',begin:'2012-10-1' , end : '2012-10-7'}");
-        System.out.println(longToIP(3708424703l));
-        System.out.println(longToIP(3708424703l + 511));
+        System.out.println(IPUtil.getInstance().getAddress("216.252.128.1"));
 
     }
 
