@@ -119,12 +119,14 @@ public class StatService extends HttpServlet {
                 } else {
                     double max = Double.parseDouble(broad[4].toString());
                     double total = Double.parseDouble(broad[6].toString()) + broadband;
-                    double avg = total / hour;
+                    float total_add = Float.parseFloat(broad[7].toString()) + 1;
+                    double avg = total / total_add;
+
                     if (broadband > max) {
                         String time = date.split(" ")[1];
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? WHERE period = ? AND type='Media' AND cp=?", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp});
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? WHERE period = ? AND type='Media' AND cp=? AND total_add = ?", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp , total_add});
                     } else {
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ?AND type='Media' AND cp=?", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp});
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ?AND type='Media' AND cp=? AND total_add = ?", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp , total_add});
                     }
                 }
                 for (Object object : channels) {
@@ -226,12 +228,14 @@ public class StatService extends HttpServlet {
                 } else {
                     double max = Double.parseDouble(broad[4].toString());
                     double total = Double.parseDouble(broad[6].toString()) + broadband;
-                    double avg = total / hour;
+                    float total_add = Float.parseFloat(broad[7].toString()) + 1;
+                    double avg = total / total_add;
+
                     if (broadband > max) {
                         String time = date.split(" ")[1];
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? WHERE period = ? AND type='Media' AND cp=?", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp});
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? WHERE period = ? AND type='Media' AND cp=? AND total_add = ?", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp , total_add});
                     } else {
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ?AND type='Media' AND cp=?", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp});
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ?AND type='Media' AND cp=? AND total_add = ?", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp , total_add});
                     }
                 }
                 //保存小时数据

@@ -4,6 +4,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.sobey.common.util.CookieUtil;
 import com.sobey.common.util.DateUtil;
 import com.sobey.common.util.StringUtil;
+import com.sobey.mcss.action.Common;
 import com.sobey.mcss.domain.Cp;
 import com.sobey.mcss.domain.Userinfo;
 import com.sobey.mcss.service.BroadBandStatService;
@@ -199,7 +200,7 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                         Object[] objects = (Object[]) list.get(i);
                         String datetime = objects[3].toString().split("\\.")[0];
                         categories.append("<category label='").append(datetime.split(" ")[1]).append("'/>");
-                        float broadband = Float.parseFloat(objects[4].toString());
+                        float broadband = Float.parseFloat(objects[4].toString()) * Common.getCN(request);
                         values.append(" <set value='").append(broadband).append("'/>");
                     }
                 }
@@ -250,8 +251,8 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                 String[] temp = new String[1];
 //                StringUtil.byteToUnit(Double.parseDouble(max), temp, null);
                 unit = temp[0];
-                this.result.put("max", max);
-                this.result.put("avg", avg);
+                this.result.put("max", Float.parseFloat(max) * Common.getCN(request));
+                this.result.put("avg", Float.parseFloat(avg) * Common.getCN(request));
 //                this.result.put("max",  StringUtil.byteToUnit(Double.parseDouble(max), temp, unit));
 //                this.result.put("avg", StringUtil.byteToUnit(Double.parseDouble(avg), temp, unit));
                 this.result.put("maxtime", maxTime);
@@ -308,13 +309,16 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                             String datetime = objects[1] + " " + objects[3];
                             int day = DateUtil.getSpecificTime(datetime, 5);
                             int a = calendar.get(Calendar.DAY_OF_MONTH);
-                            float maxValue = Float.parseFloat(objects[4].toString());
+                            float maxValue = Float.parseFloat(objects[4].toString()) * Common.getCN(request);
+                            float avgValue = Float.parseFloat(objects[5].toString()) * Common.getCN(request);
+//                            objects[4] = maxValue;
+//                            objects[5] = avgValue;
                             if (min > maxValue) {
                                 min = maxValue;
                             }
                             if (a == day) {
-                                values.append(" <set value='").append(objects[4]).append("'/>");
-                                values1.append(" <set value='").append(objects[5]).append("'/>");
+                                values.append(" <set value='").append(maxValue).append("'/>");
+                                values1.append(" <set value='").append(avgValue).append("'/>");
                                 result.add(objects);
                                 find = true;
                                 break;

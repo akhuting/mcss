@@ -488,13 +488,14 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                             }
                         }
                     } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
+                        List<Daystatitem> _mdnList = null;
                         if (!init) {
-                            mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaMedia", null, yymmdd.toString());
+                            _mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaMedia", null, yymmdd.toString());
                             init = true;
                         }
-                        if (mdnList != null) {
-                            for (int i = 0; i < mdnList.size(); i++) {
-                                Daystatitem ipdaystatitem = mdnList.get(i);
+                        if (_mdnList != null) {
+                            for (int i = 0; i < _mdnList.size(); i++) {
+                                Daystatitem ipdaystatitem = _mdnList.get(i);
                                 count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                             }
                         }
@@ -610,13 +611,14 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                             }
                         }
                     } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
+                        List<Daystatitem> _mdnList = null;
                         if (!init) {
-                            mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, yymmdd.toString());
+                             _mdnList  = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, yymmdd.toString());
                             init = true;
                         }
-                        if (mdnList != null) {
-                            for (int i = 0; i < mdnList.size(); i++) {
-                                Daystatitem ipdaystatitem = mdnList.get(i);
+                        if (_mdnList != null) {
+                            for (int i = 0; i < _mdnList.size(); i++) {
+                                Daystatitem ipdaystatitem = _mdnList.get(i);
                                 count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                             }
                             if (min == 0) {

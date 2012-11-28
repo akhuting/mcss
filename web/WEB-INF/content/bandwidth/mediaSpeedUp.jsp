@@ -1,6 +1,7 @@
 <%@ page import="com.sobey.common.util.StringUtil" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="com.sobey.mcss.action.Common" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -97,10 +98,10 @@
                 <tr class=table-row>
                     <td><%=objects[1]%>
                     </td>
-                    <td><%=objects[4].toString()%>(<%=unit%>)</td>
+                    <td><%=Float.parseFloat(objects[4].toString()) * Common.getCN(request)%>(<%=unit%>)</td>
                     <td><%=objects[1] + " " + objects[3]%>
                     </td>
-                    <td><%=objects[5].toString()%>(<%=unit%>)</td>
+                    <td><%=Float.parseFloat(objects[5].toString()) * Common.getCN(request)%>(<%=unit%>)</td>
                 </tr>
                 <%
                                 }
