@@ -47,29 +47,37 @@ public class BroadBandStatService {
     }
 
     public void saveBroadbandstat(String cp, String type, String dateTime, double value) {
-        Broadbandstat broadbandstat = new Broadbandstat();
-        broadbandstat.setBroadband(value);
-        broadbandstat.setCp(cp);
-        broadbandstat.setDatetime(dateTime);
-        broadbandstat.setType(type);
-        broadBandStatDao.save(broadbandstat);
+
+        List list = broadBandStatDao.query("from Broadbandstat where cp = ? and type =? and dateTime = ?", cp, type, dateTime);
+        if (list != null && list.size() > 0) {
+            Broadbandstat broadbandstat = (Broadbandstat) list.get(0);
+            broadbandstat.setBroadband(broadbandstat.getBroadband() + value);
+            broadBandStatDao.update(broadbandstat);
+        } else {
+            Broadbandstat broadbandstat = new Broadbandstat();
+            broadbandstat.setBroadband(value);
+            broadbandstat.setCp(cp);
+            broadbandstat.setDatetime(dateTime);
+            broadbandstat.setType(type);
+            broadBandStatDao.save(broadbandstat);
+        }
     }
 
     public List getBroadbandstatListBySql(String sql, Object... value) {
         return broadBandStatDao.querySql(sql, value);
     }
 
-    public List getBroadbandstatListByHour(String cp, String type, String begin, String end){
+    public List getBroadbandstatListByHour(String cp, String type, String begin, String end) {
         StringBuffer sql = new StringBuffer("SELECT id,cp,type,datetime,broadband FROM broadbandstat where 1=1");
         sql.append(" and " + cp);
         sql.append(" and type = ?");
         sql.append(" and DateTime >= ?");
         sql.append(" and  DateTime <= ?");
         sql.append(" ORDER BY datetime");
-        return broadBandStatDao.querySql(sql.toString(), new Object[]{ type, begin, end});
+        return broadBandStatDao.querySql(sql.toString(), new Object[]{type, begin, end});
     }
 
-    public void executeSql(String sql, Object... values){
-        broadBandStatDao.executeSql(sql , values);
+    public void executeSql(String sql, Object... values) {
+        broadBandStatDao.executeSql(sql, values);
     }
 }

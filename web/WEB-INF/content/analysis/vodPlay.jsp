@@ -62,8 +62,7 @@
                 <thead>
                 <tr>
                     <th>时间</th>
-                    <th>峰值点播数</th>
-                    <th>最低点播数</th>
+                    <th>点播数</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,11 +87,8 @@
                 %>
                 <tr class=table-row>
                     <td>00:00-<%=key%>:00</td>
-                    <td><%=value.toString().split(";")[0]%>
+                    <td><%=value.toString()%>
                     </td>
-                    <td><%=value.toString().split(";")[1]%>
-                    </td>
-
                 </tr>
                 <%
                 } else {
@@ -100,9 +96,7 @@
                 %>
                 <tr class=table-row>
                     <td><%=last%>:00-<%=key%>:00</td>
-                    <td><%=value.toString().split(";")[0]%>
-                    </td>
-                    <td><%=value.toString().split(";")[1]%>
+                    <td><%=value.toString()%>
                     </td>
 
                 </tr>
@@ -116,9 +110,7 @@
                 <tr class=table-row>
                     <td><%=key%>
                     </td>
-                    <td><%=value.toString().split(";")[0]%>
-                    </td>
-                    <td><%=value.toString().split(";")[1]%>
+                    <td><%=value.toString()%>
                     </td>
                 </tr>
                 <%
