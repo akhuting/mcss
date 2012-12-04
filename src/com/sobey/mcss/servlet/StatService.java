@@ -2,6 +2,7 @@ package com.sobey.mcss.servlet;
 
 import com.sobey.common.util.DateUtil;
 import com.sobey.common.util.MirrorUtil;
+import com.sobey.common.util.StringUtil;
 import com.sobey.mcss.domain.Daystatitem;
 import com.sobey.mcss.domain.Hourstatitem;
 import com.sobey.mcss.service.BroadBandStatService;
@@ -97,12 +98,12 @@ public class StatService extends HttpServlet {
                 List channels = stat.element("channels").elements("channel");
                 double broadband = Long.parseLong(stat.elementText("broadband"));
 
-                broadband = broadband / 1048576d;
+                broadband = StringUtil.div(broadband, 1048576d, 4);
 
                 //保存带宽统计数据
 //                if (broadband != 0)
 
-                broadBandStatService.saveBroadbandstat(cp, "Media", date, broadband);
+                double temp = broadBandStatService.saveBroadbandstat(cp, "Media", date, broadband);
 
                 /**
                  * 每天的带宽信息还要另外保存到HourStatItem表里，加快查询带宽统计跨几天甚至一个月的数据查询速度
@@ -115,18 +116,23 @@ public class StatService extends HttpServlet {
 //                Hourstatitem broad = mcssStreamerService.getHourstatitemByPk(cp, "BroadBand", "Stat", "Media", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
                 if (broad == null) {
                     String time = date.split(" ")[1];
-                    broadBandStatService.executeSql("INSERT INTO broadbanddaystat VALUES(?,?,?,?,?,?,?,?)", new Object[]{cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media", time, broadband, 0, broadband, 0});
+                    broadBandStatService.executeSql("INSERT INTO broadbanddaystat VALUES(?,?,?,?,?,?,?,?)", new Object[]{cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media", time, broadband, 0, broadband, 1});
                 } else {
                     double max = Double.parseDouble(broad[4].toString());
                     double total = Double.parseDouble(broad[6].toString()) + broadband;
-                    float total_add = Float.parseFloat(broad[7].toString()) + 1;
-                    double avg = total / total_add;
-
-                    if (broadband > max) {
-                        String time = date.split(" ")[1];
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? WHERE period = ? AND type='Media' AND cp=? AND total_add = ?", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp, total_add});
+                    double total_add = 0;
+                    if (temp == 0) {
+                        total_add = Float.parseFloat(broad[7].toString()) + 1;
                     } else {
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ?AND type='Media' AND cp=? AND total_add = ?", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp, total_add});
+                        total_add = Float.parseFloat(broad[7].toString());
+                    }
+                    double avg = StringUtil.div(total, total_add, 4);
+                    temp = broadband + temp;
+                    if (temp > max) {
+                        String time = date.split(" ")[1];
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? , total_add = ? WHERE period = ? AND type='Media' AND cp=? ", time, temp, avg, total, total_add, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp);
+                    } else {
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? , total_add = ? WHERE period = ?AND type='Media' AND cp=?", avg, total, total_add, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp);
                     }
                 }
                 for (Object object : channels) {
@@ -206,17 +212,17 @@ public class StatService extends HttpServlet {
                 String date = stat.elementText("date");
                 int hour = DateUtil.getSpecificTime(date, DateUtil.HOUR_OF_DAY);
                 double broadband = Double.parseDouble(stat.elementText("broadband"));
-                broadband = broadband / 1048576d;
+                broadband = StringUtil.div(broadband, 1048576d, 4);
                 String playCount = stat.elementText("playCount");
 
                 //保存带宽统计数据
 //                if (broadband != 0)
-                broadBandStatService.saveBroadbandstat(cp, "Media", date, broadband);
+                double temp = broadBandStatService.saveBroadbandstat(cp, "Media", date, broadband);
 
                 /**
                  * 每天的带宽信息还要另外保存到HourStatItem表里，加快查询带宽统计跨几天甚至一个月的数据查询速度
                  */
-                List lis = broadBandStatService.getBroadbandstatListBySql("SELECT * FROM broadbanddaystat WHERE  cp = ? and period =? and type = ?", new Object[]{cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media"});
+                List lis = broadBandStatService.getBroadbandstatListBySql("SELECT * FROM broadbanddaystat WHERE  cp = ? and period =? and type = ?", cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media");
                 Object[] broad = null;
                 if (lis != null && lis.size() > 0) {
                     broad = (Object[]) lis.get(0);
@@ -224,65 +230,71 @@ public class StatService extends HttpServlet {
 //                Hourstatitem broad = mcssStreamerService.getHourstatitemByPk(cp, "BroadBand", "Stat", "Media", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
                 if (broad == null) {
                     String time = date.split(" ")[1];
-                    broadBandStatService.executeSql("INSERT INTO broadbanddaystat VALUES(?,?,?,?,?,?,?,?)", new Object[]{cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media", time, broadband, 0, broadband, 0});
+                    broadBandStatService.executeSql("INSERT INTO broadbanddaystat VALUES(?,?,?,?,?,?,?,?)", cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media", time, broadband, 0, broadband, 1);
                 } else {
                     double max = Double.parseDouble(broad[4].toString());
                     double total = Double.parseDouble(broad[6].toString()) + broadband;
-                    float total_add = Float.parseFloat(broad[7].toString()) + 1;
-                    double avg = total / total_add;
-
-                    if (broadband > max) {
-                        String time = date.split(" ")[1];
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? WHERE period = ? AND type='Media' AND cp=? AND total_add = ?", new Object[]{time, broadband, avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp, total_add});
+                    double total_add = 0;
+                    if (temp == 0) {
+                        total_add = Float.parseFloat(broad[7].toString()) + 1;
                     } else {
-                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? WHERE period = ?AND type='Media' AND cp=? AND total_add = ?", new Object[]{avg, total, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp, total_add});
+                        total_add = Float.parseFloat(broad[7].toString());
                     }
-                }
-                //保存小时数据
-                Map map = new HashMap();
-                map.put("count" + hour, Integer.parseInt(playCount));
-                try {
-                    hourStatItemService.saveHourStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
-                } catch (Exception e) {  //异常表示数据库已经有数据，更新数据即可
-                    Hourstatitem hourstatitem = hourStatItemService.getHourstatitemByPk(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
+                    double avg = StringUtil.div(total, total_add, 4);
+                    temp = broadband + temp;
+                    if (temp > max) {
+                        String time = date.split(" ")[1];
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? , total_add = ? WHERE period = ? AND type='Media' AND cp=? ", time, temp, avg, total, total_add, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp);
+                    } else {
+                        broadBandStatService.executeSql("UPDATE broadbanddaystat SET avg_value = ? ,  total = ? , total_add = ? WHERE period = ?AND type='Media' AND cp=?", avg, total, total_add, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp);
+                    }
+                    //保存小时数据
+                    Map map = new HashMap();
+                    map.put("count" + hour, Integer.parseInt(playCount));
+                    try {
+                        hourStatItemService.saveHourStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
+                    } catch (Exception e) {  //异常表示数据库已经有数据，更新数据即可
+                        Hourstatitem hourstatitem = hourStatItemService.getHourstatitemByPk(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
 
-                    String value = String.valueOf(MirrorUtil.getValue(Hourstatitem.class, hourstatitem, "count" + hour));
-                    map.clear();
-                    map.put("count" + hour, (Integer.parseInt(playCount) + Integer.parseInt(value)));
+                        String value = String.valueOf(MirrorUtil.getValue(Hourstatitem.class, hourstatitem, "count" + hour));
+                        map.clear();
+                        map.put("count" + hour, (Integer.parseInt(playCount) + Integer.parseInt(value)));
 
-                    hourStatItemService.updateHourStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
+                        hourStatItemService.updateHourStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
 
 //                    StringUtil.println(String.format("Object %s already exists in the database . Because primary key constraint violation , So the object will be updated", Hourstatitem.class.getSimpleName()));
-                }
+                    }
 
-                //保存天的数据
-                int day = DateUtil.getSpecificTime(date, DateUtil.DAY_OF_MONTH);
-                map.clear();
-                map.put("count" + day, Integer.parseInt(playCount));
-                try {
-                    dayStatItemService.saveDayStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
-                } catch (Exception e) { //异常表示数据库已经有数据，更新数据即可
-                    Daystatitem daystatitem = dayStatItemService.getDaystatitemByPk(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM));
-
-                    String value = String.valueOf(MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + day));
+                    //保存天的数据
+                    int day = DateUtil.getSpecificTime(date, DateUtil.DAY_OF_MONTH);
                     map.clear();
-                    map.put("count" + day, Integer.parseInt(playCount) + Integer.parseInt(value));
-                    dayStatItemService.updateDayStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
+                    map.put("count" + day, Integer.parseInt(playCount));
+                    try {
+                        dayStatItemService.saveDayStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
+                    } catch (Exception e) { //异常表示数据库已经有数据，更新数据即可
+                        Daystatitem daystatitem = dayStatItemService.getDaystatitemByPk(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM));
+
+                        String value = String.valueOf(MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + day));
+                        map.clear();
+                        map.put("count" + day, Integer.parseInt(playCount) + Integer.parseInt(value));
+                        dayStatItemService.updateDayStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
 
 //                    StringUtil.println(String.format("Object %s already exists in the database . Because primary key constraint violation , So the object will be updated", Daystatitem.class.getSimpleName()));
+                    }
+
                 }
 
+//                if ("UploadStatService".equals(method)) {
+//                    String cp = stat.elementText("cpid");
+//                    String taskId = stat.elementText("taskId");
+//                    String begin = stat.elementText("beginDate");
+//                    String end = stat.elementText("endDate");
+//                    String ip = stat.elementText("ip");
+//                    String dataFlow = stat.elementText("dataFlow");
+//                    uploadStatService.saveUploadStat(cp, taskId, begin, end, ip, dataFlow);
+//                }
             }
 
-            if ("UploadStatService".equals(method)) {
-                String cp = stat.elementText("cpid");
-                String taskId = stat.elementText("taskId");
-                String begin = stat.elementText("beginDate");
-                String end = stat.elementText("endDate");
-                String ip = stat.elementText("ip");
-                String dataFlow = stat.elementText("dataFlow");
-                uploadStatService.saveUploadStat(cp, taskId, begin, end, ip, dataFlow);
-            }
         }
     }
 

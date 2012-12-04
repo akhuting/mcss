@@ -107,7 +107,7 @@ public class StringUtil {
             if (toUnit.equals("GB")) {
                 return String.format("%.2f", Arith.div(value, toGB, 2));
             }
-            if(toUnit.equals("Byte")){
+            if (toUnit.equals("Byte")) {
                 return String.format("%.2f", Arith.div(value, 1, 2));
             }
         }
@@ -128,10 +128,30 @@ public class StringUtil {
             return "0";
         }
     }
+
     public static String byteToGB(Double value) {
         //Byte >> GB
         Double toGB = 1024 * 1024 * 1024 * 1d;
         return String.format("%.2f", Arith.div(value, toGB, 2));
 
+    }
+
+    public static String getHost(String url) {
+        url = url.replace("http://", "").replace("https://", "");
+        try {
+            url = url.split("/")[0];
+        } catch (Exception ignored) {
+        }
+        return url;
+    }
+
+    public static String getURI(String url) {
+        url = url.replace("http://", "").replace("https://", "");
+        try {
+            String str[] = url.split("/");
+            return "/" + str[1];
+        } catch (Exception ignored) {
+        }
+        return "/";
     }
 }

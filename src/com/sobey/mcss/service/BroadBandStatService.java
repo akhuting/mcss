@@ -46,11 +46,12 @@ public class BroadBandStatService {
         return broadBandStatDao.querySql(sql.toString(), cp, type, beginTime, endTime);
     }
 
-    public void saveBroadbandstat(String cp, String type, String dateTime, double value) {
-
+    public double saveBroadbandstat(String cp, String type, String dateTime, double value) {
+        double broadband = 0;
         List list = broadBandStatDao.query("from Broadbandstat where cp = ? and type =? and dateTime = ?", cp, type, dateTime);
         if (list != null && list.size() > 0) {
             Broadbandstat broadbandstat = (Broadbandstat) list.get(0);
+            broadband = broadbandstat.getBroadband();
             broadbandstat.setBroadband(broadbandstat.getBroadband() + value);
             broadBandStatDao.update(broadbandstat);
         } else {
@@ -61,6 +62,7 @@ public class BroadBandStatService {
             broadbandstat.setType(type);
             broadBandStatDao.save(broadbandstat);
         }
+        return broadband;
     }
 
     public List getBroadbandstatListBySql(String sql, Object... value) {

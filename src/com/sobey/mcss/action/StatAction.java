@@ -2,25 +2,25 @@ package com.sobey.mcss.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sobey.common.util.PropertiesUtil;
-import com.sobey.common.util.R;
-import com.sobey.common.util.StringUtil;
 import com.sobey.common.util.HttpUtil;
-import com.sobey.mcss.service.BroadBandStatService;
-import com.sobey.mcss.service.DayStatItemService;
-import com.sobey.mcss.service.HourStatItemService;
+import com.sobey.common.util.StringUtil;
+import com.sobey.mcss.domain.Cp;
+import com.sobey.mcss.domain.Userinfo;
+import com.sobey.mcss.service.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
+import org.apache.struts2.interceptor.ServletRequestAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by Yanggang.
@@ -31,7 +31,7 @@ import java.util.Map;
 @SuppressWarnings({"deprecation"})
 @Controller
 @Results(@Result(name = "inputStream", type = "stream", params = {"contentType", "text/html;charset=utf-8", "inputName", "inputStream"}))
-public class StatAction extends ActionSupport {
+public class StatAction extends ActionSupport implements ServletRequestAware {
     private String cpStr;
     private String typeStr;
     private String item;
@@ -73,10 +73,11 @@ public class StatAction extends ActionSupport {
         boolean success = false;
         try {
             String http[] = item.split("\r\n");
-            for (int i = 0; i < http.length; i++) {
-                if (http[i].startsWith("http")) {
-                    HttpUtil.sendGet(http[i], null);
-                    success = true;
+            for (String aHttp : http) {
+                if (aHttp.startsWith("http")) {
+                    String host = StringUtil.getHost(aHttp);
+                    String url = StringUtil.getURI(aHttp);
+                    success = HttpUtil.varnishPurge(host, url);
                 } else {
                     invalid++;
                 }
@@ -109,11 +110,10 @@ public class StatAction extends ActionSupport {
             for (File log : file.listFiles()) {
                 if (log.isFile()) {
                     String[] str = log.getName().split("_");
-                    if (str.length == 5) {
-                        if (str[0].equals(cpStr) && str[3].equals(typeStr)) {
-                            String cp = str[0];
-                            String type = str[3];
-                            String date = str[4].split("\\.")[0];
+                    if (str.length == 3) {
+                        boolean hasCp = hasCp(str[0]);
+                        if (hasCp && str[1].equals(typeStr)) {
+                            String date = str[2];
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("date", date);
                             jsonObject.put("url", "/log/" + log.getName());
@@ -131,24 +131,43 @@ public class StatAction extends ActionSupport {
         return "inputStream";
     }
 
-    public String getLogCp() {
-        try {
-            String url = PropertiesUtil.getString("LOGFILE.URL");
-            StringBuffer result = null;
-            File file = new File(url);
-            if (!file.exists()) {
-                file.mkdir();
-            }
-            for (File cp : file.listFiles()) {
-                if (cp.isFile()) {
-                    String[] str = cp.getName().split("_");
-                    if (result != null) {
-                        result.append("|").append(str[0]);
-                    } else {
-                        result = new StringBuffer();
-                        result.append(str[0]);
+    private boolean hasCp(String cp) {
+        /*
+         1，判断查询的cp是否是根域名，如果是，循环根域名下的所有子域名判断有没有和当前查到文件cp相等的，有就返回true
+         2，如果不是，直接循环所有域名，查找有没有和当前找到的文件cp相等的，有就返回true
+         3，都没返回的话，直接返回false
+         */
+        List<Cp> cps = getAllCp();
+        for (Cp _cp : cps) {
+            if (_cp.getCp().equals(cpStr) && _cp.getPid() == 0) {
+                for (Cp subCp : cps) {
+                    if (subCp.getPid() == _cp.getId()) {
+                        if (subCp.getCp().equals(cp)) {
+                            return true;
+                        }
                     }
                 }
+            }
+            if (_cp.getCp().equals(cp)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getLogCp() {
+        try {
+
+            StringBuffer result = null;
+
+            for (Cp cp : getAllCp()) {
+                if (result != null) {
+                    result.append("|").append(cp.getCp());
+                } else {
+                    result = new StringBuffer();
+                    result.append(cp.getCp());
+                }
+
             }
             if (result == null) {
                 result = new StringBuffer();
@@ -156,8 +175,30 @@ public class StatAction extends ActionSupport {
             inputStream = new ByteArrayInputStream(result.toString().getBytes());
         } catch (Exception e) {
             e.printStackTrace();
-             inputStream = new ByteArrayInputStream("0".getBytes());
+            inputStream = new ByteArrayInputStream("0".getBytes());
         }
         return "inputStream";
+    }
+
+    private List<Cp> getAllCp() {
+        Userinfo userinfo = (Userinfo) request.getSession().getAttribute("user");
+        if (userinfo.getUserStatus() == 1) {
+            return cpService.getAll();
+        }
+        return userService.getUserById(userinfo.getUserid()).get(0).getCps();
+    }
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CpService cpService;
+
+
+    private HttpServletRequest request;
+
+    @Override
+    public void setServletRequest(HttpServletRequest httpServletRequest) {
+        this.request = httpServletRequest;
     }
 }

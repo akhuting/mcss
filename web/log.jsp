@@ -97,7 +97,7 @@
         <div class="extrabottom">
             <ul>
                 <li><select id="type">
-                    <option value="web">web</option>
+                    <option value="access">web</option>
                     <option value="media">media</option>
                     <option value="upload">upload</option>
                 </select></li>
