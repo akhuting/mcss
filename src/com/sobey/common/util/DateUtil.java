@@ -136,7 +136,8 @@ public class DateUtil {
 
     /**
      * 得到本周第一天
-     * @return  yyyy-mm-dd
+     *
+     * @return yyyy-mm-dd
      */
     public static String getFirstDayOfWeek() {
         StringBuffer result = new StringBuffer();
@@ -158,12 +159,13 @@ public class DateUtil {
 
     /**
      * 得到本周最后一天
+     *
      * @return yyyy-mm-dd
      */
     public static String getLastDayOfWeek() {
         StringBuffer result = new StringBuffer();
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 7-(calendar.get(Calendar.DAY_OF_WEEK)) + 1);
+        calendar.add(Calendar.DATE, 7 - (calendar.get(Calendar.DAY_OF_WEEK)) + 1);
         result.append(calendar.get(Calendar.YEAR));
         String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         if (month.length() == 1) {
@@ -180,10 +182,47 @@ public class DateUtil {
 
     /**
      * 得到本月最后一天
-     * @return  dd
+     *
+     * @return dd
      */
-    public static int getLastDayOfMonth(){
+    public static int getLastDayOfMonth() {
         Calendar cal = Calendar.getInstance();
         return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
+
+    public static String getBeginEnd() {
+        Date d = new Date();
+        String begin;
+        String end;
+        int min = d.getMinutes();
+        if (((d.getMinutes() / 5) % 2) == 0) {      //0-5
+            end = DateUtil.getSpecificTime(d, DateUtil.YY_MM_DD) + " " + d.getHours() + ":" + min / 10 + "5:00";
+
+        } else {      //5-0
+            int i = ((min / 10) + 1);
+            int h = d.getHours();
+            if (i == 6) {
+                if (h == 23) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(d);
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    d = calendar.getTime();
+                    end = DateUtil.getSpecificTime(d, DateUtil.YY_MM_DD) + " " + "00" + ":" + "00:00";
+                } else {
+                    end = DateUtil.getSpecificTime(d, DateUtil.YY_MM_DD) + " " + (d.getHours() + 1) + ":" + "00:00";
+                }
+
+            } else {
+                end = DateUtil.getSpecificTime(d, DateUtil.YY_MM_DD) + " " + d.getHours() + ":" + i + "0:00";
+            }
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(end));
+        calendar.add(Calendar.MINUTE, -5);
+        begin = DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_DD_TIME);
+//        System.out.println(begin);
+//        System.out.println(end);
+        return begin + "," + end;
+    }
+
 }
