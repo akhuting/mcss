@@ -249,7 +249,7 @@ public class StatService extends HttpServlet {
 
         //保存带宽统计数据
 //                if (broadband != 0)
-
+        System.out.println("ip : " + ip);
         broadBandStatService.executeSql("INSERT INTO broadbandtemp(cp,dt,ip,bb)  VALUES(?,?,?,?)", new Object[]{cp, date, ip, broadband});
         String s[] = DateUtil.getBeginEnd().split(",");
         List list = broadBandStatService.getBroadbandstatListBySql("SELECT ip,SUM(bb),COUNT(bb)  FROM broadbandtemp WHERE cp = ? and (dt BETWEEN ? AND ? ) GROUP BY ip", cp, s[0], s[1]);
@@ -291,6 +291,8 @@ public class StatService extends HttpServlet {
         if (dayMaxTime != null) {
             dayMaxTime = dayMaxTime.replace(".0", "");
             dayMaxTime = dayMaxTime.split(" ")[1];
+        }else{
+            dayMaxTime = "";
         }
 
         if (broad == null) {

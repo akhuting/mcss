@@ -631,141 +631,146 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 
     @SuppressWarnings({"NullArgumentToVariableArgMethod"})
     public void webAccessDay() {
-        double count = 0;
-        boolean init = false;
-        setCp();
-        List<Daystatitem> list = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Viewed", "IP", _yymmdd.toString());
-        Daystatitem daystatitem = null;
-        if (list != null && list.size() > 0) {
-            daystatitem = list.get(0);
-        }
-        StringBuffer total = new StringBuffer();
-        StringBuffer nextTotal = new StringBuffer();
-        StringBuffer dataset = new StringBuffer();
-        StringBuffer chart = new StringBuffer();
-        StringBuffer categories = new StringBuffer();
-        chart.append("<chart rotateYAxisName='0' caption='访问人数统计图' xAxisName='日期' yAxisName='人数(IP数)' showValues='0' formatNumberScale='0'>");
-        categories.append("<categories>");
-        dataset.append("<dataset seriesName='独立IP数'>");
-        Calendar calendar = Calendar.getInstance();
-        Calendar compareCalendar = Calendar.getInstance();
-        compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
-        calendar.set(year, month - 1, begin);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        while (calendar.before(compareCalendar)) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            categories.append("<category label='").append(calendar.get(Calendar.DAY_OF_MONTH)).append("'/>");
-            if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(_yymmdd.toString())) {
-                String value = "";
-                if (daystatitem == null) {
-                    value = "0";
-                } else {
-                    value = MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
-                }
-                value = (Integer.parseInt(value) * Common.getCN(request)) + "";
-                dataset.append("<set value='");
-                dataset.append(value);
-                dataset.append("'/>");
-                if (total.length() != 0) {
-                    total.append("+count" + (calendar.get(Calendar.DAY_OF_MONTH)));
-                } else {
-                    total.append("count" + (calendar.get(Calendar.DAY_OF_MONTH)));
-                }
-
-            } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
-                if (!init) {
-                    list = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Viewed", "IP", yymmdd.toString());
-                    if (list != null && list.size() > 0) {
-                        daystatitem = list.get(0);
-                    }
-                    init = true;
-                }
-                String value = "";
-                if (daystatitem == null) {
-                    value = "0";
-                } else {
-                    value = MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
-                }
-                value = Integer.parseInt(value) * Common.getCN(request) + "";
-                dataset.append("<set value='");
-                dataset.append(value);
-                dataset.append("'/>");
-                if (total.length() != 0) {
-                    total.append("+count" + (calendar.get(Calendar.DAY_OF_MONTH)));
-                } else {
-                    total.append("count" + (calendar.get(Calendar.DAY_OF_MONTH)));
-                }
-            }
-
-        }
-        StringBuffer sql = new StringBuffer("Select (");
-        sql.append(total);
-        if (total.toString().indexOf("+") != -1) {
-            total.setLength(0);
-            total.append("total");
-        }
-        sql.append(") as ").append(total).append(" , item From ipdaystatitem");
-        sql.append(" Where 1=1");
-        if (userCps == null) {
-            sql.append(" And cp = '").append(cp).append("'");
-        } else {
-            sql.append(" And ").append(userCps).append("");
-        }
-        sql.append(" And period = '").append(_yymmdd).append("'");
-        sql.append(" And type = 'WebAccess' And subtype = 'IP'");
-        List ips = null;
         try {
-            ips = ipDayStatItemService.getIpdaystatitemListBySql(sql.toString(), 0, 10, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        List nextIps = null;
-        if (ips != null && ips.size() > 0) {
-            for (int i = 0; i < ips.size(); i++) {
-                Object[] object = (Object[]) ips.get(i);
-                int num = Integer.parseInt(object[0].toString());
-                count += Double.parseDouble(object[0].toString());
-                if (nextTotal.length() != 0) {
-                    sql.setLength(0);
-                    sql.append("Select (");
-                    sql.append(nextTotal);
-                    if (nextTotal.toString().indexOf("+") != -1) {
-                        total.setLength(0);
-                        total.append("total");
-                    }
-                    sql.append(") as ").append(nextTotal).append(" , item From ipdaystatitem");
-                    sql.append(" Where 1=1");
-                    if (userCps == null) {
-                        sql.append(" And cp = '").append(cp).append("'");
+            double count = 0;
+            boolean init = false;
+            setCp();
+            List<Daystatitem> list = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Viewed", "IP", _yymmdd.toString());
+            Daystatitem daystatitem = null;
+            if (list != null && list.size() > 0) {
+                daystatitem = list.get(0);
+            }
+            StringBuffer total = new StringBuffer();
+            StringBuffer nextTotal = new StringBuffer();
+            StringBuffer dataset = new StringBuffer();
+            StringBuffer chart = new StringBuffer();
+            StringBuffer categories = new StringBuffer();
+            chart.append("<chart rotateYAxisName='0' caption='访问人数统计图' xAxisName='日期' yAxisName='人数(IP数)' showValues='0' formatNumberScale='0'>");
+            categories.append("<categories>");
+            dataset.append("<dataset seriesName='独立IP数'>");
+            Calendar calendar = Calendar.getInstance();
+            Calendar compareCalendar = Calendar.getInstance();
+            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            calendar.set(year, month - 1, begin);
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            while (calendar.before(compareCalendar)) {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                categories.append("<category label='").append(calendar.get(Calendar.DAY_OF_MONTH)).append("'/>");
+                if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(_yymmdd.toString())) {
+                    String value = "";
+                    if (daystatitem == null) {
+                        value = "0";
                     } else {
-                        sql.append(" And ").append(userCps).append("");
+                        value = MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
                     }
-                    sql.append(" And period = '").append(yymmdd).append("'");
-                    sql.append(" And type = 'WebAccess' And subtype = 'IP'");
-                    nextIps = ipDayStatItemService.getIpdaystatitemListBySql(sql.toString(), 0, 10, null);
-                    if (nextIps != null && nextIps.size() > 0) {
-                        for (int j = 0; j < nextIps.size(); j++) {
-                            Object[] next = (Object[]) nextIps.get(j);
-                            if (next[1].toString().equals(object[1].toString())) {
-                                count += Double.parseDouble(next[0].toString());
-                                num += Integer.parseInt(next[0].toString());
-                                break;
+                    value = (Integer.parseInt(value) * Common.getCN(request)) + "";
+                    dataset.append("<set value='");
+                    dataset.append(value);
+                    dataset.append("'/>");
+                    if (total.length() != 0) {
+                        total.append("+count" + (calendar.get(Calendar.DAY_OF_MONTH)));
+                    } else {
+                        total.append("count" + (calendar.get(Calendar.DAY_OF_MONTH)));
+                    }
+
+                } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
+                    if (!init) {
+                        list = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Viewed", "IP", yymmdd.toString());
+                        if (list != null && list.size() > 0) {
+                            daystatitem = list.get(0);
+                        }
+                        init = true;
+                    }
+                    String value = "";
+                    if (daystatitem == null) {
+                        value = "0";
+                    } else {
+                        value = MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
+                    }
+                    value = Integer.parseInt(value) * Common.getCN(request) + "";
+                    dataset.append("<set value='");
+                    dataset.append(value);
+                    dataset.append("'/>");
+                    if (total.length() != 0) {
+                        total.append("+count" + (calendar.get(Calendar.DAY_OF_MONTH)));
+                    } else {
+                        total.append("count" + (calendar.get(Calendar.DAY_OF_MONTH)));
+                    }
+                }
+
+            }
+            StringBuffer sql = new StringBuffer("Select (");
+            sql.append(total);
+            if (total.toString().indexOf("+") != -1) {
+                total.setLength(0);
+                total.append("total");
+            }
+            sql.append(") as ").append(total).append(" , item From ipdaystatitem");
+            sql.append(" Where 1=1");
+            if (userCps == null) {
+                sql.append(" And cp = '").append(cp).append("'");
+            } else {
+                sql.append(" And ").append(userCps).append("");
+            }
+            sql.append(" And period = '").append(_yymmdd).append("'");
+            sql.append(" And type = 'WebAccess' And subtype = 'IP'");
+            List ips = null;
+            try {
+                ips = ipDayStatItemService.getIpdaystatitemListBySql(sql.toString(), 0, 10, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            List nextIps = null;
+            if (ips != null && ips.size() > 0) {
+                for (int i = 0; i < ips.size(); i++) {
+                    Object[] object = (Object[]) ips.get(i);
+                    float num =Float.parseFloat(object[0].toString());
+                    count += Double.parseDouble(object[0].toString());
+                    if (nextTotal.length() != 0) {
+                        sql.setLength(0);
+                        sql.append("Select (");
+                        sql.append(nextTotal);
+                        if (nextTotal.toString().indexOf("+") != -1) {
+                            total.setLength(0);
+                            total.append("total");
+                        }
+                        sql.append(") as ").append(nextTotal).append(" , item From ipdaystatitem");
+                        sql.append(" Where 1=1");
+                        if (userCps == null) {
+                            sql.append(" And cp = '").append(cp).append("'");
+                        } else {
+                            sql.append(" And ").append(userCps).append("");
+                        }
+                        sql.append(" And period = '").append(yymmdd).append("'");
+                        sql.append(" And type = 'WebAccess' And subtype = 'IP'");
+                        nextIps = ipDayStatItemService.getIpdaystatitemListBySql(sql.toString(), 0, 10, null);
+                        if (nextIps != null && nextIps.size() > 0) {
+                            for (int j = 0; j < nextIps.size(); j++) {
+                                Object[] next = (Object[]) nextIps.get(j);
+                                if (next[1].toString().equals(object[1].toString())) {
+                                    count += Double.parseDouble(next[0].toString());
+                                    num += Integer.parseInt(next[0].toString());
+                                    break;
+                                }
                             }
                         }
                     }
+                    num = num * Common.getCN(request);
+                    result.put(object[1].toString(), String.valueOf(num));
                 }
-                num = num * Common.getCN(request);
-                result.put(object[1].toString(), String.valueOf(num));
             }
+
+            count = count * Common.getCN(request);
+            categories.append("</categories>");
+            dataset.append("</dataset>");
+            chart.append(categories);
+            chart.append(dataset);
+            chart.append("</chart>");
+            result.put("count", String.valueOf(count));
+            result.put("xml", chart.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        count = count * Common.getCN(request);
-        categories.append("</categories>");
-        dataset.append("</dataset>");
-        chart.append(categories);
-        chart.append(dataset);
-        chart.append("</chart>");
-        result.put("count", String.valueOf(count));
-        result.put("xml", chart.toString());
     }
 
     public void webAreaHour() {
@@ -1739,7 +1744,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 
                 playCountValue = playCountValue * Common.getCN(request);
                 sbOne.append("<set value='").append(playCountValue).append("'/>");
-                result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D),playCountValue);
+                result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), playCountValue);
             } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
                 if (!init) {
                     playCountList = dayStatItemService.getDaystatitemList(userCps, "Analysis", "VodPlay", "PlayCount", yymmdd.toString());
@@ -1756,7 +1761,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                 }
                 playCountValue = playCountValue * Common.getCN(request);
                 sbOne.append("<set value='").append(playCountValue).append("'/>");
-                result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D),playCountValue);
+                result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), playCountValue);
             }
         }
         sbOne.append("</dataset>");

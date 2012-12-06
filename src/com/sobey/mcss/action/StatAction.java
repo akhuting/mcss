@@ -148,7 +148,7 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
                     }
                 }
             }
-            if (_cp.getCp().equals(cp)) {
+            if (_cp.getCp().equals(cp) && cp.equals(cpStr)) {
                 return true;
             }
         }

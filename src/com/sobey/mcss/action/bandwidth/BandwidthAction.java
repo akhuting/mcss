@@ -128,7 +128,7 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                 boolean find = false;
                 StringBuffer categories = new StringBuffer();
                 StringBuffer values = new StringBuffer();
-                sb.append("<chart  caption='").append(capton).append("' formatNumberScale='0' btnSwitchToPinModeTooltext='Pin模式可以把某块区域锁定下来，便于比较' btnSwitchtoZoomModeTitle='切换成缩放模式' btnSwitchToZoomModeTooltext='缩放模式可以任意缩放图表大小来查看数据' btnSwitchToPinModeTitle='切换成Pin模式' btnResetChartTitle='重置图表' btnResetChartTooltext='重置图表到初始状态' btnZoomOutTooltext='返回至上一个缩放级别' btnZoomOutTitle='返回'>");
+                sb.append("<chart  caption='").append(capton).append("'btnSwitchToPinModeTooltext='Pin模式可以把某块区域锁定下来，便于比较' btnSwitchtoZoomModeTitle='切换成缩放模式' btnSwitchToZoomModeTooltext='缩放模式可以任意缩放图表大小来查看数据' btnSwitchToPinModeTitle='切换成Pin模式' btnResetChartTitle='重置图表' btnResetChartTooltext='重置图表到初始状态' btnZoomOutTooltext='返回至上一个缩放级别' btnZoomOutTitle='返回'>");
                 categories.append("<categories>");
                 values.append("<dataset seriesName='MDN带宽'>");
                 long count = 0;

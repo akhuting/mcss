@@ -882,8 +882,6 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                                 min = count;
                             }
                         }
-                    } else {
-                        break;
                     }
                 }
             }
@@ -926,20 +924,20 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                         sb.append("<entity id='");
                         sb.append(entry.getKey());
                         sb.append("' toolText='");
-                        sb.append(value).append("  流量:0" + unit[0] + "'");
+                        sb.append(value).append("  流量:0.00" + unit[0] + "'");
                         sb.append(" displayValue='").append(value).append("'");
-                        sb.append(" Value='0' />");
-                        result.put(value, String.valueOf(0));
+                        sb.append(" Value='0.00' />");
+                        result.put(value, "0.00");
                     }
                 }
             } else {
                 sb.append("<entity id='");
                 sb.append(entry.getKey());
                 sb.append("' toolText='");
-                sb.append(value).append("  流量:0" + unit[0] + " '");
+                sb.append(value).append("  流量:0.00" + unit[0] + " '");
                 sb.append(" displayValue='").append(value).append("'");
-                sb.append(" Value='0'  />");
-                result.put(value, String.valueOf(0));
+                sb.append(" Value='0.00'  />");
+                result.put(value, "0.00");
             }
         }
         sb.append("</data>");
