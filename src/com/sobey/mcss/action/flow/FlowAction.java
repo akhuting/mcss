@@ -728,7 +728,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                                 try {
                                     count += Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, daystatitem,
                                             "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
-                                    break;
+//                                    break;
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     count += 0;
@@ -747,7 +747,6 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                                 try {
                                     count += Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, daystatitem,
                                             "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
-                                    break;
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     count += 0;
@@ -794,7 +793,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                                 try {
                                     count += Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, daystatitem,
                                             "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
-                                    break;
+
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     count += 0;
@@ -813,7 +812,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                                 try {
                                     count += Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, daystatitem,
                                             "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
-                                    break;
+
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     count += 0;

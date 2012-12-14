@@ -1,6 +1,4 @@
 <%@ page import="java.util.Map" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.text.DecimalFormat" %>
 <%@ page import="java.util.Arrays" %>
 <%--
   Created by IntelliJ IDEA.
@@ -47,7 +45,7 @@
     <!-- Alternative Content Box Start -->
     <div class="contentcontainer">
         <div class="headings alt">
-            <h2>总播放量分析</h2>
+            <h2>播放量分析</h2>
         </div>
         <%@include file="../search.jsp" %>
         <div class="contentbox" id="graphs"></div>
@@ -62,7 +60,8 @@
                 <thead>
                 <tr>
                     <th>时间</th>
-                    <th>点播数</th>
+                    <th>峰值点播数</th>
+                    <th>最低点播数</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -87,8 +86,11 @@
                 %>
                 <tr class=table-row>
                     <td>00:00-<%=key%>:00</td>
-                    <td><%=value.toString()%>
+                    <td><%=value.toString().split(";")[0]%>
                     </td>
+                    <td><%=value.toString().split(";")[1]%>
+                    </td>
+
                 </tr>
                 <%
                 } else {
@@ -96,7 +98,9 @@
                 %>
                 <tr class=table-row>
                     <td><%=last%>:00-<%=key%>:00</td>
-                    <td><%=value.toString()%>
+                    <td><%=value.toString().split(";")[0]%>
+                    </td>
+                    <td><%=value.toString().split(";")[1]%>
                     </td>
 
                 </tr>
@@ -110,7 +114,9 @@
                 <tr class=table-row>
                     <td><%=key%>
                     </td>
-                    <td><%=value.toString()%>
+                    <td><%=value.toString().split(";")[0]%>
+                    </td>
+                    <td><%=value.toString().split(";")[1]%>
                     </td>
                 </tr>
                 <%
@@ -131,9 +137,9 @@
     <div style="clear:both;"></div>
 
 
-     <!--
-       <div id="footer">
-        	Copyright &copy; 1997 - 2011 Sobey Digital Technology Co.Ltd
+    <!--
+      <div id="footer">
+           Copyright &copy; 1997 - 2011 Sobey Digital Technology Co.Ltd
         </div>
         -->
 

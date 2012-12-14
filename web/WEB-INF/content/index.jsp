@@ -189,7 +189,7 @@
                                style="font-size: 13px;background-image: url('<%=basePath%>themes/blue/img/bg_navigation1.png');border-bottom-color: #666;border-top-color:#666"
                                id="sub">流媒体点播加速数据分析</a>
                             <ul class="navigation">
-                                <li><a href="<%=basePath%>analysis/analysis!vodPlay.action">&nbsp;&nbsp;&nbsp;&nbsp;总播放量分析</a>
+                                <li><a href="<%=basePath%>analysis/analysis!vodPlay.action">&nbsp;&nbsp;&nbsp;&nbsp;播放量分析</a>
                                 </li>
                                 <li><a href="<%=basePath%>analysis/analysis!vodStay.action">&nbsp;&nbsp;&nbsp;&nbsp;停留时间分析</a>
                                 </li>

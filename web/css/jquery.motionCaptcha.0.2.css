@@ -1,0 +1,123 @@
+/**
+ * jQuery MotionCAPTCHA Plugin CSS
+ * josscrowcroft.com/projects/motioncaptcha-jquery-plugin/
+ * 
+ * Only these rules are absolutely necessary for the plugin.
+ * NB. The width & height of the canvas can be flexible to fit your layout but there's a recommended min/max
+ * - if you need it much bigger/smaller, you could tweak the background-positions of the shape classes.
+ */
+
+/* The canvas: */
+#mc-canvas {
+	width:220px;  /* For best results, set width to between 210px and 240px */
+	height:154px; /* For best results, set height to between 140px and 170px */
+	background:#fff -9999px -9999px no-repeat;
+	background-image: url('../img/motionCaptcha-shapes.jpg') !important;
+}
+
+/* The shapes: */
+#mc-canvas.triangle     { background-position:  10px   10px }
+#mc-canvas.x            { background-position:-200px   10px }
+#mc-canvas.rectangle    { background-position:-400px   10px }
+#mc-canvas.circle       { background-position:-600px   10px }
+#mc-canvas.check        { background-position:  10px -150px }
+#mc-canvas.caret        { background-position:-200px -150px }
+#mc-canvas.zigzag       { background-position:-400px -150px }
+#mc-canvas.arrow        { background-position:-600px -150px }
+#mc-canvas.leftbracket  { background-position:  10px -300px }
+#mc-canvas.rightbracket { background-position:-200px -300px }
+#mc-canvas.v            { background-position:-400px -300px }
+#mc-canvas.delete       { background-position:-600px -300px }
+#mc-canvas.leftbrace    { background-position:  10px -450px }
+#mc-canvas.rightbrace   { background-position:-200px -450px }
+#mc-canvas.star         { background-position:-400px -450px }
+#mc-canvas.pigtail      { background-position:-600px -450px }
+
+/* Disable mouse-selection on the page (only while user is actively drawing on the canvas): */
+.mc-noselect {
+	-webkit-user-select: none,
+	   -moz-user-select: none,
+	        user-select: none
+}
+
+/* MotionCAPTCHA canvas */
+#mc-canvas {
+    margin:0 auto 20px;
+    padding:1px;
+    display: block;
+    border: 4px solid #433e45;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+/* Red border when invalid */
+#mc-canvas.mc-invalid {
+    border: 4px solid #aa4444;
+}
+/* Green border when valid */
+#mc-canvas.mc-valid {
+    border: 4px solid #44aa44;
+}
+
+/* The submit button */
+#sb {
+    margin:0;
+    width: 85px;
+    color: #5d7731;
+    display:inline-block;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+    background: #b6d76f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#cae285), to(#9dc954));
+    background: -moz-linear-gradient(top,  #cae285,  #9dc954);
+    -webkit-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3);
+    box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3);
+}
+#sb:hover,
+#sb:focus {
+    cursor: pointer;
+    -webkit-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3), 0 0 5px rgba(255,255,190,0.5);
+    -moz-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3), 0 0 5px rgba(255,255,190,0.5);
+    box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3), 0 0 5px rgba(255,255,190,0.5);
+}
+#sb:active {
+    cursor: pointer;
+    position: relative;
+    top: 1px;
+    text-shadow: 0 -1px 0 rgba(255,255,255,0.4);
+    background: #9dc954;
+    background: -webkit-gradient(linear, left top, left bottom, from(#9dc954), to(#cae285));
+    background: -moz-linear-gradient(top,  #9dc954,  #cae285);
+    -webkit-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0 0 0 transparent, inset 0 0 0 transparent;
+    -moz-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0 0 0 transparent, inset 0 0 0 transparent;
+    box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0 0 0 transparent, inset 0 0 0 transparent;
+}
+
+#sb:disabled {
+    top:0;
+    color: #777;
+    display:inline-block;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+    background: #bbb;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#bbb));
+    background: -moz-linear-gradient(top,  #ccc,  #bbb);
+    -webkit-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3);
+    box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0px 1px 2px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.3);
+}
+#sb {
+    font-family:"Lucida Grande", sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    /*display: block;*/
+    border: 0;
+    outline:0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0 1px 1px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0 1px 1px rgba(0,0,0,0.3);
+    box-shadow: 0 0 0 5px rgba(0,0,0,0.1), inset 0 1px 1px rgba(0,0,0,0.3);
+    padding: 9px 12px;
+    margin:0 0 20px;
+}

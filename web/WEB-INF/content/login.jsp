@@ -21,13 +21,22 @@
     <link href="<%=basePath%>themes/blue/styles.css" rel="stylesheet" type="text/css"/>
     <!-- Theme End -->
     <script type="text/javascript" src="<%=basePath%>scripts/dialog/artDialog.min.js"></script>
-    <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery-1.4.4.min.js"></SCRIPT>
+    <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery.min.js"></SCRIPT>
+    <%--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>--%>
     <link href="<%=basePath%>scripts/dialog/skin/aero.css" rel="stylesheet" type="text/css"/>
+    <link href="<%=basePath%>css/jquery.motionCaptcha.0.2.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">
         $(document).ready(function (){
             if(parent.document.getElementById("detail")!=null){
                 parent.document.location.href = "<%=basePath%>";
             }
+            $('#frm').motionCaptcha({
+                shapes: ['triangle', 'x', 'rectangle', 'circle', 'check', 'caret', 'zigzag', 'arrow', 'leftbracket', 'rightbracket', 'v', 'delete', 'star', 'pigtail'],
+                errorMsg: '再试一次.',
+                successMsg: '验证通过!',
+                submitId: "sb",
+                noCanvasMsg: "Your browser doesn't support <canvas> - try Chrome, FF4, Safari or IE9."
+            });
         });
         function enter(e) {
             var myEvent = e || window.event;
@@ -63,9 +72,11 @@
                         });
                 return;
             }
-            var frm = document.getElementById("frm");
-            frm.action = "<%=basePath%>user!login.action";
-            frm.submit();
+            $("#frm").attr("action", "<%=basePath%>user!login.action");
+            $("#frm").submit();
+            <%--var frm = document.getElementById("frm");--%>
+            <%--frm.action = "<%=basePath%>user!login.action";--%>
+            <%--frm.submit();--%>
         }
         function forget() {
             var userName = document.getElementById("fn");
@@ -102,22 +113,20 @@
         <div id="innerlogin">
             <form action="" method="post" name="frm" id="frm">
                 <p>用户名:</p>
-                <input type="text" id="loginName" name="loginName" class="logininput"/>
+                <input type="text" id="loginName" name="loginName" class="logininput" value="<%=request.getAttribute("loginName")==null ?"":request.getAttribute("loginName")%>"/>
 
                 <p><font color="red" style="font-size: 13px;"><s:actionerror/></font></p>
-
-                <p>&nbsp;</p>
 
                 <p>密码:</p>
                 <input type="password" name="loginpassword" id="loginpassword" class="logininput"/>
 
-                <input type="button" class="loginbtn" value="提交" onclick="submitFrm();"/><br/>
-
-                <div>
-
-                    <p><a href="" title="忘记密码" class="notifypop">忘记密码?</a></p>
-
+                <div id="mc">
+                    <p>请在框中绘制形状通过验证:</p>
+                    <canvas id="mc-canvas" style="margin-top: 10px;"></canvas>
                 </div>
+                <input disabled="disabled"  id="sb" type="button" value="提交" onclick="submitFrm();">
+
+                   <%--<a href="" title="忘记密码" class="notifypop">忘记密码?</a>--%>
             </form>
         </div>
     </div>
@@ -146,5 +155,6 @@
 
 </div>
 <script type="text/javascript" src='<%=basePath%>scripts/functions.js'></script>
+<script type="text/javascript" src="<%=basePath%>js/jquery.motionCaptcha.0.2.js"></script>
 </body>
 </html>

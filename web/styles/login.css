@@ -34,7 +34,7 @@ body {
 }
 
 .logininput {
-    width: 240px;
+    width: 210px;
     padding: 17px 10px;
     border: 1px solid #fff;
     border-radius: 8px;
@@ -49,7 +49,7 @@ body {
     text-shadow: 1px 1px 1px #222;
 }
 
-#innerlogin p a {
+#innerlogin  a {
     background: #ccc url(../img/bg_forgotten_password.png) repeat-x top;
     text-shadow: 1px 1px 1px #fff;
     color: #666;
@@ -60,7 +60,7 @@ body {
     text-decoration: none;
 }
 
-#innerlogin p a:hover {
+#innerlogin  a:hover {
     background: #ccc url(../img/bg_forgotten_password.png) 0 -25px;
     color: #333;
 }

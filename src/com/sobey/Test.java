@@ -1,5 +1,6 @@
 package com.sobey;
 
+import com.sobey.common.util.DateUtil;
 import com.sobey.common.util.HttpUtil;
 import com.sobey.common.util.StringUtil;
 import org.dom4j.DocumentException;
@@ -10,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -25,31 +27,31 @@ public class Test {
             HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
                     "    <stat>\n" +
                     "        <cpid>vodhyw.sobeycache.com</cpid>\n" +
-                    "        <date>2012-12-05 16:29:52</date>\n" +
+                    "        <date>2012-12-05 17:29:52</date>\n" +
                     "        <type>vod</type>\n" +
                     "        <broadband>6078512</broadband>\n" +
                     "        <playCount>2</playCount>\n" +
                     "    </stat>\n" +
                     "</root>");
 //        } else {
-            HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
-                    "    <stat>\n" +
-                    "        <cpid>vodhyw.sobeycache.com</cpid>\n" +
-                    "        <date>2012-12-05 16:29:52</date>\n" +
-                    "        <type>live</type>\n" +
-                    "        <channels>\n" +
-                    "            <channel>\n" +
-                    "                <name>1</name>\n" +
-                    "                <onliveCount>0</onliveCount>\n" +
-                    "            </channel>\n" +
-                    "            <channel>\n" +
-                    "                <name>XJTV-10</name>\n" +
-                    "                <onliveCount>0</onliveCount>\n" +
-                    "            </channel>\n" +
-                    "        </channels>\n" +
-                    "        <broadband>3078512</broadband>\n" +
-                    "    </stat>    \n" +
-                    "</root>");
+//            HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
+//                    "    <stat>\n" +
+//                    "        <cpid>vodhyw.sobeycache.com</cpid>\n" +
+//                    "        <date>2012-12-12 17:53:52</date>\n" +
+//                    "        <type>live</type>\n" +
+//                    "        <channels>\n" +
+//                    "            <channel>\n" +
+//                    "                <name>1</name>\n" +
+//                    "                <onliveCount>1</onliveCount>\n" +
+//                    "            </channel>\n" +
+//                    "            <channel>\n" +
+//                    "                <name>XJTV-10</name>\n" +
+//                    "                <onliveCount>1</onliveCount>\n" +
+//                    "            </channel>\n" +
+//                    "        </channels>\n" +
+//                    "        <broadband>3078512</broadband>\n" +
+//                    "    </stat>    \n" +
+//                    "</root>");
 //        }
 //         socket("113.142.30.222",80);
 //        System.out.println(StringUtil.getURI("http://cn.bing.com/aaa.jso"));

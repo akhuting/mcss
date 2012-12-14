@@ -6,6 +6,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 import com.sobey.common.util.DateUtil;
 import com.sobey.common.util.HttpUtil;
+import com.sobey.common.util.PasswordEncoder;
 import com.sobey.mcss.domain.UserCp;
 import com.sobey.mcss.domain.Userinfo;
 import com.sobey.mcss.service.UserCpService;
@@ -33,7 +34,7 @@ import java.util.Map;
 @Controller
 @Results({@Result(name = Action.SUCCESS, location = "index.jsp"),
         @Result(name = "userManager", location = "userManager.jsp"),
-        @Result(name = "main", location = "/user!index.action" , type = "redirect"),
+        @Result(name = "main", location = "/user!index.action", type = "redirect"),
         @Result(name = "reg", location = "reg.jsp"),
         @Result(name = "edit", location = "edit.jsp"),
         @Result(name = "inputStream", type = "stream", params = {"contentType", "text/html;charset=utf-8", "inputName", "inputStream"})})
@@ -65,15 +66,20 @@ public class UserAction extends ActionSupport {
     }
 
     public String login() {
-            ActionContext ac = ActionContext.getContext();
-            Userinfo userinfo = userService.getUser(loginName, loginpassword);
-            if (userinfo == null) {
-                addActionError("登录名或密码不正确! ");
-                return "login";
-            }
-            userinfo.setLastLogin(DateUtil.getCurrentTime(DateUtil._YY_MM_DD_TIME));
-            userService.updateUser(userinfo);
-            ac.getSession().put("user", userinfo);
+        ActionContext ac = ActionContext.getContext();
+        loginpassword = PasswordEncoder.encode(loginName,loginpassword);
+        Userinfo userinfo = userService.getUser(loginName, loginpassword);
+        if (loginName == null && loginpassword == null) {
+            addActionError("登录名或密码不能为空! ");
+            return "login";
+        }
+        if (userinfo == null) {
+            addActionError("登录名或密码不正确! ");
+            return "login";
+        }
+        userinfo.setLastLogin(DateUtil.getCurrentTime(DateUtil._YY_MM_DD_TIME));
+        userService.updateUser(userinfo);
+        ac.getSession().put("user", userinfo);
         return "main";
     }
 
@@ -115,7 +121,12 @@ public class UserAction extends ActionSupport {
         this.email = email;
     }
 
+    public String getLoginName() {
+        return loginName;
+    }
+
     public void setLoginpassword(String loginpassword) {
+
         this.loginpassword = loginpassword;
     }
 
@@ -150,6 +161,8 @@ public class UserAction extends ActionSupport {
     public String modify() {
 
         try {
+            loginpassword = PasswordEncoder.encode(loginName, loginpassword);
+            newPassword = PasswordEncoder.encode(loginName, newPassword);
             userService.updatePassword(loginName, loginpassword, newPassword);
             HttpServletRequest request = ServletActionContext.getRequest();
             inputStream = new ByteArrayInputStream(("ok('" + request.getContextPath() + "/login!index.action?d=" + System.currentTimeMillis() + "'); ").getBytes("UTF-8"));
@@ -203,7 +216,7 @@ public class UserAction extends ActionSupport {
         Userinfo userinfo = new Userinfo();
         userinfo.setCellphone(phone);
         userinfo.setEmail(email);
-        userinfo.setPassword(loginpassword);
+        userinfo.setPassword(PasswordEncoder.encode(loginName, loginpassword));
         userinfo.setUsername(loginName);
         userinfo.setUserStatus(0);
         userinfo.setUserTruename(name);
@@ -274,7 +287,9 @@ public class UserAction extends ActionSupport {
             Userinfo userinfo = new Userinfo();
             userinfo.setCellphone(phone);
             userinfo.setEmail(email);
-            userinfo.setPassword(loginpassword);
+            if(!loginpassword.equals("_SOBEY_PASSWORD")){
+                userinfo.setPassword(loginpassword);
+            }
             userinfo.setUsername(loginName);
             userinfo.setUserid(id);
             userinfo.setUserTruename(name);

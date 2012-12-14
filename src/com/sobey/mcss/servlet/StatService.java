@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,12 +109,62 @@ public class StatService extends HttpServlet {
                     //当前在线人数
                     String onlineCount = element.elementText("onliveCount");
 
+                    String s[] = DateUtil.getBeginEnd(DateUtil.getDateTime(date)).split(",");
+
+                    List liveTemp = broadBandStatService.getBroadbandstatListBySql("SELECT * FROM livetemp WHERE cp = ? AND dt = ? AND ip = ? AND channel = ?", cp, s[1], ip, name);
+                    if (liveTemp != null && liveTemp.size() > 0) {
+                        for (Object aLiveTemp : liveTemp) {
+                            Object[] objects = (Object[]) aLiveTemp;
+                            int id = Integer.parseInt(objects[0].toString());
+                            broadBandStatService.executeSql("UPDATE livetemp SET online = ? WHERE id = ?", onlineCount, id);
+                        }
+                    } else {
+                        broadBandStatService.executeSql("INSERT INTO livetemp(cp,dt,ip,online,channel)  VALUES(?,?,?,?,?)", cp, s[1], ip, onlineCount, name);
+                    }
+                    List<String> dt = new ArrayList();
+                    List<String> ips = new ArrayList();
+                    liveTemp = broadBandStatService.getBroadbandstatListBySql("SELECT * FROM livetemp WHERE cp = ? AND HOUR(dt) = ?  AND channel = ?", cp, hour - 1, name);
+                    for (Object aLiveTemp : liveTemp) {
+                        Object[] objects = (Object[]) aLiveTemp;
+                        if (!dt.contains(objects[2].toString())) {
+                            dt.add(objects[2].toString());
+                        }
+                        if (!ips.contains(objects[3].toString())) {
+                            ips.add(objects[3].toString());
+                        }
+                    }
+
+                    int max = 0;
+                    int min = 0;
+                    for (String d : dt) {
+                        int online = 0;
+                        for (Object aLiveTemp : liveTemp) {
+                            Object[] objects = (Object[]) aLiveTemp;
+                            if (objects[2].toString().equals(d)) {
+                                for (String i : ips) {
+                                    if (i.equals(objects[3].toString())) {
+                                        online += Integer.parseInt(objects[4].toString());
+                                    }
+                                }
+                            }
+                        }
+                        if (online > max) {
+                            max = online;
+                        }
+                        if (online < min) {
+                            min = online;
+                        }
+                    }
+
                     //保存小时数据
-                    Map map = new HashMap();
-                    map.put("count" + hour, Integer.parseInt(onlineCount));
+                    Map maxMap = new HashMap();
+                    Map minMap = new HashMap();
+                    maxMap.put("count" + hour, max);
+                    minMap.put("count" + hour, min);
+
                     try {
-                        hourStatItemService.saveHourStatItem(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
-                        hourStatItemService.saveHourStatItem(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
+                        hourStatItemService.saveHourStatItem(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), maxMap);
+                        hourStatItemService.saveHourStatItem(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), minMap);
                     } catch (Exception e) {  //异常表示数据库已经有数据，更新数据即可
 
                         //从数据查出当前小时的峰值在线人数
@@ -121,38 +172,56 @@ public class StatService extends HttpServlet {
                         String high = String.valueOf(MirrorUtil.getValue(Hourstatitem.class, hourstatitem, "count" + hour));
 
                         //如果当前在线人数大于数据库在线人数则更新数据库
-                        if (Integer.parseInt(onlineCount) > Integer.parseInt(high)) {
-                            hourStatItemService.updateHourStatItem(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
+                        if (max > Integer.parseInt(high)) {
+                            hourStatItemService.updateHourStatItem(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), maxMap);
                         }
 
                         //和上面同理，保存最低在线人数
                         hourstatitem = hourStatItemService.getHourstatitemByPk(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
                         String low = String.valueOf(MirrorUtil.getValue(Hourstatitem.class, hourstatitem, "count" + hour));
-                        if (Integer.parseInt(onlineCount) < Integer.parseInt(low) || low.equals("0")) {
-                            hourStatItemService.updateHourStatItem(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
+                        if (min < Integer.parseInt(low)) {
+                            hourStatItemService.updateHourStatItem(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), minMap);
                         }
 //                        StringUtil.println(String.format("Object %s already exists in the database . Because primary key constraint violation , So the object will be updated", Hourstatitem.class.getSimpleName()));
                     }
 
+                    max = 0;
+                    min = 0;
+
+                    Hourstatitem maxStatItem = hourStatItemService.getHourstatitemByPk(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
+                    Hourstatitem minStatItem = hourStatItemService.getHourstatitemByPk(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
+
+                    for (int i = 1; i <= 24; i++) {
+                        int maxValue = Integer.parseInt(MirrorUtil.getValue(Hourstatitem.class, maxStatItem, "count" + (i)).toString());
+                        int minValue = Integer.parseInt(MirrorUtil.getValue(Hourstatitem.class, minStatItem, "count" + (i)).toString());
+                        if (maxValue > max) {
+                            max = maxValue;
+                        }
+                        if (minValue < min) {
+                            min = minValue;
+                        }
+                    }
                     //保存天的数据
                     int day = DateUtil.getSpecificTime(date, DateUtil.DAY_OF_MONTH);
-                    map.clear();
-                    map.put("count" + day, Integer.parseInt(onlineCount));
+                    maxMap.clear();
+                    minMap.clear();
+                    maxMap.put("count" + day, max);
+                    minMap.put("count" + day, min);
                     try {
-                        dayStatItemService.saveDayStatItem(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
-                        dayStatItemService.saveDayStatItem(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
+                        dayStatItemService.saveDayStatItem(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM), maxMap);
+                        dayStatItemService.saveDayStatItem(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM), minMap);
                     } catch (Exception e) { //异常表示数据库已经有数据，更新数据即可
                         Daystatitem daystatitem = dayStatItemService.getDaystatitemByPk(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM));
 
                         String high = String.valueOf(MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + day));
-                        if (Integer.parseInt(onlineCount) > Integer.parseInt(high)) {
-                            dayStatItemService.updateDayStatItem(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
+                        if (max > Integer.parseInt(high)) {
+                            dayStatItemService.updateDayStatItem(cp, "LiveWatch", "Highest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM), maxMap);
                         }
                         daystatitem = dayStatItemService.getDaystatitemByPk(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM));
 
                         String low = String.valueOf(MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + hour));
-                        if (Integer.parseInt(onlineCount) < Integer.parseInt(low) || low.equals("0")) {
-                            dayStatItemService.updateDayStatItem(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
+                        if (min < Integer.parseInt(low)) {
+                            dayStatItemService.updateDayStatItem(cp, "LiveWatch", "Lowest", name, DateUtil.getSpecificTime(date, DateUtil.YY_MM), minMap);
                         }
 //                        StringUtil.println(String.format("Object %s already exists in the database . Because primary key constraint violation , So the object will be updated", Daystatitem.class.getSimpleName()));
                     }
@@ -175,46 +244,127 @@ public class StatService extends HttpServlet {
                     e.printStackTrace();
                 }
                 String date = stat.elementText("date");
-                int hour = DateUtil.getSpecificTime(date, DateUtil.HOUR_OF_DAY);
+                int hour = DateUtil.getSpecificTime(date, DateUtil.HOUR_OF_DAY) + 1;
                 double broadband = Double.parseDouble(stat.elementText("broadband"));
                 saveBroadBand(broadband, cp, date, ip);
                 String playCount = stat.elementText("playCount");
 
-                //保存带宽统计数据
-//                if (broadband != 0)
+                String s[] = DateUtil.getBeginEnd(DateUtil.getDateTime(date)).split(",");
 
-                //保存小时数据
-                Map map = new HashMap();
-                map.put("count" + hour, Integer.parseInt(playCount));
-                try {
-                    hourStatItemService.saveHourStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
-                } catch (Exception e) {  //异常表示数据库已经有数据，更新数据即可
-                    Hourstatitem hourstatitem = hourStatItemService.getHourstatitemByPk(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
-
-                    String value = String.valueOf(MirrorUtil.getValue(Hourstatitem.class, hourstatitem, "count" + hour));
-                    map.clear();
-                    map.put("count" + hour, (Integer.parseInt(playCount) + Integer.parseInt(value)));
-
-                    hourStatItemService.updateHourStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), map);
-
-//                    StringUtil.println(String.format("Object %s already exists in the database . Because primary key constraint violation , So the object will be updated", Hourstatitem.class.getSimpleName()));
+                List vodTemp = broadBandStatService.getBroadbandstatListBySql("SELECT * FROM vodtemp WHERE cp = ? AND dt = ? AND ip = ? ", cp, s[1], ip);
+                if (vodTemp != null && vodTemp.size() > 0) {
+                    for (Object aLiveTemp : vodTemp) {
+                        Object[] objects = (Object[]) aLiveTemp;
+                        int id = Integer.parseInt(objects[0].toString());
+                        broadBandStatService.executeSql("UPDATE vodtemp SET online = ? WHERE id = ?", playCount, id);
+                    }
+                } else {
+                    broadBandStatService.executeSql("INSERT INTO vodtemp(cp,dt,ip,online)  VALUES(?,?,?,?)", cp, s[1], ip, playCount);
+                }
+                List<String> dt = new ArrayList();
+                List<String> ips = new ArrayList();
+                vodTemp = broadBandStatService.getBroadbandstatListBySql("SELECT * FROM vodtemp WHERE cp = ? AND HOUR(dt) = ? ", cp, hour - 1);
+                for (Object aLiveTemp : vodTemp) {
+                    Object[] objects = (Object[]) aLiveTemp;
+                    if (!dt.contains(objects[2].toString())) {
+                        dt.add(objects[2].toString());
+                    }
+                    if (!ips.contains(objects[3].toString())) {
+                        ips.add(objects[3].toString());
+                    }
                 }
 
+                int max = 0;
+                int min = 0;
+                for (String d : dt) {
+                    int online = 0;
+                    for (Object aLiveTemp : vodTemp) {
+                        Object[] objects = (Object[]) aLiveTemp;
+                        if (objects[2].toString().equals(d)) {
+                            for (String i : ips) {
+                                if (i.equals(objects[3].toString())) {
+                                    online += Integer.parseInt(objects[4].toString());
+                                }
+                            }
+                        }
+                    }
+                    if (online > max) {
+                        max = online;
+                    }
+                    if (online < min) {
+                        min = online;
+                    }
+                }
+
+                //保存小时数据
+                Map maxMap = new HashMap();
+                Map minMap = new HashMap();
+                maxMap.put("count" + hour, max);
+                minMap.put("count" + hour, min);
+
+
+                try {
+                    hourStatItemService.saveHourStatItem(cp, "Analysis", "VodPlay", "Highest", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), maxMap);
+                    hourStatItemService.saveHourStatItem(cp, "Analysis", "VodPlay", "Lowest", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), minMap);
+                } catch (Exception e) {  //异常表示数据库已经有数据，更新数据即可
+
+
+                    //从数据查出当前小时的峰值在线人数
+                    Hourstatitem hourstatitem = hourStatItemService.getHourstatitemByPk(cp, "Analysis", "VodPlay", "Highest", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
+                    String high = String.valueOf(MirrorUtil.getValue(Hourstatitem.class, hourstatitem, "count" + hour));
+
+                    //如果当前在线人数大于数据库在线人数则更新数据库
+                    if (max > Integer.parseInt(high)) {
+                        hourStatItemService.updateHourStatItem(cp, "Analysis", "VodPlay", "Highest", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), maxMap);
+                    }
+
+                    //和上面同理，保存最低在线人数
+                    hourstatitem = hourStatItemService.getHourstatitemByPk(cp, "Analysis", "VodPlay", "Lowest", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
+                    String low = String.valueOf(MirrorUtil.getValue(Hourstatitem.class, hourstatitem, "count" + hour));
+                    if (min < Integer.parseInt(low)) {
+                        hourStatItemService.updateHourStatItem(cp, "Analysis", "VodPlay", "Lowest", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D), minMap);
+                    }
+                }
+
+                max = 0;
+                min = 0;
+
+                Hourstatitem maxStatItem = hourStatItemService.getHourstatitemByPk(cp, "Analysis", "VodPlay", "Highest", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
+                Hourstatitem minStatItem = hourStatItemService.getHourstatitemByPk(cp, "Analysis", "VodPlay", "Lowest", DateUtil.getSpecificTime(date, DateUtil.YY_MM_D));
+
+                for (int i = 1; i <= 24; i++) {
+                    int maxValue = Integer.parseInt(MirrorUtil.getValue(Hourstatitem.class, maxStatItem, "count" + (i)).toString());
+                    int minValue = Integer.parseInt(MirrorUtil.getValue(Hourstatitem.class, minStatItem, "count" + (i)).toString());
+                    if (maxValue > max) {
+                        max = maxValue;
+                    }
+                    if (minValue < min) {
+                        min = minValue;
+                    }
+                }
                 //保存天的数据
                 int day = DateUtil.getSpecificTime(date, DateUtil.DAY_OF_MONTH);
-                map.clear();
-                map.put("count" + day, Integer.parseInt(playCount));
+                maxMap.clear();
+                minMap.clear();
+                maxMap.put("count" + day, max);
+                minMap.put("count" + day, min);
                 try {
-                    dayStatItemService.saveDayStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
+                    dayStatItemService.saveDayStatItem(cp, "Analysis", "VodPlay", "Highest", DateUtil.getSpecificTime(date, DateUtil.YY_MM), maxMap);
+                    dayStatItemService.saveDayStatItem(cp, "Analysis", "VodPlay", "Lowest", DateUtil.getSpecificTime(date, DateUtil.YY_MM), minMap);
                 } catch (Exception e) { //异常表示数据库已经有数据，更新数据即可
-                    Daystatitem daystatitem = dayStatItemService.getDaystatitemByPk(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM));
+                    Daystatitem daystatitem = dayStatItemService.getDaystatitemByPk(cp, "Analysis", "VodPlay", "Highest", DateUtil.getSpecificTime(date, DateUtil.YY_MM));
 
-                    String value = String.valueOf(MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + day));
-                    map.clear();
-                    map.put("count" + day, Integer.parseInt(playCount) + Integer.parseInt(value));
-                    dayStatItemService.updateDayStatItem(cp, "Analysis", "VodPlay", "PlayCount", DateUtil.getSpecificTime(date, DateUtil.YY_MM), map);
+                    String high = String.valueOf(MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + day));
+                    if (max > Integer.parseInt(high)) {
+                        dayStatItemService.updateDayStatItem(cp, "Analysis", "VodPlay", "Highest", DateUtil.getSpecificTime(date, DateUtil.YY_MM), maxMap);
+                    }
+                    daystatitem = dayStatItemService.getDaystatitemByPk(cp, "Analysis", "VodPlay", "Lowest", DateUtil.getSpecificTime(date, DateUtil.YY_MM));
 
-//                    StringUtil.println(String.format("Object %s already exists in the database . Because primary key constraint violation , So the object will be updated", Daystatitem.class.getSimpleName()));
+                    String low = String.valueOf(MirrorUtil.getValue(Daystatitem.class, daystatitem, "count" + hour));
+                    if (min < Integer.parseInt(low)) {
+                        dayStatItemService.updateDayStatItem(cp, "Analysis", "VodPlay", "Lowest", DateUtil.getSpecificTime(date, DateUtil.YY_MM), minMap);
+                    }
+//                        StringUtil.println(String.format("Object %s already exists in the database . Because primary key constraint violation , So the object will be updated", Daystatitem.class.getSimpleName()));
                 }
 
             }
@@ -291,7 +441,7 @@ public class StatService extends HttpServlet {
         if (dayMaxTime != null) {
             dayMaxTime = dayMaxTime.replace(".0", "");
             dayMaxTime = dayMaxTime.split(" ")[1];
-        }else{
+        } else {
             dayMaxTime = "";
         }
 

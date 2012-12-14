@@ -335,9 +335,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
         }
         if (StringUtil.checkEmpty(endTime)) {
             endTime = DateUtil.getLastDayOfWeek();
-
-            initCp();
         }
+        initCp();
         if (DateUtil.checkDay(beginTime, endTime)) {
             initHour();
             vodPlayHour();
@@ -724,7 +723,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             if (ips != null && ips.size() > 0) {
                 for (int i = 0; i < ips.size(); i++) {
                     Object[] object = (Object[]) ips.get(i);
-                    float num =Float.parseFloat(object[0].toString());
+                    float num = Float.parseFloat(object[0].toString());
                     count += Double.parseDouble(object[0].toString());
                     if (nextTotal.length() != 0) {
                         sql.setLength(0);
@@ -1716,13 +1715,17 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
     public void vodPlayDay() {
         boolean init = false;
         setCp();
-        List<Daystatitem> playCountList = dayStatItemService.getDaystatitemList(userCps, "Analysis", "VodPlay", "PlayCount", _yymmdd.toString());
-        Daystatitem playCount = null;
+        List<Daystatitem> highList = dayStatItemService.getDaystatitemList(userCps, "Analysis", "VodPlay", "Highest", _yymmdd.toString());
+        List<Daystatitem> lowList = dayStatItemService.getDaystatitemList(userCps, "Analysis", "VodPlay", "Lowest", _yymmdd.toString());
+        Daystatitem high = null;
+        Daystatitem low = null;
 
-        StringBuffer chart = new StringBuffer("<chart palette='4' caption='总播放量统计' yAxisName='点播数' xAxisName='日期' numdivlines='4'  lineThickness='2' showValues='0' formatNumberScale='0' decimals='1' anchorRadius='2' yAxisMinValue='800000' shadowAlpha='50'>");
+        StringBuffer chart = new StringBuffer("<chart palette='4' caption='播放量统计' yAxisName='点播数' xAxisName='日期' numdivlines='4'  lineThickness='2' showValues='0' formatNumberScale='0' decimals='1' anchorRadius='2' yAxisMinValue='800000' shadowAlpha='50'>");
         chart.append("<categories>");
         StringBuffer sbOne = new StringBuffer();
-        sbOne.append("<dataset seriesName='点播数'>");
+        StringBuffer sbTwo = new StringBuffer();
+        sbOne.append("<dataset seriesName='峰值点播数'>");
+        sbTwo.append("<dataset seriesName='最低点播数'>");
         Calendar calendar = Calendar.getInstance();
         Calendar compareCalendar = Calendar.getInstance();
         compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
@@ -1732,41 +1735,63 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(_yymmdd.toString())) {
                 chart.append("<category label='").append(calendar.get(Calendar.DAY_OF_MONTH)).append("'/>");
-                int playCountValue = 0;
+                double highValue = 0;
 
+                double lowValue = 0;
 
-                if (playCountList != null && playCountList.size() > 0) {
-                    for (int j = 0; j < playCountList.size(); j++) {
-                        playCount = playCountList.get(0);
-                        playCountValue = Integer.parseInt(MirrorUtil.getValue(Daystatitem.class, playCount, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
+                if (highList != null && highList.size() > 0) {
+                    for (int j = 0; j < highList.size(); j++) {
+                        high = highList.get(0);
+                        highValue = Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, high, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
                     }
                 }
-
-                playCountValue = playCountValue * Common.getCN(request);
-                sbOne.append("<set value='").append(playCountValue).append("'/>");
-                result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), playCountValue);
+                if (lowList != null && lowList.size() > 0) {
+                    for (int j = 0; j < lowList.size(); j++) {
+                        low = lowList.get(0);
+                        lowValue = Double.parseDouble(MirrorUtil.getValue(Daystatitem.class, low, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
+                    }
+                }
+                lowValue = lowValue * Common.getCN(request);
+                highValue = highValue * Common.getCN(request);
+                sbOne.append("<set value='").append(highValue).append("'/>");
+                sbTwo.append("<set value='").append(lowValue).append("'/>");
+                result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), highValue + ";" + lowValue);
             } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
                 if (!init) {
-                    playCountList = dayStatItemService.getDaystatitemList(userCps, "Analysis", "VodPlay", "PlayCount", yymmdd.toString());
-                }
-                chart.append("<category label='").append(calendar.get(Calendar.DAY_OF_MONTH)).append("'/>");
-                int playCountValue = 0;
-
-
-                if (playCountList != null && playCountList.size() > 0) {
-                    for (int j = 0; j < playCountList.size(); j++) {
-                        playCount = playCountList.get(0);
-                        playCountValue = Integer.parseInt(MirrorUtil.getValue(Daystatitem.class, playCount, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
+                    highList = dayStatItemService.getDaystatitemList(userCps, "Analysis", "VodPlay", "Highest", yymmdd.toString());
+                    lowList = dayStatItemService.getDaystatitemList(userCps, "Analysis", "VodPlay", "Lowest", yymmdd.toString());
+                    if (highList != null && highList.size() > 0) {
+                        high = highList.get(0);
+                    }
+                    if (lowList != null && lowList.size() > 0) {
+                        low = lowList.get(0);
                     }
                 }
-                playCountValue = playCountValue * Common.getCN(request);
-                sbOne.append("<set value='").append(playCountValue).append("'/>");
-                result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), playCountValue);
+                chart.append("<category label='").append(calendar.get(Calendar.DAY_OF_MONTH)).append("'/>");
+                String highValue = "";
+                if (high == null) {
+                    highValue = "0";
+                } else {
+                    highValue = MirrorUtil.getValue(Daystatitem.class, high, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
+                }
+                String lowValue = "";
+                if (low == null) {
+                    lowValue = "0";
+                } else {
+                    lowValue = MirrorUtil.getValue(Daystatitem.class, low, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString();
+                }
+                lowValue = Integer.parseInt(lowValue) * Common.getCN(request) + "";
+                highValue = Integer.parseInt(highValue) * Common.getCN(request) + "";
+                sbOne.append("<set value='").append(highValue).append("'/>");
+                sbTwo.append("<set value='").append(lowValue).append("'/>");
+                result.put(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D), highValue + ";" + lowValue);
             }
         }
         sbOne.append("</dataset>");
+        sbTwo.append("</dataset>");
         chart.append("</categories>");
         chart.append(sbOne);
+        chart.append(sbTwo);
         chart.append("</chart>");
         result.put("xml", chart.toString());
     }
