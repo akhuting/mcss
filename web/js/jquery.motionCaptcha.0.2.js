@@ -291,7 +291,7 @@ jQuery.fn.motionCaptcha || (function($) {
 						
 			// Set the form action:
 //			$form.attr( 'action', $(opts.actionId).val() );
-			
+			$("#code").val("true");
 			// Enable the submit button:
 			$submit.prop('disabled', false);
 			

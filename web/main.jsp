@@ -44,7 +44,7 @@
                 <ul >
                    <li style="float: left;margin-right: 26px;">
                    <div>
-                       <img src="http://findicons.com/files/icons/1764/windows_icons_v1/96/html_htm_ie.png" alt="" >
+                       <img src="img/icons/html_htm_ie.png" alt="" >
                    </div>
                        <div style="padding:3px 10px;">
                           网页加速
@@ -52,7 +52,7 @@
                    </li>
                     <li style="float: left;margin-right: 26px;">
                         <div>
-                            <img src="http://findicons.com/files/icons/1070/software/96/windows_media_player.png" alt="" >
+                            <img src="img/icons/windows_media_player.png" alt="" >
                         </div>
                         <div style="padding:3px 10px;">
                             流媒体加速

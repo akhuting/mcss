@@ -72,6 +72,18 @@
                         });
                 return;
             }
+            if (document.getElementById("code").value == "false") {
+                var passwordDialog = art.dialog({
+                    lock: true,
+                    id:"id2",
+                    follow:document.getElementById("loginpassword"),
+                    skin: 'aero',
+                    icon: 'error',
+                    content: '请绘制验证码',
+                    closeFn:function() { }
+                });
+                return;
+            }
             $("#frm").attr("action", "<%=basePath%>user!login.action");
             $("#frm").submit();
             <%--var frm = document.getElementById("frm");--%>
@@ -125,7 +137,7 @@
                     <canvas id="mc-canvas" style="margin-top: 10px;"></canvas>
                 </div>
                 <input disabled="disabled"  id="sb" type="button" value="提交" onclick="submitFrm();">
-
+                 <input type="hidden" id="code" value="false">
                    <%--<a href="" title="忘记密码" class="notifypop">忘记密码?</a>--%>
             </form>
         </div>

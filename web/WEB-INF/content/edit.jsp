@@ -155,7 +155,7 @@
                             <p>
                                 <label for="password">密码</label>
                                 <input id="password" name="loginpassword" type="password"
-                                       value="<%=user.getPassword()%>" AUTOCOMPLETE=OFF/>
+                                       value="_SOBEY_PASSWORD" AUTOCOMPLETE=OFF/>
                             </p>
                         </fieldset>
                         <fieldset class="step">

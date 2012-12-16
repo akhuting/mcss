@@ -1,6 +1,7 @@
 package com.sobey.mcss.action;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.sobey.common.util.DateUtil;
 import com.sobey.common.util.PropertiesUtil;
 import com.sobey.common.util.HttpUtil;
 import com.sobey.common.util.StringUtil;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -35,6 +37,8 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
     private String cpStr;
     private String typeStr;
     private String item;
+    private String begin;
+    private String end;
 
     private InputStream inputStream;
 
@@ -65,6 +69,14 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
 
     public void setItem(String item) {
         this.item = item;
+    }
+
+    public void setBegin(String begin) {
+        this.begin = begin;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
     }
 
     public String refresh() {
@@ -112,12 +124,14 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
                     String[] str = log.getName().split("_");
                     if (str.length == 3) {
                         boolean hasCp = hasCp(str[0]);
-                        if (hasCp && str[1].equals(typeStr)) {
-                            String date = str[2];
+                        boolean validate = validate(str[2]);
+                        if (hasCp && validate && str[1].equals(typeStr)) {
+                            String date = str[2].replace(".log", "");
                             JSONObject jsonObject = new JSONObject();
                             jsonObject.put("date", date);
                             jsonObject.put("url", "/log/" + log.getName());
                             jsonObject.put("name", log.getName());
+                            jsonObject.put("size", StringUtil.FormetFileSize(StringUtil.getFileSizes(log)));
                             jsonArray.add(jsonObject);
                         }
                     }
@@ -131,7 +145,30 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
         return "inputStream";
     }
 
+    private boolean validate(String date) {
+
+        /*
+          判断日志是否在查询之内
+         */
+        date = date.replace(".log", "");
+        int year = Integer.parseInt(date.substring(0, 4));
+        int month = Integer.parseInt(date.substring(4, 6));
+        int day = Integer.parseInt(date.substring(6, 8));
+
+        Calendar beginCalendar = Calendar.getInstance();
+        Calendar endCalendar = Calendar.getInstance();
+        Calendar compareCalendar = Calendar.getInstance();
+        compareCalendar.set(year, month - 1, day);
+        beginCalendar.set(DateUtil.getSpecificTime(begin, DateUtil.YEAR), DateUtil.getSpecificTime(begin, DateUtil.MONTH), DateUtil.getSpecificTime(begin, DateUtil.DAY_OF_MONTH));
+        endCalendar.set(DateUtil.getSpecificTime(end, DateUtil.YEAR), DateUtil.getSpecificTime(end, DateUtil.MONTH), DateUtil.getSpecificTime(end, DateUtil.DAY_OF_MONTH));
+
+        long add = (endCalendar.getTime().getTime() - beginCalendar.getTime().getTime()) / (24 * 60 * 60 * 1000);
+        return beginCalendar.before(compareCalendar) && endCalendar.after(compareCalendar);
+    }
+
     private boolean hasCp(String cp) {
+
+
         /*
          1，判断查询的cp是否是根域名，如果是，循环根域名下的所有子域名判断有没有和当前查到文件cp相等的，有就返回true
          2，如果不是，直接循环所有域名，查找有没有和当前找到的文件cp相等的，有就返回true

@@ -67,7 +67,7 @@ public class UserAction extends ActionSupport {
 
     public String login() {
         ActionContext ac = ActionContext.getContext();
-        loginpassword = PasswordEncoder.encode(loginName,loginpassword);
+        loginpassword = PasswordEncoder.encode(loginName, loginpassword);
         Userinfo userinfo = userService.getUser(loginName, loginpassword);
         if (loginName == null && loginpassword == null) {
             addActionError("登录名或密码不能为空! ");
@@ -284,14 +284,13 @@ public class UserAction extends ActionSupport {
             HttpServletRequest request = ServletActionContext.getRequest();
             range = request.getParameter("smin") + "-" + request.getParameter("smax") +
                     "-" + request.getParameter("fmin") + "-" + request.getParameter("fmax");
-            Userinfo userinfo = new Userinfo();
+            Userinfo userinfo = userService.getUserById(id).get(0);
             userinfo.setCellphone(phone);
             userinfo.setEmail(email);
-            if(!loginpassword.equals("_SOBEY_PASSWORD")){
-                userinfo.setPassword(loginpassword);
+            if (!loginpassword.equals("_SOBEY_PASSWORD")) {
+                userinfo.setPassword(PasswordEncoder.encode(loginName, loginpassword));
             }
             userinfo.setUsername(loginName);
-            userinfo.setUserid(id);
             userinfo.setUserTruename(name);
             userinfo.setUserRank(rank);
             userinfo.setUserRange(range);
