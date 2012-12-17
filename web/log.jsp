@@ -22,6 +22,7 @@
     <SCRIPT type="text/javascript" src="scripts/common.js"></SCRIPT>
     <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery-ui-1.8.6.custom.min.js"></SCRIPT>
     <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery-ui-timepicker-addon.js"></SCRIPT>
+    <script type="text/javascript" src="<%=basePath%>scripts/page.js"></script>
     <link href="styles/layout.css" rel="stylesheet" type="text/css"/>
     <link href="styles/wysiwyg.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>styles/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
@@ -53,7 +54,7 @@
                         $("#war").slideDown("slow");
                     } else {
                         $("#war").slideUp("slow");
-                        var str = "<table width='100%'> <thead> <tr> <th>日期</th> <th>日志名称</th> <th>大小</th><th>操作</th> </tr> </thead> <tbody>";
+                        var str = "<table width='100%' id='idData'> <thead> <tr> <th>日期</th> <th>日志名称</th> <th>大小</th><th>操作</th> </tr> </thead> <tbody>";
                         for (var i = 0; i < obj.length; i++) {
                             str += "<tr class='alt'>";
                             str += "<td>";
@@ -70,8 +71,9 @@
                             str += " <img src='img/icons/save_download_32.png' alt='下载'/></a></td>";
                             str += "</tr>";
                         }
-                        str += "</tbody> </table>";
+                        str += "</tbody> </table><div id='barcon'></div>";
                         document.getElementById("file").innerHTML = str;
+                        goPage(1, 6);
                     }
                 }
             });
@@ -144,9 +146,11 @@
                 <li><select id="cp" name="cp">
                     <option value="0">选择域名</option>
                 </select></li>
-                <li><input style="width: 110px;" class="logDate" type="text" name="endTime" id="beginTime" value="<%=DateUtil.getFirstDayOfWeek()%>"/>
+                <li><input style="width: 110px;" class="logDate" type="text" name="endTime" id="beginTime"
+                           value="<%=DateUtil.getFirstDayOfWeek()%>"/>
                 </li>
-                <li><input style="width: 110px;" class="logDate" type="text" name="endTime" id="endTime" value="<%=DateUtil.getLastDayOfWeek()%>"/></li>
+                <li><input style="width: 110px;" class="logDate" type="text" name="endTime" id="endTime"
+                           value="<%=DateUtil.getLastDayOfWeek()%>"/></li>
                 <li><input type="button" onclick="getFile();" value="查询" class="btn"/></li>
             </ul>
             <script type="text/javascript">
@@ -175,7 +179,7 @@
         </div>
 
         <div class="contentbox" id="file">
-            <table width="100%">
+            <table width="100%" id="idData">
                 <thead>
                 <tr>
                     <th>日期</th>
@@ -189,11 +193,7 @@
                 </tbody>
             </table>
 
-            <ul class="pagination">
-                <li class="text">上一页</li>
-                <li><a href="#" title="">1</a></li>
-                <li class="text"><a href="#" title="">下一页</a></li>
-            </ul>
+            <div id="barcon"></div>
             <div style="clear: both;"></div>
         </div>
 

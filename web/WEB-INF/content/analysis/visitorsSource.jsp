@@ -53,7 +53,7 @@
         <%@include file="../search.jsp" %>
 
         <div class="contentbox">
-            <table width="100%">
+            <table width="100%"  id="idData">
                 <thead>
                 <tr>
                     <th>&nbsp;</th>
@@ -90,7 +90,7 @@
                 </tbody>
             </table>
 
-
+            <div id="barcon"></div>
             <div style="clear: both;"></div>
         </div>
 

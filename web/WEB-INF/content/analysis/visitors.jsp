@@ -59,7 +59,7 @@
             myChart1.render("graphs");
         </script>
         <div class="contentbox">
-            <table width="100%">
+            <table width="100%"  id="idData">
                 <thead>
                 <tr>
                     <th>&nbsp;</th>
@@ -79,7 +79,7 @@
                         count = 1;
                     }
 
-                    for (Map.Entry<String, String> entry : StringUtil.sortMapByValue(map)) {
+                    for (Map.Entry<String, String> entry : StringUtil.sortMapByValueDouble(map)) {
                         if (!entry.getKey().equals("xml") && !entry.getKey().equals("count")) {
                 %>
                 <tr class=table-row>
@@ -97,7 +97,7 @@
                 </tbody>
             </table>
 
-
+            <div id="barcon"></div>
             <div style="clear: both;"></div>
         </div>
 

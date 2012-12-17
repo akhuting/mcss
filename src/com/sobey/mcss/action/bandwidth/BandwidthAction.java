@@ -302,7 +302,7 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                 while (calendar.before(compareCalendar)) {
                     calendar.add(Calendar.DAY_OF_MONTH, 1);
                     boolean find = false;
-                    categories.append("<category label='").append(DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM_D)).append("'/>");
+                    categories.append("<category label='").append(calendar.get(Calendar.DAY_OF_MONTH)).append("'/>");
                     if (list != null) {
                         for (int j = 0; j < list.size(); ++j) {
                             Object[] objects = (Object[]) list.get(j);
