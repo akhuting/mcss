@@ -21,8 +21,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Yanggang.
@@ -119,6 +118,7 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
                 file.mkdir();
             }
             JSONArray jsonArray = new JSONArray();
+            ArrayList list = new ArrayList();
             for (File log : file.listFiles()) {
                 if (log.isFile()) {
                     String[] str = log.getName().split("_");
@@ -137,11 +137,39 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
                             jsonObject.put("url", "/log/" + log.getName());
                             jsonObject.put("name", log.getName());
                             jsonObject.put("size", StringUtil.FormetFileSize(StringUtil.getFileSizes(log)));
-                            jsonArray.add(jsonObject);
+//                            jsonArray.add(jsonObject);
+                            list.add(jsonObject);
                         }
                     }
                 }
             }
+            Collections.sort(list, new Comparator() {
+                @Override
+                public int compare(Object o1, Object o2) {
+                    JSONObject j1 = (JSONObject) o1;
+                    JSONObject j2 = (JSONObject) o2;
+                    int year = Integer.parseInt(j1.get("date").toString().substring(0, 4));
+                    int month = Integer.parseInt(j1.get("date").toString().substring(4, 6));
+                    int day = Integer.parseInt(j1.get("date").toString().substring(6, 8));
+                    Calendar j1Calendar = Calendar.getInstance();
+                    j1Calendar.set(year, month - 1, day);
+
+                    year = Integer.parseInt(j2.get("date").toString().substring(0, 4));
+                    month = Integer.parseInt(j2.get("date").toString().substring(4, 6));
+                    day = Integer.parseInt(j2.get("date").toString().substring(6, 8));
+                    Calendar j2Calendar = Calendar.getInstance();
+                    j2Calendar.set(year, month - 1, day);
+
+                    long diff = j1Calendar.getTime().getTime() - j2Calendar.getTime().getTime();
+                    if (diff > 0)
+                        return 1;
+                    else if (diff == 0)
+                        return 0;
+                    else
+                        return -1;
+                }
+            });
+            jsonArray = JSONArray.fromObject(list);
             inputStream = new ByteArrayInputStream(jsonArray.toString().getBytes());
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,7 +196,7 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
         endCalendar.set(DateUtil.getSpecificTime(end, DateUtil.YEAR), DateUtil.getSpecificTime(end, DateUtil.MONTH), DateUtil.getSpecificTime(end, DateUtil.DAY_OF_MONTH));
 
         long add = (endCalendar.getTime().getTime() - beginCalendar.getTime().getTime()) / (24 * 60 * 60 * 1000);
-        return beginCalendar.before(compareCalendar) && endCalendar.after(compareCalendar);
+        return beginCalendar.before(compareCalendar) && endCalendar.after(compareCalendar) || compareCalendar.equals(beginCalendar) || compareCalendar.equals(endCalendar);
     }
 
     private boolean hasCp(String cp) {
