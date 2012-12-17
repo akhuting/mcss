@@ -123,8 +123,13 @@ public class StatAction extends ActionSupport implements ServletRequestAware {
                 if (log.isFile()) {
                     String[] str = log.getName().split("_");
                     if (str.length == 3) {
-                        boolean hasCp = hasCp(str[0]);
-                        boolean validate = validate(str[2]);
+                        boolean hasCp = false;
+                        boolean validate = false;
+                        try {
+                            validate = validate(str[2]);
+                            hasCp = hasCp(str[0]);
+                        } catch (Exception ignored) {
+                        }
                         if (hasCp && validate && str[1].equals(typeStr)) {
                             String date = str[2].replace(".log", "");
                             JSONObject jsonObject = new JSONObject();
