@@ -73,7 +73,8 @@ public class StatService extends HttpServlet {
             document = DocumentHelper.parseText(sb.toString());
         } catch (DocumentException e) {
             e.printStackTrace();
-            System.out.println("解析xml错误");
+            System.out.println("解析xml错误：");
+            System.out.println(sb.toString());
             return;
         }
         String ip = req.getRemoteHost();
@@ -379,7 +380,12 @@ public class StatService extends HttpServlet {
 //                    uploadStatService.saveUploadStat(cp, taskId, begin, end, ip, dataFlow);
 //                }
         }
-
+        String batch = "DELETE FROM broadbandtemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
+        broadBandStatService.executeSql(batch);
+        batch = "DELETE FROM livetemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
+        broadBandStatService.executeSql(batch);
+        batch = "DELETE FROM vodtemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
+        broadBandStatService.executeSql(batch);
     }
 
     protected void printString(HttpServletResponse response, String string) {

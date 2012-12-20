@@ -37,17 +37,19 @@ public class HibernateService<T> extends HibernateDaoSupport implements Hibernat
 
 
     public void save(List<T> list) {
-       for(int i = 0; i < list.size(); i++){
-           this.getHibernateTemplate().saveOrUpdate(list.get(i));
-           if(i%20 == 0){
-               this.getHibernateTemplate().flush();
-               this.getHibernateTemplate().clear();
-           }
-       }
+        for (int i = 0; i < list.size(); i++) {
+            this.getHibernateTemplate().saveOrUpdate(list.get(i));
+            if (i % 20 == 0) {
+                this.getHibernateTemplate().flush();
+                this.getHibernateTemplate().clear();
+            }
+        }
     }
-    public void deleteAll(List<T> list){
+
+    public void deleteAll(List<T> list) {
         this.getHibernateTemplate().deleteAll(list);
     }
+
     public T fetch(int id) {
         return this.getHibernateTemplate().get(getEntryClass(), id);
     }
@@ -74,6 +76,8 @@ public class HibernateService<T> extends HibernateDaoSupport implements Hibernat
     public boolean executeSql(String sql, Object... values) {
         Query query = createSQLQuery(sql, values);
         int result = query.executeUpdate();
+        this.getSession().flush(); //清理缓存，执行批量插入
+        this.getSession().clear(); //清空缓存中的 对象
         if (result == 1) {
             return true;
         } else {
