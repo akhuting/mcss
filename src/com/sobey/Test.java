@@ -25,15 +25,15 @@ public class Test {
     public static void main(String args[]) throws DocumentException {
 //        boolean b = true;
 //        if (b) {
-//            HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
-//                    "    <stat>\n" +
-//                    "        <cpid>vodhyw.sobeycache.com</cpid>\n" +
-//                    "        <date>2012-12-05 17:29:52</date>\n" +
-//                    "        <type>vod</type>\n" +
-//                    "        <broadband>6078512</broadband>\n" +
-//                    "        <playCount>2</playCount>\n" +
-//                    "    </stat>\n" +
-//                    "</root>");
+            HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
+                    "    <stat>\n" +
+                    "        <cpid>vodhyw.sobeycache.com</cpid>\n" +
+                    "        <date>2012-12-05 17:29:52</date>\n" +
+                    "        <type>vod</type>\n" +
+                    "        <broadband>6078512</broadband>\n" +
+                    "        <playCount>2</playCount>\n" +
+                    "    </stat>\n" +
+                    "</root>");
 //        } else {
 //            HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
 //                    "    <stat>\n" +
@@ -57,28 +57,28 @@ public class Test {
 //         socket("113.142.30.222",80);
 //        System.out.println(StringUtil.getURI("http://cn.bing.com/aaa.jso"));
 //        System.out.println(IPUtil.getInstance().getAddress("61.136.5.7"));
-        String date = "20121103.log";
-        String begin = "2012-11-01";
-        String end = "2012-12-30";
-
-        date = date.replace(".log", "");
-        int year = Integer.parseInt(date.substring(0, 4));
-        int month = Integer.parseInt(date.substring(4, 6));
-        int day = Integer.parseInt(date.substring(6, 8));
-
-        Calendar beginCalendar = Calendar.getInstance();
-        Calendar endCalendar = Calendar.getInstance();
-        Calendar compareCalendar = Calendar.getInstance();
-        compareCalendar.set(year, month-1, day);
-        beginCalendar.set(DateUtil.getSpecificTime(begin, DateUtil.YEAR), DateUtil.getSpecificTime(begin, DateUtil.MONTH), DateUtil.getSpecificTime(begin, DateUtil.DAY_OF_MONTH));
-        endCalendar.set(DateUtil.getSpecificTime(end, DateUtil.YEAR), DateUtil.getSpecificTime(end, DateUtil.MONTH), DateUtil.getSpecificTime(end, DateUtil.DAY_OF_MONTH));
-
-        long add = (endCalendar.getTime().getTime()-beginCalendar.getTime().getTime())/(24*60*60*1000);
-        if(beginCalendar.before(compareCalendar)&&endCalendar.after(compareCalendar)){
-            System.out.println("yes");
-        }else{
-            System.out.println("no");
-        }
+//        String date = "20121103.log";
+//        String begin = "2012-11-01";
+//        String end = "2012-12-30";
+//
+//        date = date.replace(".log", "");
+//        int year = Integer.parseInt(date.substring(0, 4));
+//        int month = Integer.parseInt(date.substring(4, 6));
+//        int day = Integer.parseInt(date.substring(6, 8));
+//
+//        Calendar beginCalendar = Calendar.getInstance();
+//        Calendar endCalendar = Calendar.getInstance();
+//        Calendar compareCalendar = Calendar.getInstance();
+//        compareCalendar.set(year, month-1, day);
+//        beginCalendar.set(DateUtil.getSpecificTime(begin, DateUtil.YEAR), DateUtil.getSpecificTime(begin, DateUtil.MONTH), DateUtil.getSpecificTime(begin, DateUtil.DAY_OF_MONTH));
+//        endCalendar.set(DateUtil.getSpecificTime(end, DateUtil.YEAR), DateUtil.getSpecificTime(end, DateUtil.MONTH), DateUtil.getSpecificTime(end, DateUtil.DAY_OF_MONTH));
+//
+//        long add = (endCalendar.getTime().getTime()-beginCalendar.getTime().getTime())/(24*60*60*1000);
+//        if(beginCalendar.before(compareCalendar)&&endCalendar.after(compareCalendar)){
+//            System.out.println("yes");
+//        }else{
+//            System.out.println("no");
+//        }
     }
 
     private static String encoding = "GBK";

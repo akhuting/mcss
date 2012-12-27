@@ -755,7 +755,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         }
                     }
                     num = num * Common.getCN(request);
-                    result.put(object[1].toString(), String.valueOf(num));
+                    if (num != 0)
+                        result.put(object[1].toString(), String.valueOf(num));
                 }
             }
 
@@ -2229,7 +2230,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                 }
 //                System.out.println(object[1].toString());
                 num = num * Common.getCN(request);
-                result.put(object[1].toString(), String.valueOf(num));
+                if (num != 0)
+                    result.put(object[1].toString(), String.valueOf(num));
             }
             count = count * Common.getCN(request);
             result.put("count", String.valueOf(count));

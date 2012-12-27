@@ -69,7 +69,7 @@
                 </thead>
                 <tbody>
                 <%
-                    NumberFormat formatter = new DecimalFormat("0%");
+                    NumberFormat formatter = new DecimalFormat("0.00%");
                     double count = 0;
                     int index = 0;
                     if (map.get("count") != null) {

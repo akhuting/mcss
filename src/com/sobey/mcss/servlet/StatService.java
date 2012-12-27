@@ -9,6 +9,7 @@ import com.sobey.mcss.service.BroadBandStatService;
 import com.sobey.mcss.service.DayStatItemService;
 import com.sobey.mcss.service.HourStatItemService;
 import com.sobey.mcss.service.UploadStatService;
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -37,6 +38,7 @@ import java.util.Map;
 @Component("StatService")
 public class StatService extends HttpServlet {
 
+    Logger logger = Logger.getLogger(getClass());
     //    private int currentHour = DateUtil.getSpecificTime(DateUtil.getCurrentTime(DateUtil._YY_MM_DD_TIME), DateUtil.HOUR_OF_DAY);
     @Autowired
     private HourStatItemService hourStatItemService;
@@ -63,9 +65,11 @@ public class StatService extends HttpServlet {
         while ((line = br.readLine()) != null) {
             sb.append(line);
         }
-
+        if (logger.isDebugEnabled()) {
+            logger.debug("收到Xml信息：" + sb.toString());
+        }
         if (sb.toString().equals("")) {
-            System.out.println("xml数据为空");
+            logger.error("xml数据为空");
             this.printString(resp, "xml数据为空");
         }
         Document document = null;
@@ -73,8 +77,7 @@ public class StatService extends HttpServlet {
             document = DocumentHelper.parseText(sb.toString());
         } catch (DocumentException e) {
             e.printStackTrace();
-            System.out.println("解析xml错误：");
-            System.out.println(sb.toString());
+            logger.error("解析xml错误：" + sb.toString());
             return;
         }
         String ip = req.getRemoteHost();
@@ -380,12 +383,12 @@ public class StatService extends HttpServlet {
 //                    uploadStatService.saveUploadStat(cp, taskId, begin, end, ip, dataFlow);
 //                }
         }
-        String batch = "DELETE FROM broadbandtemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
-        broadBandStatService.executeSql(batch);
-        batch = "DELETE FROM livetemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
-        broadBandStatService.executeSql(batch);
-        batch = "DELETE FROM vodtemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
-        broadBandStatService.executeSql(batch);
+//        String batch = "DELETE FROM broadbandtemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
+//        broadBandStatService.executeSql(batch);
+//        batch = "DELETE FROM livetemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
+//        broadBandStatService.executeSql(batch);
+//        batch = "DELETE FROM vodtemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
+//        broadBandStatService.executeSql(batch);
     }
 
     protected void printString(HttpServletResponse response, String string) {
@@ -401,60 +404,66 @@ public class StatService extends HttpServlet {
     }
 
     private void saveBroadBand(double broadband, String cp, String date, String ip) {
-        broadband = StringUtil.div(broadband, 1048576d, 4);
+        try {
+            broadband = StringUtil.div(broadband, 1048576d, 4);
 
-        //保存带宽统计数据
+            //保存带宽统计数据
 //                if (broadband != 0)
-        System.out.println("ip : " + ip);
-        broadBandStatService.executeSql("INSERT INTO broadbandtemp(cp,dt,ip,bb)  VALUES(?,?,?,?)", new Object[]{cp, date, ip, broadband});
-        String s[] = DateUtil.getBeginEnd().split(",");
-        List list = broadBandStatService.getBroadbandstatListBySql("SELECT ip,SUM(bb),COUNT(bb)  FROM broadbandtemp WHERE cp = ? and (dt BETWEEN ? AND ? ) GROUP BY ip", cp, s[0], s[1]);
-        double count = 0;
-        if (list != null && list.size() > 0) {
-            for (Object aList : list) {
-                Object[] objects = (Object[]) aList;
-                String value = objects[1].toString();
-                String i = objects[2].toString();
-                count += StringUtil.div(Double.valueOf(value), Double.valueOf(i), 4);
-            }
-        }
-        broadBandStatService.saveBroadbandstat(cp, "Media", s[1], count);
-        List l = broadBandStatService.getBroadbandstatListBySql("SELECT BroadBand ,DateTime FROM broadbandstat WHERE (DateTime  BETWEEN ? AND ?) AND cp = ? AND type='Media'", DateUtil.getCurrentTime(DateUtil._YY_MM_DD) + " 00:00:00", DateUtil.getCurrentTime(DateUtil._YY_MM_DD) + " 23:59:59", cp);
-        /**
-         * 每天的带宽信息还要另外保存到HourStatItem表里，加快查询带宽统计跨几天甚至一个月的数据查询速度
-         */
-        List lis = broadBandStatService.getBroadbandstatListBySql("SELECT * FROM broadbanddaystat WHERE  cp = ? and period =? and type = ?", new Object[]{cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media"});
-        Object[] broad = null;
-        if (lis != null && lis.size() > 0) {
-            broad = (Object[]) lis.get(0);
-        }
-        double dayMax = 0;
-        double dayAvg = 0;
-        double dayTotal = 0;
-        String dayMaxTime = null;
-        if (l != null && l.size() > 0) {
-            for (Object aL : l) {
-                Object[] objects = (Object[]) aL;
-                double value = Double.parseDouble(objects[0].toString());
-                dayTotal += value;
-                if (value > dayMax) {
-                    dayMax = value;
-                    dayMaxTime = objects[1].toString();
+            broadBandStatService.executeSql("INSERT INTO broadbandtemp(cp,dt,ip,bb)  VALUES(?,?,?,?)", new Object[]{cp, date, ip, broadband});
+            String s[] = DateUtil.getBeginEnd().split(",");
+            List list = broadBandStatService.getBroadbandstatListBySql("SELECT ip,SUM(bb),COUNT(bb)  FROM broadbandtemp WHERE cp = ? and (dt BETWEEN ? AND ? ) GROUP BY ip", cp, s[0], s[1]);
+            double count = 0;
+            if (list != null && list.size() > 0) {
+                for (Object aList : list) {
+                    Object[] objects = (Object[]) aList;
+                    String value = objects[1].toString();
+                    String i = objects[2].toString();
+                    count += StringUtil.div(Double.valueOf(value), Double.valueOf(i), 4);
                 }
             }
-            dayAvg = StringUtil.div(dayTotal, (double) l.size(), 4);
-        }
-        if (dayMaxTime != null) {
-            dayMaxTime = dayMaxTime.replace(".0", "");
-            dayMaxTime = dayMaxTime.split(" ")[1];
-        } else {
-            dayMaxTime = "";
-        }
+            broadBandStatService.saveBroadbandstat(cp, "Media", s[1], count);
+            List l = broadBandStatService.getBroadbandstatListBySql("SELECT BroadBand ,DateTime FROM broadbandstat WHERE (DateTime  BETWEEN ? AND ?) AND cp = ? AND type='Media'", DateUtil.getCurrentTime(DateUtil._YY_MM_DD) + " 00:00:00", DateUtil.getCurrentTime(DateUtil._YY_MM_DD) + " 23:59:59", cp);
+            /**
+             * 每天的带宽信息还要另外保存到HourStatItem表里，加快查询带宽统计跨几天甚至一个月的数据查询速度
+             */
+            List lis = broadBandStatService.getBroadbandstatListBySql("SELECT * FROM broadbanddaystat WHERE  cp = ? and period =? and type = ?", new Object[]{cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media"});
+            Object[] broad = null;
+            if (lis != null && lis.size() > 0) {
+                broad = (Object[]) lis.get(0);
+            }
+            double dayMax = 0;
+            double dayAvg = 0;
+            double dayTotal = 0;
+            String dayMaxTime = null;
+            if (l != null && l.size() > 0) {
+                for (Object aL : l) {
+                    Object[] objects = (Object[]) aL;
+                    double value = Double.parseDouble(objects[0].toString());
+                    dayTotal += value;
+                    if (value > dayMax) {
+                        dayMax = value;
+                        dayMaxTime = objects[1].toString();
+                    }
+                }
+                dayAvg = StringUtil.div(dayTotal, (double) l.size(), 4);
+            }
+            if (dayMaxTime != null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug(dayMaxTime + " 发现最大值：" + dayMax);
+                }
+                dayMaxTime = dayMaxTime.replace(".0", "");
+                dayMaxTime = dayMaxTime.split(" ")[1];
+            } else {
+                dayMaxTime = "";
+            }
 
-        if (broad == null) {
-            broadBandStatService.executeSql("INSERT INTO broadbanddaystat VALUES(?,?,?,?,?,?,?,?)", cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media", dayMaxTime, dayMax, dayAvg, dayTotal, 1);
-        } else {
-            broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? , total_add = ? WHERE period = ? AND type='Media' AND cp=? ", dayMaxTime, dayMax, dayAvg, dayTotal, 1, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp);
+            if (broad == null) {
+                broadBandStatService.executeSql("INSERT INTO broadbanddaystat VALUES(?,?,?,?,?,?,?,?)", cp, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), "Media", dayMaxTime, dayMax, dayAvg, dayTotal, 1);
+            } else {
+                broadBandStatService.executeSql("UPDATE broadbanddaystat SET max_time = ?, max_value = ?, avg_value = ? ,  total = ? , total_add = ? WHERE period = ? AND type='Media' AND cp=? ", dayMaxTime, dayMax, dayAvg, dayTotal, 1, DateUtil.getSpecificTime(date, DateUtil._YY_MM_DD), cp);
+            }
+        } catch (Exception e) {
+            logger.error("saveBroadBand Error", e);
         }
     }
 }
