@@ -1076,8 +1076,8 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
         }
         yymmdd = new StringBuffer();
         if (month != endMonth) {
-            yymmdd.append(year);
-            if (String.valueOf(month).length() == 1) {
+            yymmdd.append(endYear);
+            if (String.valueOf(endMonth).length() == 1) {
                 yymmdd.append("0").append(endMonth);
             } else {
                 yymmdd.append(endMonth);

@@ -1935,11 +1935,11 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                     }
                 } else {
                     if (!init) {
-                        five_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "5Min", _yymmdd.toString());
-                        ten_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "10Min", _yymmdd.toString());
-                        thirty_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "30Min", _yymmdd.toString());
-                        sixty_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "60Min", _yymmdd.toString());
-                        n_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "NMin", _yymmdd.toString());
+                        five_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "5Min", yymmdd.toString());
+                        ten_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "10Min", yymmdd.toString());
+                        thirty_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "30Min", yymmdd.toString());
+                        sixty_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "60Min", yymmdd.toString());
+                        n_min = dayStatItemService.getDaystatitemList(userCps, "Analysis", "Vod", "NMin", yymmdd.toString());
 
                         init = true;
                     }
@@ -2437,8 +2437,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
         }
         yymmdd = new StringBuffer();
         if (month != endMonth) {
-            yymmdd.append(year);
-            if (String.valueOf(month).length() == 1) {
+            yymmdd.append(endYear);
+            if (String.valueOf(endMonth).length() == 1) {
                 yymmdd.append("0").append(endMonth);
             } else {
                 yymmdd.append(endMonth);
