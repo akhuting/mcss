@@ -284,11 +284,12 @@ public class BandwidthAction extends ActionSupport implements ServletRequestAwar
                     end = DateUtil.getSpecificTime(this.endTime, 5);
                 }
                 int year = DateUtil.getSpecificTime(this.beginTime, 1);
+                int endYear = DateUtil.getSpecificTime(this.endTime, 1);
                 int montn = DateUtil.getSpecificTime(this.beginTime, 2) + 1;
                 int endMonth = DateUtil.getSpecificTime(this.endTime, 2) + 1;
                 Calendar calendar = Calendar.getInstance();
                 Calendar compareCalendar = Calendar.getInstance();
-                compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+                compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
                 calendar.set(year, montn - 1, begin);
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 Calendar temp = Calendar.getInstance();

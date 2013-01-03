@@ -44,6 +44,7 @@ import java.util.*;
 public class AnalysisAction extends ActionSupport implements ServletRequestAware, ServletResponseAware {
 
     private int year;
+    private int endYear;
     private int month;
     private int endMonth;
     private int begin;
@@ -473,7 +474,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 
         Calendar calendar = Calendar.getInstance();
         Calendar compareCalendar = Calendar.getInstance();
-        compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+        compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
         calendar.set(year, month - 1, begin);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         while (calendar.before(compareCalendar)) {
@@ -649,7 +650,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             dataset.append("<dataset seriesName='独立IP数'>");
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -858,7 +859,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             int count = 0;
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -983,7 +984,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
         sbTwo.append("<dataset seriesName='最低人数'>");
         Calendar calendar = Calendar.getInstance();
         Calendar compareCalendar = Calendar.getInstance();
-        compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+        compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
         calendar.set(year, month - 1, begin);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         while (calendar.before(compareCalendar)) {
@@ -1178,7 +1179,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -1280,7 +1281,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -1505,7 +1506,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             int count = 0;
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -1595,7 +1596,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             int count = 0;
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -1729,7 +1730,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
         sbTwo.append("<dataset seriesName='最低点播数'>");
         Calendar calendar = Calendar.getInstance();
         Calendar compareCalendar = Calendar.getInstance();
-        compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+        compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
         calendar.set(year, month - 1, begin);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         while (calendar.before(compareCalendar)) {
@@ -1897,7 +1898,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -2077,7 +2078,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             int count = 0;
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -2153,7 +2154,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
         StringBuffer nextTotal = new StringBuffer();
         Calendar calendar = Calendar.getInstance();
         Calendar compareCalendar = Calendar.getInstance();
-        compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+        compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
         calendar.set(year, month - 1, begin);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         while (calendar.before(compareCalendar)) {
@@ -2347,7 +2348,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             chart.append("<category label='").append(value).append("'/>");
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -2414,6 +2415,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
 
     private void initDay() {
         year = DateUtil.getSpecificTime(beginTime, DateUtil.YEAR);
+        endYear = DateUtil.getSpecificTime(endTime, DateUtil.YEAR);
         month = DateUtil.getSpecificTime(beginTime, DateUtil.MONTH) + 1;
         endMonth = DateUtil.getSpecificTime(endTime, DateUtil.MONTH) + 1;
         begin = DateUtil.getSpecificTime(beginTime, DateUtil.DAY_OF_MONTH);

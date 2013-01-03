@@ -67,6 +67,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
     private Map<Integer, Double> dayData = new HashMap<Integer, Double>();
     private Map<String, Map<String, Double>> usersData = new HashMap<String, Map<String, Double>>();
     private int year;
+    private int endYear;
     private int month;
     private int endMonth;
     private int begin;
@@ -467,7 +468,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             if (min == 0) {
                 Calendar calendar = Calendar.getInstance();
                 Calendar compareCalendar = Calendar.getInstance();
-                compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+                compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
                 calendar.set(year, month - 1, begin);
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 while (calendar.before(compareCalendar)) {
@@ -524,7 +525,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
 
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -591,7 +592,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             if (min == 0) {
                 Calendar calendar = Calendar.getInstance();
                 Calendar compareCalendar = Calendar.getInstance();
-                compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+                compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
                 calendar.set(year, month - 1, begin);
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 while (calendar.before(compareCalendar)) {
@@ -644,7 +645,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             categories.append("<categories>");
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -716,7 +717,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             double count = 0;
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -781,7 +782,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             double count = 0;
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
-            compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+            compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
             calendar.set(year, month - 1, begin);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             while (calendar.before(compareCalendar)) {
@@ -1009,7 +1010,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
         boolean find = false;
         Calendar calendar = Calendar.getInstance();
         Calendar compareCalendar = Calendar.getInstance();
-        compareCalendar.set(year, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
+        compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
         calendar.set(year, month - 1, begin);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         while (calendar.before(compareCalendar)) {
@@ -1053,6 +1054,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
 
     private void initDay() {
         year = DateUtil.getSpecificTime(beginTime, DateUtil.YEAR);
+        endYear = DateUtil.getSpecificTime(endTime, DateUtil.YEAR);
         month = DateUtil.getSpecificTime(beginTime, DateUtil.MONTH) + 1;
         endMonth = DateUtil.getSpecificTime(endTime, DateUtil.MONTH) + 1;
         begin = DateUtil.getSpecificTime(beginTime, DateUtil.DAY_OF_MONTH);
