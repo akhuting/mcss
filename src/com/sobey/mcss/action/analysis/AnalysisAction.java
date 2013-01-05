@@ -625,7 +625,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
         chart.append(categories);
         chart.append(dataset);
         chart.append("</chart>");
-        result.put("count", String.valueOf(count));
+        result.put("count", count);
         result.put("xml", chart.toString());
     }
 
@@ -724,7 +724,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             if (ips != null && ips.size() > 0) {
                 for (int i = 0; i < ips.size(); i++) {
                     Object[] object = (Object[]) ips.get(i);
-                    float num = Float.parseFloat(object[0].toString());
+                    double num = Double.parseDouble(object[0].toString());
                     count += Double.parseDouble(object[0].toString());
                     if (nextTotal.length() != 0) {
                         sql.setLength(0);
@@ -749,8 +749,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                                 Object[] next = (Object[]) nextIps.get(j);
                                 if (next[1].toString().equals(object[1].toString())) {
                                     count += Double.parseDouble(next[0].toString());
-                                    num += Integer.parseInt(next[0].toString());
-                                    break;
+                                    num += Double.parseDouble(next[0].toString());
+//                                    break;
                                 }
                             }
                         }
@@ -767,7 +767,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
             chart.append(categories);
             chart.append(dataset);
             chart.append("</chart>");
-            result.put("count", String.valueOf(count));
+            result.put("count", count);
             result.put("xml", chart.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -872,7 +872,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                                 try {
                                     count += Integer.parseInt(MirrorUtil.getValue(Daystatitem.class, daystatitem,
                                             "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
-                                    break;
+//                                    break;
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     count += 0;
@@ -886,12 +886,12 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         init = true;
                     }
                     if (list != null) {
-                        for (Daystatitem daystatitem : list) {
+                        for (Daystatitem daystatitem : newList) {
                             if (daystatitem.getItem().startsWith(value)) {
                                 try {
                                     count += Integer.parseInt(MirrorUtil.getValue(Daystatitem.class, daystatitem,
                                             "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
-                                    break;
+//                                    break;
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     count += 0;
@@ -1518,7 +1518,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                                 try {
                                     count += Integer.parseInt(MirrorUtil.getValue(Daystatitem.class, daystatitem,
                                             "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
-                                    break;
+//                                    break;
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     count += 0;
@@ -1537,7 +1537,7 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                                 try {
                                     count += Integer.parseInt(MirrorUtil.getValue(Daystatitem.class, daystatitem,
                                             "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
-                                    break;
+//                                    break;
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     count += 0;
@@ -2373,13 +2373,13 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                             break;
                         }
                     }
-                    if (highList == null) {
+                    if (nextHighList == null) {
                         nextHighList = new ArrayList<Daystatitem>();
                     }
-                    if (lowList == null) {
+                    if (nextLowList == null) {
                         nextLowList = new ArrayList<Daystatitem>();
                     }
-                    if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(_yymmdd.toString())) {
+                    if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
                         for (Daystatitem high : nextHighList) {
                             if (high.getItem().equals(value)) {
                                 highValue += Integer.parseInt(MirrorUtil.getValue(Daystatitem.class, high, "count" + (calendar.get(Calendar.DAY_OF_MONTH))).toString());
