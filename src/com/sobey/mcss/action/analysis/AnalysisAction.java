@@ -691,10 +691,10 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                     dataset.append("<set value='");
                     dataset.append(value);
                     dataset.append("'/>");
-                    if (total.length() != 0) {
-                        total.append("+count" + (calendar.get(Calendar.DAY_OF_MONTH)));
+                    if (nextTotal.length() != 0) {
+                        nextTotal.append("+count" + (calendar.get(Calendar.DAY_OF_MONTH)));
                     } else {
-                        total.append("count" + (calendar.get(Calendar.DAY_OF_MONTH)));
+                        nextTotal.append("count" + (calendar.get(Calendar.DAY_OF_MONTH)));
                     }
                 }
 
@@ -731,8 +731,8 @@ public class AnalysisAction extends ActionSupport implements ServletRequestAware
                         sql.append("Select (");
                         sql.append(nextTotal);
                         if (nextTotal.toString().indexOf("+") != -1) {
-                            total.setLength(0);
-                            total.append("total");
+                            nextTotal.setLength(0);
+                            nextTotal.append("total");
                         }
                         sql.append(") as ").append(nextTotal).append(" , item From ipdaystatitem");
                         sql.append(" Where 1=1");

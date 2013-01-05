@@ -69,7 +69,7 @@
                 </thead>
                 <tbody>
                 <%
-                    NumberFormat formatter = new DecimalFormat("0.00%");
+//                    NumberFormat formatter = new DecimalFormat("0.00%");
                     double count = 0;
                     int index = 0;
                     if (map.get("count") != null) {
@@ -87,7 +87,7 @@
                     </td>
                     <td><%=entry.getKey()%>
                     </td>
-                    <td><%=formatter.format(Double.parseDouble(String.valueOf(entry.getValue())) / count)%>
+                    <td><%=(Double.parseDouble(String.valueOf(entry.getValue())) / count)*100%>%
                     </td>
                 </tr>
                 <%
