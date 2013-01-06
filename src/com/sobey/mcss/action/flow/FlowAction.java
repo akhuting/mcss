@@ -774,7 +774,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
         init = false;
         newList = null;
         StringBuffer sb = new StringBuffer();
-        sb.append("<map  showFCMenuItem='0' numberPrefix='' baseFontSize='12' animation='1' legendShadow='1'  canvasBorderThickness='0' canvasBorderAlpha='0' showBorder='0' showShadow='1' showBevel='0' showLabels='1'  fillAlpha='100' hoverColor='639ACE' bgColor='f3fbff' chartRightMargin='0' fillColor='ffffff' chartTopMargin='0' showlegend='1' chartLeftMargin='0' chartBottomMargin='0'>");
+        sb.append("<map  showFCMenuItem='0' numberPrefix='' baseFontSize='12' animation='1' legendShadow='1'  canvasBorderThickness='0' canvasBorderAlpha='0' showBorder='1' showShadow='1' showBevel='0' showLabels='1'  fillAlpha='100' hoverColor='639ACE' bgColor='f3fbff' chartRightMargin='0' fillColor='ffffff' chartTopMargin='0' showlegend='1' chartLeftMargin='0' chartBottomMargin='0'>");
         sb.append("<colorRange> <color minValue='1' maxValue='20' color='ffff00' /> <color minValue='20' maxValue='40' color='ffcc00' /> <color minValue='40' maxValue='65' color='ff9900' /> <color minValue='65' maxValue='85' color='ff6600' /> <color minValue='85' maxValue='100' color='ff3300' /> <color minValue='100' maxValue='99999999999999999999' color='ff0000' /> </colorRange>");
         sb.append("<data>");
         for (Map.Entry<String, String> entry : maps.entrySet()) {
@@ -892,7 +892,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
         StringUtil.byteToUnit(min, unit, null);
         unit_lable = unit[0];
         StringBuffer sb = new StringBuffer();
-        sb.append("<map  showFCMenuItem='0' numberPrefix=''legendCaption='' baseFontSize='12' animation='1' legendShadow='1'  canvasBorderThickness='0' canvasBorderAlpha='0' showBorder='0' showShadow='1' showBevel='0' showLabels='1'  fillAlpha='100' hoverColor='639ACE' bgColor='f3fbff' chartRightMargin='0' fillColor='ffffff' chartTopMargin='0' showlegend='1' chartLeftMargin='0' chartBottomMargin='0'>");
+        sb.append("<map  showFCMenuItem='0' numberPrefix=''legendCaption='' baseFontSize='12' animation='1' legendShadow='1'  canvasBorderThickness='0' canvasBorderAlpha='0' showBorder='1' showShadow='1' showBevel='0' showLabels='1'  fillAlpha='100' hoverColor='639ACE' bgColor='f3fbff' chartRightMargin='0' fillColor='ffffff' chartTopMargin='0' showlegend='1' chartLeftMargin='0' chartBottomMargin='0'>");
         sb.append("<colorRange> <color minValue='1' maxValue='20' color='ffff00' /> <color minValue='20' maxValue='40' color='ffcc00' /> <color minValue='40' maxValue='65' color='ff9900' /> <color minValue='65' maxValue='85' color='ff6600' /> <color minValue='85' maxValue='100' color='ff3300' /> <color minValue='100' maxValue='99999999999999999999' color='ff0000' /> </colorRange>");
         sb.append("<data>");
         for (Map.Entry<String, String> entry : maps.entrySet()) {

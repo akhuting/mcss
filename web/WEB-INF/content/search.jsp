@@ -130,9 +130,15 @@ function setSelectEffects(id) {
     $effect.css('opacity', '1.0')
     setInterval(function () {
         if ($effect.css('opacity') == 1) {
-            $effect.animate({opacity: 0.5});
+
+            $effect.animate({opacity: 0.1,fontSize:"1.1em"});
+            $effect.find("img").height(17);
+            $effect.find("img").width(17);
         } else {
-            $effect.animate({opacity: 1.0});
+
+            $effect.animate({opacity: 1.0,fontSize:"1em"});
+            $effect.find("img").height(16);
+            $effect.find("img").width(16);
         }
     }, 800);
 }
@@ -278,11 +284,11 @@ $(function () {
             <li id="month" style="padding-top: 2px;"><a href="javascript:month();"
                                                         style="text-decoration: none;color: #666"><img
                     src="<%=basePath%>img/icons/3.png" width="16" height="16" align="middle"/> 一月</a></li>
-            <li id="excel" style="padding-top: 2px;"><a href="javascript:void(0);"
-                                                        style="text-decoration: none;color: #666"><img
-                    src="<%=basePath%>img/icons/exDB.gif" width="16" height="16" align="middle"
-                    title="导出Excel"/></a>
-            </li>
+            <%--<li id="excel" style="padding-top: 2px;"><a href="javascript:void(0);"--%>
+                                                        <%--style="text-decoration: none;color: #666"><img--%>
+                    <%--src="<%=basePath%>img/icons/exDB.gif" width="16" height="16" align="middle"--%>
+                    <%--title="导出Excel"/></a>--%>
+            <%--</li>--%>
             <li id="print" style="padding-top: 2px;"><a href="javascript:void(0);" style="text-decoration: none"><img
                     src="<%=basePath%>img/icons/Printer.png" width="16" height="16" onclick="print();"
                     align="middle"

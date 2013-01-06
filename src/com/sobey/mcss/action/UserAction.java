@@ -66,6 +66,8 @@ public class UserAction extends ActionSupport {
     }
 
     public String login() {
+        loginName = loginName.trim().toLowerCase();
+        loginpassword = loginpassword.trim().toLowerCase();
         ActionContext ac = ActionContext.getContext();
         loginpassword = PasswordEncoder.encode(loginName, loginpassword);
         Userinfo userinfo = userService.getUser(loginName, loginpassword);
@@ -161,6 +163,9 @@ public class UserAction extends ActionSupport {
     public String modify() {
 
         try {
+            loginName = loginName.trim().toLowerCase();
+            loginpassword = loginpassword.trim().toLowerCase();
+            newPassword = newPassword.trim().toLowerCase();
             loginpassword = PasswordEncoder.encode(loginName, loginpassword);
             newPassword = PasswordEncoder.encode(loginName, newPassword);
             userService.updatePassword(loginName, loginpassword, newPassword);
@@ -210,6 +215,8 @@ public class UserAction extends ActionSupport {
     }
 
     public String regUser() {
+        loginName = loginName.trim().toLowerCase();
+        loginpassword = loginpassword.trim().toLowerCase();
         HttpServletRequest request = ServletActionContext.getRequest();
         range = request.getParameter("smin") + "-" + request.getParameter("smax") +
                 "-" + request.getParameter("fmin") + "-" + request.getParameter("fmax");
@@ -281,13 +288,15 @@ public class UserAction extends ActionSupport {
 
     public String editUser() {
         try {
+            loginName = loginName.trim().toLowerCase();
+            loginpassword = loginpassword.trim().toLowerCase();
             HttpServletRequest request = ServletActionContext.getRequest();
             range = request.getParameter("smin") + "-" + request.getParameter("smax") +
                     "-" + request.getParameter("fmin") + "-" + request.getParameter("fmax");
             Userinfo userinfo = userService.getUserById(id).get(0);
             userinfo.setCellphone(phone);
             userinfo.setEmail(email);
-            if (!loginpassword.equals("_SOBEY_PASSWORD")) {
+            if (!loginpassword.toUpperCase().trim().equals("_SOBEY_PASSWORD")) {
                 userinfo.setPassword(PasswordEncoder.encode(loginName, loginpassword));
             }
             userinfo.setUsername(loginName);

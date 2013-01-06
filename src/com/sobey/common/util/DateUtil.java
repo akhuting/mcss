@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Yanggang.
@@ -117,9 +118,9 @@ public class DateUtil {
     public static Date getDate(String date) {
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat(_YY_MM_DD);
         Date dateTime = null;
-        try{
+        try {
             dateTime = dateTimeFormat.parse(date);
-        }catch(ParseException e){
+        } catch (ParseException e) {
             System.out.println(e.getMessage());
         }
         return dateTime;
@@ -128,9 +129,9 @@ public class DateUtil {
     public static Date getDateTime(String date) {
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat(_YY_MM_DD_TIME);
         Date dateTime = null;
-        try{
+        try {
             dateTime = dateTimeFormat.parse(date);
-        }catch(ParseException e){
+        } catch (ParseException e) {
             System.out.println(e.getMessage());
         }
         return dateTime;
@@ -155,8 +156,13 @@ public class DateUtil {
      */
     public static String getFirstDayOfWeek() {
         StringBuffer result = new StringBuffer();
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -(calendar.get(Calendar.DAY_OF_WEEK) - 2));
+        Calendar calendar = new GregorianCalendar();
+
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+
+        calendar.setTime(new Date());
+
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
         result.append(calendar.get(Calendar.YEAR));
         String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         if (month.length() == 1) {
@@ -178,8 +184,13 @@ public class DateUtil {
      */
     public static String getLastDayOfWeek() {
         StringBuffer result = new StringBuffer();
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 7 - (calendar.get(Calendar.DAY_OF_WEEK)) + 1);
+        Calendar calendar = new GregorianCalendar();
+
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+
+        calendar.setTime(new Date());
+
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + 6);
         result.append(calendar.get(Calendar.YEAR));
         String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         if (month.length() == 1) {
@@ -203,6 +214,7 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
+
     public static String getBeginEnd(Date d) {
         String begin;
         String end;

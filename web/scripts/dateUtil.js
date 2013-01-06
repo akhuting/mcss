@@ -17,7 +17,7 @@ function StringToDate(string) {
     return new Date(Date.parse(string.replace(/-/g, "/")));
 }
 function countTimeLength(interval, date1, date2) {
-    var objInterval = {'D' : 1000 * 60 * 60 * 24, 'H' : 1000 * 60 * 60, 'M' : 1000 * 60, 'S' : 1000, 'T' : 1};
+    var objInterval = {'D': 1000 * 60 * 60 * 24, 'H': 1000 * 60 * 60, 'M': 1000 * 60, 'S': 1000, 'T': 1};
     interval = interval.toUpperCase();
     var dt1 = Date.parse(StringToDate(date1));
     var dt2 = Date.parse(StringToDate(date2));
@@ -30,7 +30,7 @@ function countTimeLength(interval, date1, date2) {
 }
 
 var now = new Date();                    //当前日期
-var nowDayOfWeek = now.getDay();         //今天本周的第几天
+var nowDayOfWeek = now.getDay() == 0 ? 7 : now.getDay();         //今天本周的第几天
 var nowDay = now.getDate();              //当前日
 var nowMonth = now.getMonth();           //当前月
 var nowYear = now.getFullYear();             //当前年

@@ -29,7 +29,7 @@
     <link href="<%=basePath%>themes/blue/styles.css" rel="stylesheet" type="text/css"/>
     <!-- Theme End -->
     <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery-1.4.4.min.js"></SCRIPT>
-    <script type="text/javascript" src="<%=basePath%>scripts/FusionMaps.js"></script>
+    <script type="text/javascript" src="<%=basePath%>scripts/FusionCharts.js"></script>
     <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery-ui-1.8.6.custom.min.js"></SCRIPT>
     <script type="text/javascript" src="<%=basePath%>scripts/page.js"></script>
     <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery-ui-timepicker-addon.js"></SCRIPT>
@@ -57,7 +57,7 @@
         <%@include file="../search.jsp" %>
         <div class="contentbox" id="graphs"></div>
         <script type="text/javascript">
-              var map = new FusionMaps("<%=basePath%>swf/Chinamap.swf?", "Map1Id", "100%", "630", "0", "0");
+              var map = new FusionMaps("<%=basePath%>swf/china2.swf?", "Map1Id", "100%", "630", "0", "0");
             map.setDataXML("<%=map.get("xml")%>");
             map.setTransparent(true);
             map.render("graphs");
