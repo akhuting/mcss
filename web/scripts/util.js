@@ -130,7 +130,11 @@ function channelCallback() {
                 var values = text.split("|");
                 for (var i = 0; i < values.length; i++) {
                     var temp = document.createElement("option");
-                    temp.text = values[i];
+                    var channel = values[i];
+                    if(channel.length > 12){
+                        channel = channel.substr(0,11) + "...";
+                    }
+                    temp.text = channel;
                     temp.value = values[i];
                     cp.options.add(temp);
                 }

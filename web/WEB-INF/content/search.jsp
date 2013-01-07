@@ -127,18 +127,13 @@ function checkCurrentDate() {
 
 function setSelectEffects(id) {
     var $effect = $("#" + id);
-    $effect.css('opacity', '1.0')
+    $effect.css('opacity', '1.0');
+    $effect.find("img").attr("src","<%=basePath%>img/icons/clock.png");
     setInterval(function () {
         if ($effect.css('opacity') == 1) {
-
-            $effect.animate({opacity: 0.1,fontSize:"1.1em"});
-            $effect.find("img").height(17);
-            $effect.find("img").width(17);
+            $effect.animate({opacity: 0.1});
         } else {
-
-            $effect.animate({opacity: 1.0,fontSize:"1em"});
-            $effect.find("img").height(16);
-            $effect.find("img").width(16);
+            $effect.animate({opacity: 1.0});
         }
     }, 800);
 }
