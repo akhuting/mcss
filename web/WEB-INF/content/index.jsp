@@ -165,6 +165,7 @@
                             </ul>
                         </li>
                     </ul>
+                </li>
                 <li>
                     <ul id="nav">
                         <li>
@@ -198,8 +199,6 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
-                <%--<li><a href="<%=basePath%>upload/upload!uploadStat.action" style="font-size: 13px;font-weight: bold;">上传带宽统计</a>--%>
                 </li>
             </ul>
         </li>

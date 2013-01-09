@@ -780,6 +780,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
         for (Map.Entry<String, String> entry : maps.entrySet()) {
             String value = entry.getValue();
             double count = 0;
+            String[] tempUnit = new String[1];
             Calendar calendar = Calendar.getInstance();
             Calendar compareCalendar = Calendar.getInstance();
             compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
@@ -828,7 +829,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                 count = count * Common.getCN(request);
                 sb.append("<entity id='").append(entry.getKey()).append("'");
                 sb.append(" displayValue='").append(value).append("'");
-                sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count, null, unit[0])).append(unit[0]);
+                sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count,tempUnit,null)).append(tempUnit[0]);
                 sb.append("' Value='").append(StringUtil.byteToUnit(count, null, unit[0])).append("'");
                 sb.append("/>");
                 total += count;
@@ -898,6 +899,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
         for (Map.Entry<String, String> entry : maps.entrySet()) {
             String value = entry.getValue();
             boolean find = false;
+            String[] tempUnit = new String[1];
             if (list != null && list.size() > 0) {
                 for (Hourstatitem hourstatitem : list) {
                     if (hourstatitem.getItem().startsWith(value)) {
@@ -913,7 +915,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                         count = count * Common.getCN(request);
                         sb.append("<entity id='").append(entry.getKey()).append("'");
                         sb.append(" displayValue='").append(value).append("'");
-                        sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count, null, unit[0])).append(unit[0]);
+                        sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count,tempUnit,null)).append(tempUnit[0]);
                         sb.append("' Value='").append(StringUtil.byteToUnit(count, null, unit[0])).append("'");
                         sb.append("/>");
                         total += count;
