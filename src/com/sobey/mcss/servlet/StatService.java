@@ -383,12 +383,12 @@ public class StatService extends HttpServlet {
 //                    uploadStatService.saveUploadStat(cp, taskId, begin, end, ip, dataFlow);
 //                }
         }
-//        String batch = "DELETE FROM broadbandtemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
-//        broadBandStatService.executeSql(batch);
-//        batch = "DELETE FROM livetemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
-//        broadBandStatService.executeSql(batch);
-//        batch = "DELETE FROM vodtemp WHERE DAYOFMONTH(dt) <> DAYOFMONTH(NOW())";
-//        broadBandStatService.executeSql(batch);
+        String batch = "DELETE FROM broadbandtemp WHERE TO_DAYS(NOW()) - TO_DAYS(dt) >=2";
+        broadBandStatService.executeSql(batch);
+        batch = "DELETE FROM livetemp WHERE TO_DAYS(NOW()) - TO_DAYS(dt) >=2";
+        broadBandStatService.executeSql(batch);
+        batch = "DELETE FROM vodtemp WHERE TO_DAYS(NOW()) - TO_DAYS(dt) >=2";
+        broadBandStatService.executeSql(batch);
     }
 
     protected void printString(HttpServletResponse response, String string) {
