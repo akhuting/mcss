@@ -13,239 +13,197 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>mcss登录</title>
-<style type="text/css">
-    * {
-        margin: 0;
-        padding: 0;
-        border: 0;
-    }
-
-    body {
-        font: 12px/24px "Microsoft YaHei";
-        background-color: #eeeef0
-    }
-
-    p, ul, li, dt, dd, dl, img, body, h1, h2, h3, h4 {
-        list-style: none;
-    }
-
-    a {
-        text-decoration: none;
-        outline: none
-    }
-
-    .of {
-        overflow: hidden;
-        _zoom: 1;
-    }
-
-    .fl {
-        float: left;
-        display: inline
-    }
-
-    .fr {
-        float: right;
-        display: inline
-    }
-
-    input, select, textarea {
-        outline: none
-    }
-
-    select {
-        -moz-border-radius: 2px;
-        -webkit-border-radius: 2px;
-        -ms-border-radius: 2px;
-        border-radius: 2px;
-    }
-
-    .cl {
-        clear: both;
-        line-height: 0;
-        height: 0;
-        font-size: 0;
-    }
-
-    .mcss_top {
-        height: 99px;
-        background: url(images/mcss_bg.gif) 0 0 repeat-x;
-        padding-top: 12px;
-        border-top: 2px #e5e5e5 solid
-    }
-
-    .mcss_top .logo {
-        width: 324px;
-        height: 37px;
-        background: url(images/mcss_logo.png) 0 0 no-repeat;
-        margin-left: 34px;
-    }
-
-    .mcss_cent {
-        width: 538px;
-        margin: 0 auto;
-        padding-top: 25px;
-    }
-
-    .mcss_cent .icon {
-        width: 404px;
-        height: 75px;
-        background: url(images/mcss_icon.gif) no-repeat;
-        margin: 0 0 20px 6px;
-    }
-
-    .login_form {
-        width: 437px;
-        height: 443px;
-        background: url(images/mcss_form_bg.png) no-repeat;
-        padding: 35px 0 0 101px;
-    }
-
-    .login_form h2 {
-        width: 116px;
-        height: 35px;
-        background: url(images/mcss_icon.gif) 0 -77px no-repeat;
-        margin-bottom: 24px;
-        text-indent: -99em
-    }
-
-    .login_form li {
-        height: 39px;
-        margin-bottom: 20px;
-        overflow: hidden;
-        vertical-align: top
-    }
-
-    .login_form li.yzm {
-        height: 160px;
-        overflow: hidden;
-        margin-bottom: 0;
-    }
-
-    .login_form .bt {
-        width: 58px;
-        height: 39px;
-        line-height: 39px;
-        font-size: 15px;
-        float: left
-    }
-
-    .login_form .ipt {
-        float: left;
-        width: 240px;
-        height: 13px;
-        line-height: 14px;
-        padding: 12px 13px;
-        overflow: hidden;
-        background: url(images/mcss_ipt.gif) 0 -39px no-repeat;
-        color: #7f8b97
-    }
-
-    .login_form input.focus {
-        background-position: 0 0;
-        color: #333
-    }
-
-    .login_form .ipt1 {
-        float: left;
-        width: 220px;
-        height: 154px;
-        padding: 5px;
-        background: url(images/mcss_ipt.gif) 0 -240px no-repeat;
-    }
-
-    .login_form .ipt1.focus {
-        background-position: 0 -80px;
-        color: #333
-    }
-
-    .login_form .paint_area {
-        width: 230px;
-        height: 164px;
-        overflow: hidden;
-    }
-
-    .login_form .tishi {
-        clear: both;
-        height: 18px;
-        line-height: 18px;
-        overflow: hidden;
-        color: #606060;
-        padding-left: 59px;
-        margin-bottom: 14px;
-    }
-
-    .login_form .submit_btn {
-        padding-left: 58px;
-    }
-
-    .login_form .submit_btn a {
-        display: block;
-        width: 93px;
-        height: 38px;
-        background: url(images/mcss_icon.gif) -141px -77px no-repeat
-    }
-
-    .mcss_bot {
-        width: 100%;
-        height: 43px;
-        line-height: 43px;
-        padding-top: 15px;
-        margin-top: 85px;
-        text-align: center;
-        background: url(images/mcss_bot_bg.gif) 0 0 repeat-x;
-        color: #fff;
-    }
-</style>
-<link href="<%=basePath%>css/jquery.motionCaptcha.0.2.css" rel="stylesheet" type="text/css"/>
-<SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery.min.js"></SCRIPT>
-<script type="text/javascript">
-    $(document).ready(function () {
-        if (parent.document.getElementById("detail") != null) {
-            parent.document.location.href = "<%=basePath%>";
-        }
-        var html = $("#msg").html();
-        if (html.length != 0) {
-            alert($(".errorMessage li span").html());
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>mcss登录</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
         }
 
-        $('#frm').motionCaptcha({
-            shapes: ['triangle', 'x', 'rectangle', 'circle', 'check', 'caret', 'zigzag', 'arrow', 'leftbracket', 'rightbracket', 'v', 'delete', 'star', 'pigtail'],
-            errorMsg: '再试一次.',
-            successMsg: '验证通过!',
-            submitId: "sb",
-            noCanvasMsg: "Your browser doesn't support <canvas> - try Chrome, FF4, Safari or IE9."
-        });
-    });
-    function enter(e) {
-        var myEvent = e || window.event;
-        if (myEvent.keyCode == 13) {
-            submitFrm();
+        body {
+            font: 12px/24px "Microsoft YaHei";
+            background-color: #eeeef0
         }
-    }
-    function submitFrm() {
 
-        if (document.getElementById("loginName").value == "") {
-            alert("用户名不能为空");
-            return;
+        p, ul, li, dt, dd, dl, img, body, h1, h2, h3, h4 {
+            list-style: none;
         }
-        if (document.getElementById("loginpassword").value == "") {
-            alert("密码不能为空");
-            return;
+
+        a {
+            text-decoration: none;
+            outline: none
         }
-        if (document.getElementById("code").value == "false") {
-            alert("请绘制验证码");
-            return;
+
+        .of {
+            overflow: hidden;
+            _zoom: 1;
         }
-        $("#frm").attr("action", "<%=basePath%>user!login.action");
-        $("#frm").submit();
-        <%--var frm = document.getElementById("frm");--%>
-        <%--frm.action = "<%=basePath%>user!login.action";--%>
-        <%--frm.submit();--%>
-    }
-</script>
+
+        .fl {
+            float: left;
+            display: inline
+        }
+
+        .fr {
+            float: right;
+            display: inline
+        }
+
+        input, select, textarea {
+            outline: none
+        }
+
+        select {
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            -ms-border-radius: 2px;
+            border-radius: 2px;
+        }
+
+        .cl {
+            clear: both;
+            line-height: 0;
+            height: 0;
+            font-size: 0;
+        }
+
+        .mcss_top {
+            height: 99px;
+            background: url(images/mcss_bg.gif) 0 0 repeat-x;
+            padding-top: 12px;
+            border-top: 2px #e5e5e5 solid
+        }
+
+        .mcss_top .logo {
+            width: 324px;
+            height: 37px;
+            background: url(images/mcss_logo.png) 0 0 no-repeat;
+            margin-left: 34px;
+        }
+
+        .mcss_cent {
+            width: 538px;
+            margin: 0 auto;
+            padding-top: 25px;
+        }
+
+        .mcss_cent .icon {
+            width: 404px;
+            height: 75px;
+            background: url(images/mcss_icon.gif) no-repeat;
+            margin: 0 0 20px 6px;
+        }
+
+        .login_form {
+            width: 437px;
+            height: 443px;
+            background: url(images/mcss_form_bg.png) no-repeat;
+            padding: 35px 0 0 101px;
+        }
+
+        .login_form h2 {
+            width: 116px;
+            height: 35px;
+            background: url(images/mcss_icon.gif) 0 -77px no-repeat;
+            margin-bottom: 24px;
+            text-indent: -99em
+        }
+
+        .login_form li {
+            height: 39px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            vertical-align: top
+        }
+
+        .login_form li.yzm {
+            height: 160px;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .login_form .bt {
+            width: 58px;
+            height: 39px;
+            line-height: 39px;
+            font-size: 15px;
+            float: left
+        }
+
+        .login_form .ipt {
+            float: left;
+            width: 240px;
+            height: 13px;
+            line-height: 14px;
+            padding: 12px 13px;
+            overflow: hidden;
+            background: url(images/mcss_ipt.gif) 0 -39px no-repeat;
+            color: #7f8b97
+        }
+
+        .login_form input.focus {
+            background-position: 0 0;
+            color: #333
+        }
+
+        .login_form .ipt1 {
+            float: left;
+            width: 220px;
+            height: 154px;
+            padding: 5px;
+            background: url(images/mcss_ipt.gif) 0 -240px no-repeat;
+        }
+
+        .login_form .ipt1.focus {
+            background-position: 0 -80px;
+            color: #333
+        }
+
+        .login_form .paint_area {
+            width: 230px;
+            height: 164px;
+            overflow: hidden;
+        }
+
+        .login_form .tishi {
+            clear: both;
+            height: 18px;
+            line-height: 18px;
+            overflow: hidden;
+            color: #606060;
+            padding-left: 59px;
+            margin-bottom: 14px;
+        }
+
+        .login_form .submit_btn {
+            padding-left: 58px;
+        }
+
+        .login_form .submit_btn a {
+            display: block;
+            width: 93px;
+            height: 38px;
+            background: url(images/mcss_icon.gif) -141px -77px no-repeat
+        }
+
+        .mcss_bot {
+            width: 100%;
+            height: 43px;
+            line-height: 43px;
+            padding-top: 15px;
+            margin-top: 85px;
+            text-align: center;
+            background: url(images/mcss_bot_bg.gif) 0 0 repeat-x;
+            color: #fff;
+        }
+    </style>
+    <link href="<%=basePath%>css/jquery.motionCaptcha.0.2.css" rel="stylesheet" type="text/css"/>
+    <SCRIPT type="text/javascript" src="<%=basePath%>scripts/jquery.min.js"></SCRIPT>
+    <script type="text/javascript">
+
+    </script>
 </head>
 
 <body onkeypress="enter(event);">
@@ -286,7 +244,27 @@
 <div id="msg" style="display: none;"><s:actionerror/></div>
 </body>
 <script type="text/javascript" src="<%=basePath%>js/jquery.motionCaptcha.0.2.js"></script>
+<script src="<%=basePath%>/scripts/noty/jquery.noty.js"></script>
+
+<script src="<%=basePath%>/scripts/noty/layouts/bottom.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/bottomCenter.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/bottomLeft.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/bottomRight.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/center.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/centerLeft.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/centerRight.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/inline.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/top.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/topCenter.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/topLeft.js"></script>
+<script src="<%=basePath%>/scripts/noty/layouts/topRight.js"></script>
+
+<script src="<%=basePath%>/scripts/noty/themes/default.js"></script>
 <script type="text/javascript">
+    var html = $("#msg").html();
+    if (html.length != 0) {
+        noty({text: '<strong>提示!</strong> <br />' + $(".errorMessage li span").html(), layout: 'top', type: 'alert', force: false,timeout:2000,modal:true});
+    }
     $("#login_form").find(".ipt").focusin(function () {
         $(this).addClass("focus");
     }).focusout(function () {
@@ -297,8 +275,45 @@
         $(this).addClass("focus");
     }, function () {
         $(this).removeClass("focus");
-    })
+    });
 
+    $(document).ready(function () {
+        if (parent.document.getElementById("detail") != null) {
+            parent.document.location.href = "<%=basePath%>";
+        }
+
+
+        $('#frm').motionCaptcha({
+            shapes: ['triangle', 'x', 'rectangle', 'circle', 'check', 'caret', 'zigzag', 'arrow', 'leftbracket', 'rightbracket', 'v', 'delete', 'star', 'pigtail'],
+            errorMsg: '再试一次.',
+            successMsg: '验证通过!',
+            submitId: "sb",
+            noCanvasMsg: "Your browser doesn't support <canvas> - try Chrome, FF4, Safari or IE9."
+        });
+    });
+    function enter(e) {
+        var myEvent = e || window.event;
+        if (myEvent.keyCode == 13) {
+            submitFrm();
+        }
+    }
+    function submitFrm() {
+
+        if (document.getElementById("loginName").value == "") {
+            noty({text: '<strong>提示!</strong> <br />用户名不能为空', layout: 'top', type: 'alert', force: true, dismissQueue: true,timeout:2000,modal:true});
+            return;
+        }
+        if (document.getElementById("loginpassword").value == "") {
+            noty({text: '<strong>提示!</strong> <br />密码不能为空', layout: 'top', type: 'alert', force: true,dismissQueue: true,timeout:2000,modal:true});
+            return;
+        }
+        if (document.getElementById("code").value == "false") {
+            noty({text: '<strong>提示!</strong> <br />请绘制验证码', layout: 'top', type: 'alert', force: true,dismissQueue: true,timeout:2000,modal:true});
+            return;
+        }
+        $("#frm").attr("action", "<%=basePath%>user!login.action");
+        $("#frm").submit();
+    }
     /*底部块定位*/
     function positonBot() {
         if ($(window).height() < 855) {
