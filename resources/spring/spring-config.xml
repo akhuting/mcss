@@ -21,6 +21,42 @@
         <property name="username" value="${jdbc.username}"></property>
         <property name="password" value="${jdbc.password}"></property>
     </bean>
+
+    <bean name="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+
+        <!--必须，QuartzScheduler 延时启动，应用启动后 QuartzScheduler 再启动-->
+        <property name="startupDelay" value="60"/>
+        <!-- 普通触发器 ：触发器列表-->
+        <property name="triggers">
+            <list>
+                <ref local="testTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置执行定时任务的类和方法 -->
+    <bean id="testDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <bean class="com.sobey.mcss.Scheduler"></bean>
+        </property>
+        <property name="targetMethod">
+            <value>clearLogFile</value>
+        </property>
+    </bean>
+
+    <!-- 配置触发器 -->
+    <bean id="testTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail">
+            <ref bean="testDetail"/>
+            <!-- 触发器触发的 执行定时任务的bean -->
+        </property>
+        <property name="cronExpression">
+            <!-- 每天23时   -->  <!-- 定时任务执行的间隔 -->
+            <value>0 0 23 * * ?</value>
+        </property>
+    </bean>
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
           parent="abstractSessionFactory">

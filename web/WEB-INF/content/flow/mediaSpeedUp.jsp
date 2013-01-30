@@ -52,7 +52,7 @@
         <%@include file="../search.jsp" %>
         <div class="contentbox" id="graphs"></div>
         <script type="text/javascript">
-            var myChart1 = new FusionCharts("<%=basePath%>swf/StackedColumn2D.swf", "myChartId2", "100%", "300", "0", "0");
+            var myChart1 = new FusionCharts("<%=basePath%>swf/MSLine.swf", "myChartId2", "100%", "300", "0", "0");
             myChart1.setDataXML("<%=map.get("xml")%>");
             myChart1.setTransparent(true);
             myChart1.render("graphs");

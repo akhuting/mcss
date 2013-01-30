@@ -359,7 +359,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                     mdn = mdnList.get(j);
                     value += Double.parseDouble(MirrorUtil.getValue(Hourstatitem.class, mdn, "count" + (i)).toString());
                 }
-                 value = value * Common.getCN(request);
+                value = value * Common.getCN(request);
                 mdnSb.append("<set value='");
                 mdnSb.append(StringUtil.byteToUnit(value, unit, unit[0]));
                 mdnSb.append("'/>");
@@ -589,14 +589,14 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
             List<Daystatitem> mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, _yymmdd.toString());
             StringBuffer mdnSb = new StringBuffer();
             double min = 0;
-            if (min == 0) {
+            if (min == 0d) {
                 Calendar calendar = Calendar.getInstance();
                 Calendar compareCalendar = Calendar.getInstance();
                 compareCalendar.set(endYear, DateUtil.getSpecificTime(endTime, DateUtil.MONTH), end);
                 calendar.set(year, month - 1, begin);
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 while (calendar.before(compareCalendar)) {
-                    double count = 0;
+                    double count = 0d;
                     calendar.add(Calendar.DAY_OF_MONTH, 1);
                     if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(_yymmdd.toString())) {
                         if (mdnList != null) {
@@ -604,17 +604,17 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                                 Daystatitem ipdaystatitem = mdnList.get(i);
                                 count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                             }
-                            if (min == 0) {
+                            if (min == 0d) {
                                 min = count;
                             } else {
-                                if (count < min && count > 0)
+                                if (count < min && count > 0d)
                                     min = count;
                             }
                         }
                     } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
                         List<Daystatitem> _mdnList = null;
                         if (!init) {
-                             _mdnList  = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, yymmdd.toString());
+                            _mdnList = dayStatItemService.getDaystatitemList(userCps, "Flow", "AreaWeb", null, yymmdd.toString());
                             init = true;
                         }
                         if (_mdnList != null) {
@@ -622,10 +622,10 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                                 Daystatitem ipdaystatitem = _mdnList.get(i);
                                 count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                             }
-                            if (min == 0) {
+                            if (min == 0d) {
                                 min = count;
                             } else {
-                                if (count < min)
+                                if (count < min && count > 0d)
                                     min = count;
                             }
                         }
@@ -829,7 +829,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                 count = count * Common.getCN(request);
                 sb.append("<entity id='").append(entry.getKey()).append("'");
                 sb.append(" displayValue='").append(value).append("'");
-                sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count,tempUnit,null)).append(tempUnit[0]);
+                sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count, tempUnit, null)).append(tempUnit[0]);
                 sb.append("' Value='").append(StringUtil.byteToUnit(count, null, unit[0])).append("'");
                 sb.append("/>");
                 total += count;
@@ -915,7 +915,7 @@ public class FlowAction extends ActionSupport implements ServletRequestAware, Se
                         count = count * Common.getCN(request);
                         sb.append("<entity id='").append(entry.getKey()).append("'");
                         sb.append(" displayValue='").append(value).append("'");
-                        sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count,tempUnit,null)).append(tempUnit[0]);
+                        sb.append(" toolText='").append(value).append("  流量:").append(StringUtil.byteToUnit(count, tempUnit, null)).append(tempUnit[0]);
                         sb.append("' Value='").append(StringUtil.byteToUnit(count, null, unit[0])).append("'");
                         sb.append("/>");
                         total += count;

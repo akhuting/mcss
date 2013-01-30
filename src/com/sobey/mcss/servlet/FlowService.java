@@ -49,10 +49,16 @@ public class FlowService extends HttpServlet {
             sb.append(line);
         }
         if (sb.toString().equals("")) {
-            System.out.println("xml数据为空");
-            this.printString(resp, "xml数据为空");
+            System.out.println("json数据为空");
+            this.printString(resp, "json数据为空");
         }
-        JSONObject parameter = JSONObject.fromObject(sb.toString());
+        JSONObject parameter = null;
+        try {
+            parameter = JSONObject.fromObject(sb.toString());
+        } catch (Exception e) {
+            System.out.println("json格式错误");
+            this.printString(resp, "json格式错误");
+        }
         JSONArray array = new JSONArray();
         int year;
         int month;
@@ -143,9 +149,9 @@ public class FlowService extends HttpServlet {
                         count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                     }
                 }
-                for(int i = 0; i < array.size() ; i++){
+                for (int i = 0; i < array.size(); i++) {
                     JSONObject object = array.getJSONObject(i);
-                    if(object.getString("date").equals(DateUtil.getSpecificTime(calendar.getTime(), DateUtil._YY_MM_DD))){
+                    if (object.getString("date").equals(DateUtil.getSpecificTime(calendar.getTime(), DateUtil._YY_MM_DD))) {
                         object.put("pv", count);
                     }
                 }
@@ -169,9 +175,9 @@ public class FlowService extends HttpServlet {
                         count += Double.parseDouble(String.valueOf(MirrorUtil.getValue(Daystatitem.class, ipdaystatitem, "count" + (calendar.get(Calendar.DAY_OF_MONTH)))));
                     }
                 }
-                for(int i = 0; i < array.size() ; i++){
+                for (int i = 0; i < array.size(); i++) {
                     JSONObject object = array.getJSONObject(i);
-                    if(object.getString("date").equals(DateUtil.getSpecificTime(calendar.getTime(), DateUtil._YY_MM_DD))){
+                    if (object.getString("date").equals(DateUtil.getSpecificTime(calendar.getTime(), DateUtil._YY_MM_DD))) {
                         object.put("flow", count);
                     }
                 }
@@ -181,8 +187,8 @@ public class FlowService extends HttpServlet {
             } else if (DateUtil.getSpecificTime(calendar.getTime(), DateUtil.YY_MM).equals(yymmdd.toString())) {
             }
         }
-        result.put("status" , 1);
-        result.put("result" , array);
+        result.put("status", 1);
+        result.put("result", array);
         System.out.println(result.toString());
     }
 
