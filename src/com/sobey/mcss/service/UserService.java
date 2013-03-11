@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,16 @@ public class UserService {
 
     public Userinfo getUser(String name, String password) {
         List<Userinfo> list = userDao.query(" from Userinfo where username = ? and password = ? ", name, password);
+        if (list != null && list.size() == 1) {
+            return list.get(0);
+        } else {
+            return null;
+        }
+    }
+
+
+    public Userinfo getUser(String name) {
+        List<Userinfo> list = userDao.query(" from Userinfo where username = ? ", name);
         if (list != null && list.size() == 1) {
             return list.get(0);
         } else {

@@ -25,6 +25,10 @@ public class CpService {
         dao.save(cps);
     }
 
+    public void saveCp(Cp cps) {
+        dao.save(cps);
+    }
+
     public void deleteAll() {
         dao.executeSql("delete from cp", null);
     }
@@ -35,5 +39,14 @@ public class CpService {
 
     public void delete(List<Cp> cps) {
         dao.deleteAll(cps);
+    }
+
+    public Cp getCp(String name) {
+        List<Cp> list = dao.query(" from Cp where cp = ?", name);
+        if (list != null && list.size() > 0) {
+            return list.get(0);
+        } else {
+            return null;
+        }
     }
 }

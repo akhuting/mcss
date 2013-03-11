@@ -101,6 +101,24 @@
         <url-pattern>/FlowService</url-pattern>
     </servlet-mapping>
     <!--Servlet映射结束-->
+
+    <!--jersey服务-->
+
+    <!-- Jersey 配置 -->
+    <servlet>
+        <servlet-name>jerseyServlet</servlet-name>
+        <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <!-- 系统启动时扫描的包的路径-->
+            <param-value>com.sobey.mcss.service</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jerseyServlet</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+
      <error-page>
          <error-code>500</error-code>
          <location>/WEB-INF/content/error.jsp</location>

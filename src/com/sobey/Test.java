@@ -1,18 +1,18 @@
 package com.sobey;
 
-import com.sobey.common.util.DateUtil;
-import com.sobey.common.util.HttpUtil;
-import com.sobey.common.util.StringUtil;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 import org.dom4j.DocumentException;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -25,15 +25,15 @@ public class Test {
     public static void main(String args[]) throws DocumentException {
 //        boolean b = true;
 //        if (b) {
-            HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
-                    "    <stat>\n" +
-                    "        <cpid>vodhyw.sobeycache.com</cpid>\n" +
-                    "        <date>2012-12-05 17:29:52</date>\n" +
-                    "        <type>vod</type>\n" +
-                    "        <broadband>6078512</broadband>\n" +
-                    "        <playCount>2</playCount>\n" +
-                    "    </stat>\n" +
-                    "</root>");
+//            HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
+//                    "    <stat>\n" +
+//                    "        <cpid>vodhyw.sobeycache.com</cpid>\n" +
+//                    "        <date>2012-12-05 17:29:52</date>\n" +
+//                    "        <type>vod</type>\n" +
+//                    "        <broadband>6078512</broadband>\n" +
+//                    "        <playCount>2</playCount>\n" +
+//                    "    </stat>\n" +
+//                    "</root>");
 //        } else {
 //            HttpUtil.sendPost("http://localhost:8080/StatService", "<root>\n" +
 //                    "    <stat>\n" +
@@ -79,6 +79,17 @@ public class Test {
 //        }else{
 //            System.out.println("no");
 //        }
+
+        Client client = Client.create();
+        String url = "http://localhost:8080/api/cp";
+        WebResource resource = client.resource(url);
+        MultivaluedMap<String, String> param = new MultivaluedMapImpl();
+        param.add("name", "cctv.v.sobeycache.com");
+        param.add("alias", "cdtv");
+        param.add("domain", "v.sobeycache.com");
+//        String result = resource.queryParams(param).delete(String.class);
+        String result = resource.queryParams(param).type(MediaType.APPLICATION_FORM_URLENCODED).post(String.class);
+        System.out.println(result);
     }
 
     private static String encoding = "GBK";

@@ -19,6 +19,7 @@ public class Userinfo {
 
     @javax.persistence.Column(name = "USERID", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getUserid() {
         return userid;
     }
@@ -86,6 +87,18 @@ public class Userinfo {
 
     public void setUserStatus(int userStatus) {
         this.userStatus = userStatus;
+    }
+
+    private int status;
+
+    @javax.persistence.Column(name = "STATUS", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    @Basic
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     private String email;
